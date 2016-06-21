@@ -1,0 +1,35 @@
+---
+- name: apache stopped
+  service: name=httpd state=stopped enabled=no
+  ignore_errors: yes
+  when: server != 'apache'
+
+- name: nginx stopped
+  service: name=nginx state=stopped enabled=no
+  ignore_errors: yes
+  when: server != 'nginx'
+
+- name: removed mysql
+  yum: name=mysql* state=absent
+  ignore_errors: yes
+  when: database != 'mysql'
+
+- name: removed MariaDB
+  yum: name=MariaDB* state=absent
+  ignore_errors: yes
+  when: database != 'mariadb'
+
+- name: removed mariadb
+  yum: name=mariadb* state=absent
+  ignore_errors: yes
+  when: database != 'mariadb'
+
+- name: removed Percona
+  yum: name=Percona* state=absent
+  ignore_errors: yes
+  when: database != 'percona'
+
+- name: removed Percona
+  yum: name=percona* state=absent
+  ignore_errors: yes
+  when: database != 'percona'

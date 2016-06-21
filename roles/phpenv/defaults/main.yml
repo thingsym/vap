@@ -1,0 +1,4 @@
+bash_profile: /home/vagrant/.bash_profile
+bashrc: /home/vagrant/.bashrc
+php_version: 7.0.7
+phpenv_dir: /home/vagrant/.phpenv

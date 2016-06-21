@@ -1,0 +1,81 @@
+---
+- name: percona repository installed
+  yum: name=http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+
+- name: percona-release.repo edited (CentOS/RHEL 6)
+  replace: dest=/etc/yum.repos.d/percona-release.repo regexp="\$releasever" replace="6"
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
+
+- name: percona-release.repo edited (CentOS/RHEL 7)
+  replace: dest=/etc/yum.repos.d/percona-release.repo regexp="\$releasever" replace="7"
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
+
+- name: percona 5.6 installed
+  yum: name={{ item }} state=latest
+  with_items:
+    - Percona-Server-server-56
+    - Percona-Server-devel-56
+    - Percona-Server-client-56
+    - Percona-Server-shared-56
+    - MySQL-python
+
+- name: stat custom my.cnf.j2
+  stat: path=/vagrant/config/my.cnf.j2
+  register: is_custom_my_conf
+
+- name: custom my.cnf changed
+  template: src=/vagrant/config/my.cnf.j2 dest=/etc/my.cnf
+  when: is_custom_my_conf.stat.exists
+
+- name: my.cnf changed
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  when: not is_custom_my_conf.stat.exists
+
+- name: mysql started and enabled (CentOS/RHEL 6)
+  service: name=mysql state=restarted enabled=yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
+
+- name: mysql started and enabled (CentOS/RHEL 7)
+  service: name=mysqld state=restarted enabled=yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
+
+- name: set percona root password
+  mysql_user:
+    name: "root"
+    password: "{{ db_root_password }}"
+    host: "localhost"
+    state: present
+  ignore_errors: yes
+
+- name: set percona root password
+  mysql_user:
+    name: "root"
+    password: "{{ db_root_password }}"
+    host: "{{ item }}"
+    state: present
+    login_user: "root"
+    login_password: "{{ db_root_password }}"
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+
+- name: Delete blank Percona users
+  mysql_user:
+    name: ""
+    host: "{{ item }}"
+    state: absent
+    login_user: "root"
+    login_password: "{{ db_root_password }}"
+  with_items:
+    - localhost
+
+- name: Drop Percona test database
+  mysql_db:
+     name: test
+     state: absent
+     login_user: "root"
+     login_password: "{{ db_root_password }}"
+
+- name: create symbolic link
+  file: src=/var/lib/mysql/mysql.sock dest=/tmp/mysql.sock state=link
