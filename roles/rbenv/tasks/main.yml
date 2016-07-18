@@ -35,7 +35,7 @@
   become: yes
 
 - name: build environment
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - gcc
     - cmake

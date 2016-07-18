@@ -1,6 +1,6 @@
 ---
 - name: build environment
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - patch
     - libxml2-devel
@@ -17,7 +17,7 @@
     - libxslt-devel
 
 - name: build environment (CentOS/RHEL 6)
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - re2c
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6

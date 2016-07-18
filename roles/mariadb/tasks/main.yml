@@ -11,7 +11,7 @@
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
 
 - name: MariaDB installed (CentOS/RHEL 6)
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - MariaDB-client
     - MariaDB-common
@@ -23,7 +23,7 @@
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
 
 - name: MariaDB installed (CentOS/RHEL 7)
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - mariadb
     - mariadb-devel
