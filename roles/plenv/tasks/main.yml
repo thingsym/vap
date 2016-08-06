@@ -1,33 +1,33 @@
 ---
 - name: git checkout plenv
-  git: repo=https://github.com/tokuhirom/plenv.git dest=/home/vagrant/.plenv force=yes
+  git: repo=https://github.com/tokuhirom/plenv.git dest={{ home_dir }}/.plenv force=yes
   become: yes
 
 - name: change mode, owner and group
-  file: dest=/home/vagrant/.plenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
+  file: dest={{ home_dir }}/.plenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
   become: yes
 
 - name: edit PATH plenv on .bash_profile
-  lineinfile: dest={{ bash_profile }} line="export PATH=$HOME/.plenv/bin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.plenv/bin:$PATH"
 
 - name: edit PATH plenv on .bashrc
-  lineinfile: dest={{ bashrc }} line="export PATH=$HOME/.plenv/bin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bashrc line="export PATH=$HOME/.plenv/bin:$PATH"
 
 - name: edit plenv init on .bash_profile
-  lineinfile: dest={{ bash_profile }} line="eval \"$(plenv init -)\""
+  lineinfile: dest={{ home_dir }}/.bash_profile line="eval \"$(plenv init -)\""
 
 - name: edit plenv init on .bashrc
-  lineinfile: dest={{ bashrc }} line="eval \"$(plenv init -)\""
+  lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(plenv init -)\""
 
 - name: git checkout perl-build
-  git: repo=https://github.com/tokuhirom/Perl-Build.git dest=/home/vagrant/.plenv/plugins/perl-build force=yes
+  git: repo=https://github.com/tokuhirom/Perl-Build.git dest={{ home_dir }}/.plenv/plugins/perl-build force=yes
   become: yes
 
 - name: stat perl_path
-  stat: path=/home/vagrant/.plenv/versions/{{ perl_version | default(5.25.1) }}
+  stat: path={{ home_dir }}/.plenv/versions/{{ perl_version | default(5.25.1) }}
   register: is_perl_path
 
-- name: perl installed by plenv
+- name: perl installed via plenv
   command: sudo -u vagrant -i -- plenv install {{ perl_version | default(5.25.1) }}
   when: not is_perl_path.stat.exists
 

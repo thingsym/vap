@@ -1,4 +1,2 @@
-bash_profile: /home/vagrant/.bash_profile
-bashrc: /home/vagrant/.bashrc
+home_dir: /home/vagrant
 node_version: 0.11.2
-nodenv_dir: /home/vagrant/.nodenv
