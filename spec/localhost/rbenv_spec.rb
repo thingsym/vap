@@ -42,6 +42,15 @@ if property["ruby_version"] != 0 then
     it { should be_directory }
   end
 
+  describe file('/home/vagrant/.rbenv/plugins/rbenv-bundler') do
+    it { should be_directory }
+  end
+
+  # describe command('bundler --version') do
+  #   let(:disable_sudo) { true }
+  #   its(:exit_status) { should eq 0 }
+  # end
+
   describe package('gcc') do
     it { should be_installed }
   end
