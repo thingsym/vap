@@ -19,5 +19,6 @@
     - { role: rbenv, tags: [rbenv], when: "ruby_version != 0" }
     - { role: phpenv, tags: [phpenv], when: "php_version != 0" }
     - { role: pyenv, tags: [pyenv], when: "python_version != 0" }
+    - { role: nodenv, tags: [nodenv], when: "node_version != 0" }
     - { role: phpmyadmin, tags: [phpmyadmin], when: "phpmyadmin == true and php_version != 0 and database != 'none'" }
     - { role: after-command, tags: [after-command] }
