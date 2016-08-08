@@ -315,6 +315,15 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.1.1 - 2016.08.09
+	* rename to default-node-packages.j2 from default_node_packages.j2
+	* add synced_folder /vagrant
+	* add vagrant-vbguest plugin
+	* fix mariadb yum repository
+	* fix rbenv, plenv, pyenv and phpenv
+	* add nodenv and goenv
+	* remove RepoForge repository
+	* change to package module from yum module
 * version 0.1.0 - 2016.06.22
 	* initial release
 
