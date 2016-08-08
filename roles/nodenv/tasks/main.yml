@@ -27,11 +27,11 @@
   become: yes
 
 - name: stat default_node_packages
-  stat: path=/vagrant/config/default_node_packages.j2
+  stat: path=/vagrant/config/default-node-packages.j2
   register: is_default_node_packages
 
 - name: nodenv-default-packages changed
-  template: src=/vagrant/config/default_node_packages.j2 dest={{ home_dir }}/.nodenv/default-packages
+  template: src=/vagrant/config/default-node-packages..j2 dest={{ home_dir }}/.nodenv/default-packages
   when: is_default_node_packages.stat.exists
 
 - name: nodejs installed via nodenv
