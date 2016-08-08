@@ -24,10 +24,12 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 
 * [Virtualbox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com) >= 1.8.4
-* [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) *optional (Vagrant plugin)
-* [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier) *optional (Vagrant plugin)
-* [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec) *optional (Vagrant plugin)
 * [Ansible](https://www.ansible.com) >= 2.1.0.0
+* [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) optional (Vagrant plugin)
+* [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier) optional (Vagrant plugin)
+optional (Vagrant plugin)
+* [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+* [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec) optional (Vagrant plugin)
 
 ## Usage
 
@@ -46,6 +48,7 @@ Install the Vagrant plugin on the terminal as necessary.
 
 	vagrant plugin install vagrant-hostsupdater
 	vagrant plugin install vagrant-cachier
+	vagrant plugin install vagrant-vbguest
 	vagrant plugin install vagrant-serverspec
 
 
@@ -103,6 +106,8 @@ You can accesse from a terminal in the same LAN to use the public network to Vag
 
 	public_ip             = ''
 
+	vbguest_auto_update = false
+
 * `vm_box` (required) name of Vagrant Box (default: `hansode/centos-7.1.1503-x86_64`)
 * `vm_box_version` (required) version of Vagrant Box (default: `>= 0`)
 * `vm_ip` (required) private IP address (default: `192.168.59.63`)
@@ -110,6 +115,7 @@ You can accesse from a terminal in the same LAN to use the public network to Vag
 * `vm_document_root` (required) document root path (default: `/var/www/html`)
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: ``)
+* `vbguest_auto_update` update VirtualBox Guest Additions (default: false / value: true | false)
 
 ### Provisioning configuration file (YAML)
 
@@ -132,6 +138,8 @@ In YAML format, you can set server, database and Programming environment. And ca
 	python_version     : 3.5.1       # 3.5.1
 	php_version        : 7.0.7       # 7.0.7
 	perl_version       : 5.25.1      # 5.25.1
+	node_version       : 0.11.2      # 0.11.2
+	go_version         : 1.6.3       # 1.6.3
 
 	## Develop & Deploy Settings ##
 
@@ -151,9 +159,11 @@ In YAML format, you can set server, database and Programming environment. And ca
 #### Programming languages Settings ##
 
 * `ruby_version` version of Ruby (default: `2.3.1`)
-* `python_version` version of PHP (default: `3.5.1`)
+* `python_version` version of Python (default: `3.5.1`)
 * `php_version` version of PHP (default: `7.0.7`)
-* `perl_version` version of PHP (default: `5.25.1`)
+* `perl_version` version of Perl (default: `5.25.1`)
+* `node_version` version of Node.js (default: `0.11.2`)
+* `go_version` version of Go (default: `1.6.3`)
 
 If the version is set to 0, the programming language does not installation
 
@@ -172,10 +182,11 @@ This directory synchronize to the guest OS side `/vagrant`. `html` creates autom
 
 * command (stores shell script)
 * config (stores Custom Config)
+* config.sample (sample Custom Config)
 * group_vars (stores the provisioning configuration file of Ansible)
 	* all.yml (provisioning configuration file)
 * hosts
-	* development (inventory file)
+	* local (inventory file)
 * html (synchronize to the Document Root. create automatically at `vagrant up`, if it does not exist.)
 * Rakefile (Rakefile of ServerSpec)
 * readme-ja.md
@@ -221,10 +232,12 @@ Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
 
 ### Programming languages
 
-* Ruby (build on rbenv)
-* Python (build on pyenv)
-* PHP (build on phpenv)
-* Perl (build on plenv)
+* Ruby (build via rbenv)
+* Python (build via pyenv)
+* PHP (build via phpenv)
+* Perl (build via plenv)
+* Node.js (build via nodenv)
+* Go (build via goenv)
 
 ### Develop & Deploy Tools (Activatable)
 
@@ -278,7 +291,8 @@ Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
 When you add a tuning configuration file that you edited in the directory `config`, place it at the time of provisioning.
 As follows editable configuration files.
 
-* default-gems.j2
+* default-node-packages.j2
+* default-ruby-gems.j2
 * httpd.conf.centos6.j2
 * httpd.conf.centos7.j2
 * httpd.www.conf.centos7.j2
