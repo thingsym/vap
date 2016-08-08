@@ -32,10 +32,10 @@
   ignore_errors: yes
 
 - name: edit PATH on .bash_profile
-  lineinfile: dest={{ bash_profile }} line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bash_profile create=yes line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
 
 - name: edit PATH on .bashrc
-  lineinfile: dest={{ bashrc }} line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bashrc create=yes line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
 
 - name: unzip installed
   package: name=unzip state=latest
