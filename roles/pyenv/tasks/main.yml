@@ -1,27 +1,27 @@
 ---
 - name: git checkout pyenv
-  git: repo=https://github.com/yyuu/pyenv.git dest=/home/vagrant/.pyenv force=yes
+  git: repo=https://github.com/yyuu/pyenv.git dest={{ home_dir }}/.pyenv force=yes
   become: yes
 
 - name: change mode, owner and group
-  file: dest=/home/vagrant/.pyenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
+  file: dest={{ home_dir }}/.pyenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
   become: yes
 
 - name: edit PATH pyenv on .bash_profile
-  lineinfile: dest={{ bash_profile }} line="export PATH=$HOME/.pyenv/bin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.pyenv/bin:$PATH"
 
 - name: edit PATH pyenv on .bashrc
-  lineinfile: dest={{ bashrc }} line="export PATH=$HOME/.pyenv/bin:$PATH"
+  lineinfile: dest={{ home_dir }}/.bashrc line="export PATH=$HOME/.pyenv/bin:$PATH"
 
 - name: edit pyenv init on .bash_profile
-  lineinfile: dest={{ bash_profile }} line="eval \"$(pyenv init -)\""
+  lineinfile: dest={{ home_dir }}/.bash_profile line="eval \"$(pyenv init -)\""
 
 - name: edit pyenv init on .bashrc
-  lineinfile: dest={{ bashrc }} line="eval \"$(pyenv init -)\""
+  lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(pyenv init -)\""
 
-- name: Python installed by pyenv
+- name: Python installed via pyenv
   command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}
   ignore_errors: yes
 
-- command: sudo -u vagrant -i -- pyenv rehash
 - command: sudo -u vagrant -i -- pyenv global {{ python_version | default(3.5.1) }}
+- command: sudo -u vagrant -i -- pyenv rehash

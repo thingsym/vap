@@ -35,6 +35,15 @@ if property["php_version"] != 0 then
     it { should be_directory }
   end
 
+  describe file('/home/vagrant/.phpenv/plugins/phpenv-composer') do
+    it { should be_directory }
+  end
+
+  describe command('composer --version') do
+    let(:disable_sudo) { true }
+    its(:exit_status) { should eq 0 }
+  end
+
   if property["server"] == 'apache' then
 
     describe file('/home/vagrant/.phpenv/plugins/phpenv-apache-version') do
@@ -48,8 +57,8 @@ if property["php_version"] != 0 then
   end
 
   describe file('/home/vagrant/.phpenv/plugins/php-build/share/php-build/default_configure_options') do
-  it { should be_file }
-end
+    it { should be_file }
+  end
 
   describe file('/var/log/php.log') do
     it { should be_file }

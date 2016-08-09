@@ -10,6 +10,11 @@ if property["perl_version"] != 0 then
     end
   end
 
+  describe command('perl -v') do
+    let(:disable_sudo) { true }
+    its(:stdout) { should match /#{Regexp.escape(property["perl_version"])}/ }
+  end
+
   describe command('plenv global') do
     let(:disable_sudo) { true }
     its(:stdout) { should match property["perl_version"] }
@@ -19,8 +24,8 @@ if property["perl_version"] != 0 then
     it { should be_directory }
   end
 
-  describe package('/home/vagrant/.plenv/shims/Carton') do
-    # it { should be_installed.by('cpanm') }
+  describe file('/home/vagrant/.plenv/shims/carton') do
+    it { should be_file }
   end
 
 end
