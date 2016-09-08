@@ -1,0 +1,12 @@
+---
+- name: JDK 8 installed
+  package: name=java-1.8.0-openjdk state=present
+  when: java_version == 1.8
+
+- name: JDK 7 installed
+  package: name=java-1.7.0-openjdk state=present
+  when: java_version == 1.7
+
+- name: JDK 6 installed
+  package: name=java-1.6.0-openjdk state=present
+  when: java_version == 1.6
