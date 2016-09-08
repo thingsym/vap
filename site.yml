@@ -23,5 +23,6 @@
     - { role: goenv, tags: [goenv], when: "go_version != 0" }
     - { role: openjdk, tags: [openjdk], when: "java_version != 0" }
     - { role: jenv, tags: [jenv], when: "java_version != 0" }
+    - { role: scalaenv, tags: [scalaenv], when: "scala_version != 0 and java_version != 0" }
     - { role: phpmyadmin, tags: [phpmyadmin], when: "phpmyadmin == true and php_version != 0 and database != 'none'" }
     - { role: after-command, tags: [after-command] }
