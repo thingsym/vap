@@ -14,12 +14,14 @@ ruby_version       : 2.3.1       # 2.3.1
 python_version     : 3.5.1       # 3.5.1
 php_version        : 7.0.7       # 7.0.7
 perl_version       : 5.25.1      # 5.25.1
-node_version       : 0.11.2      # 0.11.2
+node_version       : 4.5.0      # 4.5.0
 go_version         : 1.6.3       # 1.6.3
+java_version       : 1.8         # 1.8
+scala_version      : 2.11.8      # 2.11.8 (require java)
 
 ## Develop & Deploy Settings ##
 
 ssl                : false   # true|false
-phpmyadmin         : false   # true|false (require PHP)
+phpmyadmin         : false   # true|false (require PHP and mysql)
 
 ## That's all, stop setting. Let's vagrant up!! ##

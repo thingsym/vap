@@ -16,6 +16,15 @@ By default, the server and the databese is installed in the default settings. Al
 
 **VAP** will build a Programming languages that specifies the version.
 
+* [Ruby](https://www.ruby-lang.org/)
+* [Python](https://www.python.org/)
+* [PHP](https://secure.php.net)
+* [Perl](https://www.perl.org/)
+* [Node.js](http://nodejs.org)
+* [Go](https://golang.org/)
+* [Java (OpenJDK)](http://openjdk.java.net/)
+* [Scala](http://www.scala-lang.org/)
+
 ### 3. Develop & Deploy Tools
 
 You can install the develop tools or the deploy tools by usage. See Specification for list of installed tools.
@@ -27,8 +36,7 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 * [Ansible](https://www.ansible.com) >= 2.1.0.0
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) optional (Vagrant plugin)
 * [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier) optional (Vagrant plugin)
-optional (Vagrant plugin)
-* [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+* [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) optional (Vagrant plugin)
 * [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec) optional (Vagrant plugin)
 
 ## Usage
@@ -138,8 +146,10 @@ In YAML format, you can set server, database and Programming environment. And ca
 	python_version     : 3.5.1       # 3.5.1
 	php_version        : 7.0.7       # 7.0.7
 	perl_version       : 5.25.1      # 5.25.1
-	node_version       : 0.11.2      # 0.11.2
+	node_version       : 4.5.0      # 4.5.0
 	go_version         : 1.6.3       # 1.6.3
+	java_version       : 1.8         # 1.8
+	scala_version      : 2.11.8      # 2.11.8 (require java)
 
 	## Develop & Deploy Settings ##
 
@@ -162,8 +172,10 @@ In YAML format, you can set server, database and Programming environment. And ca
 * `python_version` version of Python (default: `3.5.1`)
 * `php_version` version of PHP (default: `7.0.7`)
 * `perl_version` version of Perl (default: `5.25.1`)
-* `node_version` version of Node.js (default: `0.11.2`)
+* `node_version` version of Node.js (default: `4.5.0`)
 * `go_version` version of Go (default: `1.6.3`)
+* `java_version` version of Java (default: `1.8`)
+* `scala_version` version of Scala (default: `2.11.8`) require Java
 
 If the version is set to 0, the programming language does not installation
 
@@ -232,12 +244,14 @@ Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
 
 ### Programming languages
 
-* Ruby (build via rbenv)
-* Python (build via pyenv)
-* PHP (build via phpenv)
-* Perl (build via plenv)
-* Node.js (build via nodenv)
-* Go (build via goenv)
+* [Ruby](https://www.ruby-lang.org/) via [rbenv](https://github.com/rbenv/rbenv)
+* [Python](https://www.python.org/) via [pyenv](https://github.com/yyuu/pyenv)
+* [PHP](https://secure.php.net) via [phpenv](https://github.com/madumlao/phpenv)
+* [Perl](https://www.perl.org/) via [plenv](https://github.com/tokuhirom/plenv)
+* [Node.js](http://nodejs.org) via [nodenv](https://github.com/nodenv/nodenv)
+* [Go](https://golang.org/) via [goenv](https://github.com/wfarr/goenv)
+* [Java (OpenJDK)](http://openjdk.java.net/) via [jenv](http://www.jenv.be/)
+* [Scala](http://www.scala-lang.org/)  via [scalaenv](https://github.com/mazgi/scalaenv)
 
 ### Develop & Deploy Tools (Activatable)
 
@@ -315,6 +329,13 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.1.2 - 2016.09.10
+	* fix node version
+	* add jenv and scalaenv
+	* add Java (OpenJDK)
+	* add prestissimo
+	* add custom php.conf.j2 and php-build.default_configure_options.j2
+	* fix file name
 * version 0.1.1 - 2016.08.09
 	* rename to default-node-packages.j2 from default_node_packages.j2
 	* add synced_folder /vagrant

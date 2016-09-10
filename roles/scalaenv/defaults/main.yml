@@ -1,2 +1,2 @@
 home_dir: /home/vagrant
-node_version: 4.5.0
+scala_version: 2.11.8

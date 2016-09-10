@@ -1,0 +1,30 @@
+---
+- name: git checkout scalaenv
+  git: repo=https://github.com/mazgi/scalaenv.git dest={{ home_dir }}/.scalaenv force=yes
+  become: yes
+
+- name: change mode, owner and group
+  file: dest={{ home_dir }}/.scalaenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
+  become: yes
+
+- name: edit PATH scalaenv on .bash_profile
+  lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.scalaenv/bin:$PATH"
+
+- name: edit PATH scalaenv on .bashrc
+  lineinfile: dest={{ home_dir }}/.bashrc line="export PATH=$HOME/.scalaenv/bin:$PATH"
+
+- name: edit scalaenv init on .bash_profile
+  lineinfile: dest={{ home_dir }}/.bash_profile line="eval \"$(scalaenv init -)\""
+
+- name: edit scalaenv init on .bashrc
+  lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(scalaenv init -)\""
+
+- name: Scala installed via scalaenv
+  command: sudo -u vagrant -i -- scalaenv install scala-{{ scala_version | default(2.11.8) }}
+  ignore_errors: yes
+
+- name: scalaenv rehash
+  command: sudo -u vagrant -i -- scalaenv rehash
+
+- name: scalaenv global
+  command: sudo -u vagrant -i -- scalaenv global scala-{{ scala_version | default(2.11.8) }}
