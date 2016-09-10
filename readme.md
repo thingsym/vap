@@ -329,6 +329,13 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.1.2 - 2016.09.10
+	* fix node version
+	* add jenv and scalaenv
+	* add Java (OpenJDK)
+	* add prestissimo
+	* add custom php.conf.j2 and php-build.default_configure_options.j2
+	* fix file name
 * version 0.1.1 - 2016.08.09
 	* rename to default-node-packages.j2 from default_node_packages.j2
 	* add synced_folder /vagrant
