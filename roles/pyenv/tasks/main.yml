@@ -2,10 +2,7 @@
 - name: git checkout pyenv
   git: repo=https://github.com/yyuu/pyenv.git dest={{ home_dir }}/.pyenv force=yes
   become: yes
-
-- name: change mode, owner and group
-  file: dest={{ home_dir }}/.pyenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
-  become: yes
+  become_user: vagrant
 
 - name: edit PATH pyenv on .bash_profile
   lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.pyenv/bin:$PATH"
@@ -23,5 +20,8 @@
   command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}
   ignore_errors: yes
 
-- command: sudo -u vagrant -i -- pyenv global {{ python_version | default(3.5.1) }}
-- command: sudo -u vagrant -i -- pyenv rehash
+- name: pyenv global
+  command: sudo -u vagrant -i -- pyenv global {{ python_version | default(3.5.1) }}
+
+- name: pyenv rehash
+  command: sudo -u vagrant -i -- pyenv rehash

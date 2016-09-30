@@ -5,18 +5,18 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
 
   [property["scala_version"]].each do |scala_version|
     describe command("scalaenv versions | grep #{scala_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(scala_version)}/) }
     end
   end
 
   # describe command('/home/vagrant/.scalaenv/shims/scala -version') do
-  #   let(:disable_sudo) { true }
+  #   let(:sudo_options) { '-u vagrant -i' }
   #   its(:stdout) { should match /#{Regexp.escape(property["scala_version"])}/ }
   # end
 
   describe command('scalaenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["scala_version"] }
   end
 

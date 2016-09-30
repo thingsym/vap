@@ -2,10 +2,7 @@
 - name: git checkout plenv
   git: repo=https://github.com/tokuhirom/plenv.git dest={{ home_dir }}/.plenv force=yes
   become: yes
-
-- name: change mode, owner and group
-  file: dest={{ home_dir }}/.plenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
-  become: yes
+  become_user: vagrant
 
 - name: edit PATH plenv on .bash_profile
   lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.plenv/bin:$PATH"
@@ -22,6 +19,7 @@
 - name: git checkout perl-build
   git: repo=https://github.com/tokuhirom/Perl-Build.git dest={{ home_dir }}/.plenv/plugins/perl-build force=yes
   become: yes
+  become_user: vagrant
 
 - name: stat perl_path
   stat: path={{ home_dir }}/.plenv/versions/{{ perl_version | default(5.25.1) }}
@@ -31,8 +29,11 @@
   command: sudo -u vagrant -i -- plenv install {{ perl_version | default(5.25.1) }}
   when: not is_perl_path.stat.exists
 
-- command: sudo -u vagrant -i -- plenv rehash
-- command: sudo -u vagrant -i -- plenv global {{ perl_version | default(5.25.1) }}
+- name: plenv rehash
+  command: sudo -u vagrant -i -- plenv rehash
+
+- name: plenv global
+  command: sudo -u vagrant -i -- plenv global {{ perl_version | default(5.25.1) }}
 
 - name: cpanm module installed
   command: sudo -u vagrant -i -- plenv install-cpanm

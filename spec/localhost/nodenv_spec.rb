@@ -5,18 +5,18 @@ if property["node_version"] != 0 then
 
   [property["node_version"]].each do |node_version|
     describe command("nodenv versions | grep #{node_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(node_version)}/) }
     end
   end
 
   describe command('node -v') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{Regexp.escape(property["node_version"])}/ }
   end
 
   describe command('nodenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["node_version"] }
   end
 
