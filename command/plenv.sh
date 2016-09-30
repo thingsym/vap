@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Usage: plenv.sh <Perl Version Number>
 
 global() {
