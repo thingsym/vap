@@ -5,13 +5,13 @@ if property["java_version"] != 0 then
 
   [property["java_version"]].each do |java_version|
     describe command("jenv versions | grep #{java_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{java_version}/) }
     end
   end
 
   describe command('jenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{property["java_version"]}/ }
   end
 

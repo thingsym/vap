@@ -5,18 +5,18 @@ if property["go_version"] != 0 then
 
   [property["go_version"]].each do |go_version|
     describe command("goenv versions | grep #{go_version}") do
-      let(:disable_sudo) { true }
-      its(:stdout) { should match(/#{Regexp.escape(go_version)}/) }
+      let(:sudo_options) { '-u vagrant -i' }
+      its(:stdout) { should match /#{Regexp.escape(go_version)}/ }
     end
   end
 
   describe command('go version') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{Regexp.escape(property["go_version"])}/ }
   end
 
   describe command('goenv version') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["go_version"] }
   end
 

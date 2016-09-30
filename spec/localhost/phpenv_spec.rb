@@ -4,20 +4,20 @@ require 'shellwords'
 if property["php_version"] != 0 then
   describe file('/home/vagrant/.phpenv/') do
     it { should be_directory }
-    it { should be_mode 755 }
+    it { should be_mode 775 }
     it { should be_owned_by 'vagrant' }
     it { should be_grouped_into 'vagrant' }
   end
 
   [property["php_version"]].each do |php_version|
     describe command("phpenv versions | grep #{php_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(php_version)}/) }
     end
   end
 
   describe command('phpenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{property["php_version"]}/ }
   end
 
@@ -40,7 +40,7 @@ if property["php_version"] != 0 then
   end
 
   describe command('composer --version') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 

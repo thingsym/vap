@@ -5,18 +5,18 @@ if property["perl_version"] != 0 then
 
   [property["perl_version"]].each do |perl_version|
     describe command("plenv versions | grep #{perl_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(perl_version)}/) }
     end
   end
 
   describe command('perl -v') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{Regexp.escape(property["perl_version"])}/ }
   end
 
   describe command('plenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["perl_version"] }
   end
 

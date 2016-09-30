@@ -2,10 +2,7 @@
 - name: git checkout jenv
   git: repo=https://github.com/gcuisinier/jenv.git dest={{ home_dir }}/.jenv force=yes
   become: yes
-
-- name: change mode, owner and group
-  file: dest={{ home_dir }}/.jenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
-  become: yes
+  become_user: vagrant
 
 - name: edit PATH jenv on .bash_profile
   lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.jenv/bin:$PATH"
