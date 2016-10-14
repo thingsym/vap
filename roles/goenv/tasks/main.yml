@@ -2,9 +2,7 @@
 - name: git checkout goenv
   git: repo=https://github.com/wfarr/goenv.git dest={{ home_dir }}/.goenv force=yes
   become: yes
-- name: change mode, owner and group
-  file: dest={{ home_dir }}/.goenv state=directory mode=0755 recurse=yes owner=vagrant group=vagrant
-  become: yes
+  become_user: vagrant
 
 - name: edit PATH goenv on .bash_profile
   lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.goenv/bin:$PATH"
@@ -22,5 +20,8 @@
   command: sudo -u vagrant -i -- goenv install {{ go_version | default(1.6.3) }}
   ignore_errors: yes
 
-- command: sudo -u vagrant -i -- goenv rehash
-- command: sudo -u vagrant -i -- goenv global {{ go_version | default(1.6.3) }}
+- name: goenv rehash
+  command: sudo -u vagrant -i -- goenv rehash
+
+- name: goenv global
+  command: sudo -u vagrant -i -- goenv global {{ go_version | default(1.6.3) }}

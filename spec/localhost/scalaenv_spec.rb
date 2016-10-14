@@ -2,21 +2,26 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["scala_version"] != 0 && property["java_version"] != 0 then
+  describe file('/home/vagrant/.scalaenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["scala_version"]].each do |scala_version|
     describe command("scalaenv versions | grep #{scala_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(scala_version)}/) }
     end
   end
 
   # describe command('/home/vagrant/.scalaenv/shims/scala -version') do
-  #   let(:disable_sudo) { true }
+  #   let(:sudo_options) { '-u vagrant -i' }
   #   its(:stdout) { should match /#{Regexp.escape(property["scala_version"])}/ }
   # end
 
   describe command('scalaenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["scala_version"] }
   end
 

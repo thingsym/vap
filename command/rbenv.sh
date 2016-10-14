@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Usage: rbenv.sh <Ruby Version Number>
 
 global() {

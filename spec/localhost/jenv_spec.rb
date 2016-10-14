@@ -2,16 +2,21 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["java_version"] != 0 then
+  describe file('/home/vagrant/.jenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["java_version"]].each do |java_version|
     describe command("jenv versions | grep #{java_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{java_version}/) }
     end
   end
 
   describe command('jenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{property["java_version"]}/ }
   end
 

@@ -2,21 +2,26 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["ruby_version"] != 0 then
+  describe file('/home/vagrant/.rbenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["ruby_version"]].each do |ruby_version|
     describe command("rbenv versions | grep #{ruby_version}") do
-      let(:disable_sudo) { true }
+      let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(ruby_version)}/) }
     end
   end
 
   describe command('ruby -v') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{Regexp.escape(property["ruby_version"])}/ }
   end
 
   describe command('rbenv global') do
-    let(:disable_sudo) { true }
+    let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match property["ruby_version"] }
   end
 
@@ -47,7 +52,7 @@ if property["ruby_version"] != 0 then
   end
 
   # describe command('bundler --version') do
-  #   let(:disable_sudo) { true }
+  #   let(:sudo_options) { '-u vagrant -i' }
   #   its(:exit_status) { should eq 0 }
   # end
 
