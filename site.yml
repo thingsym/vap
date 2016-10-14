@@ -7,6 +7,7 @@
   roles:
     - { role: before-command, tags: [before-command] }
     - { role: common, tags: [common] }
+    - { role: develop-tools, tags: [develop-tools] }
     - { role: git, tags: [git] }
     - { role: gibo, tags: [gibo] }
     - { role: mysql, tags: [mysql], when: "database == 'mysql'" }
