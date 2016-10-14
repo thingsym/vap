@@ -329,6 +329,11 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.1.3 - 2016.10.15
+	* fix tests
+	* fix the inline script to get the major version number
+	* fix sudo user
+	* fix shebang
 * version 0.1.2 - 2016.09.10
 	* fix node version
 	* add jenv and scalaenv
