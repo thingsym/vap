@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["scala_version"] != 0 && property["java_version"] != 0 then
+  describe file('/home/vagrant/.scalaenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["scala_version"]].each do |scala_version|
     describe command("scalaenv versions | grep #{scala_version}") do

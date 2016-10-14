@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["java_version"] != 0 then
+  describe file('/home/vagrant/.jenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["java_version"]].each do |java_version|
     describe command("jenv versions | grep #{java_version}") do

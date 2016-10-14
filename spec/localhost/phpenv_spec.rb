@@ -4,7 +4,6 @@ require 'shellwords'
 if property["php_version"] != 0 then
   describe file('/home/vagrant/.phpenv/') do
     it { should be_directory }
-    it { should be_mode 775 }
     it { should be_owned_by 'vagrant' }
     it { should be_grouped_into 'vagrant' }
   end

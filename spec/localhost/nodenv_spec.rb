@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["node_version"] != 0 then
+  describe file('/home/vagrant/.nodenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["node_version"]].each do |node_version|
     describe command("nodenv versions | grep #{node_version}") do

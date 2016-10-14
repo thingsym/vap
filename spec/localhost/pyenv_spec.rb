@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'shellwords'
 
 if property["python_version"] != 0 then
+  describe file('/home/vagrant/.pyenv/') do
+    it { should be_directory }
+    it { should be_owned_by 'vagrant' }
+    it { should be_grouped_into 'vagrant' }
+  end
 
   [property["python_version"]].each do |python_version|
     describe command("pyenv versions | grep #{python_version}") do
