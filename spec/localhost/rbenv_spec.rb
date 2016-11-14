@@ -8,6 +8,16 @@ if property["ruby_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which rbenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which ruby') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["ruby_version"]].each do |ruby_version|
     describe command("rbenv versions | grep #{ruby_version}") do
       let(:sudo_options) { '-u vagrant -i' }
@@ -64,19 +74,35 @@ if property["ruby_version"] != 0 then
     it { should be_installed }
   end
 
-  describe package('openssl-devel') do
+  describe package('openssl-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
-  describe package('libyaml-devel') do
+  describe package('libyaml-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
-  describe package('readline-devel') do
+  describe package('readline-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
-  describe package('zlib-devel') do
+  describe package('zlib-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('libssl-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libyaml-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libreadline-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('zlib1g-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 
