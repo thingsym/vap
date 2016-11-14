@@ -1,0 +1,53 @@
+---
+- name: apache2 installed
+  package: name={{ item }} state=latest
+  with_items:
+    - apache2
+    - apache2-dev
+
+- name: stat custom apache2.conf.j2
+  stat: path=/vagrant/config/apache2.conf.j2
+  register: is_custom_apache2_conf
+
+- name: custom apache2.conf changed
+  template: src=/vagrant/config/apache2.conf.j2 dest=/etc/apache2/apache2.conf
+  when: is_custom_apache2_conf.stat.exists
+
+- name: apache2.conf changed
+  template: src=apache2.conf.j2 dest=/etc/apache2/apache2.conf
+  when: not is_custom_apache2_conf.stat.exists
+
+- name: stat custom apache2.envvars.j2
+  stat: path=/vagrant/config/apache2.envvars.j2
+  register: is_custom_apache2_envvars
+
+- name: custom apache2 envvars changed
+  template: src=/vagrant/config/apache2.envvars.j2 dest=/etc/apache2/envvars
+  when: is_custom_apache2_envvars.stat.exists
+
+- name: apache2 envvars changed
+  template: src=apache2.envvars.j2 dest=/etc/apache2/envvars
+  when: not is_custom_apache2_envvars.stat.exists
+
+- name: edit charset on charset.conf
+  lineinfile: dest=/etc/apache2/conf-available/charset.conf line="AddDefaultCharset UTF-8"
+
+- name: 000-default.conf changed
+  template: src=apache2.000-default.conf.j2 dest=/etc/apache2/sites-available/000-default.conf
+
+- name: default-ssl.conf changed
+  template: src=apache2.default-ssl.conf.j2 dest=/etc/apache2/sites-available/default-ssl.conf
+  when: ssl == true
+
+- name: enables Apache2 module ssl
+  apache2_module: name=ssl state=present
+  when: ssl == true
+
+- name: disables Apache2 module mpm_event
+  apache2_module: state=absent name=mpm_event
+
+- name: enables Apache2 module mpm_prefork
+  apache2_module: state=present name=mpm_prefork
+
+- name: apache2 started and enabled
+  service: name=apache2 state=restarted enabled=yes
