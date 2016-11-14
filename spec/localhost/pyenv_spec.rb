@@ -8,6 +8,16 @@ if property["python_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which pyenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which python') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["python_version"]].each do |python_version|
     describe command("pyenv versions | grep #{python_version}") do
       let(:sudo_options) { '-u vagrant -i' }

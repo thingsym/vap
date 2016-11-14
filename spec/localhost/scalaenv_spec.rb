@@ -8,6 +8,16 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which scalaenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which scala') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["scala_version"]].each do |scala_version|
     describe command("scalaenv versions | grep #{scala_version}") do
       let(:sudo_options) { '-u vagrant -i' }
