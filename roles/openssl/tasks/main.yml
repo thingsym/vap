@@ -1,10 +1,14 @@
 ---
 - name: openssl installed
-  package: name={{ item }} state=latest
-  with_items:
-    - openssl
-    - openssl-devel
-    - mod_ssl
+  package: name=openssl state=latest
+
+- name: openssl-devel installed (CentOS/RHEL)
+  package: name=openssl-devel state=latest
+  when: ansible_os_family == 'RedHat'
+
+- name: libssl-dev installed (Debian)
+  package: name=libssl-dev state=latest
+  when: ansible_os_family == 'Debian'
 
 - name: stat ssl_path
   stat: path=/etc/pki/tls/{{ HOSTNAME }}
