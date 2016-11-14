@@ -17,6 +17,10 @@
 </VirtualHost>
 
 {% if ssl %}
+<IfModule mod_ssl.c>
+
+Mutex fcntl
+
 #
 # This is the Apache server configuration file providing SSL support.
 # It contains the configuration directives to instruct the server how to
@@ -90,7 +94,6 @@ SSLCryptoDevice builtin
 ## SSL Virtual Host Context
 ##
 
-<IfModule mod_ssl.c>
 <VirtualHost *:443>
     ServerName {{ HOSTNAME }}
     DocumentRoot {{ DOCUMENT_ROOT }}
