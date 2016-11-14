@@ -49,15 +49,7 @@ if property["ruby_version"] != 0 then
     it { should be_directory }
   end
 
-  describe file('/home/vagrant/.rbenv/plugins/rbenv-gem-rehash') do
-    it { should be_directory }
-  end
-
   describe file('/home/vagrant/.rbenv/plugins/rbenv-default-gems') do
-    it { should be_directory }
-  end
-
-  describe file('/home/vagrant/.rbenv/plugins/rbenv-bundler') do
     it { should be_directory }
   end
 
