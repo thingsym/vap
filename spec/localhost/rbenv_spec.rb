@@ -53,10 +53,10 @@ if property["ruby_version"] != 0 then
     it { should be_directory }
   end
 
-  # describe command('bundler --version') do
-  #   let(:sudo_options) { '-u vagrant -i' }
-  #   its(:exit_status) { should eq 0 }
-  # end
+  describe command('which bundler') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
 
   describe package('gcc') do
     it { should be_installed }
