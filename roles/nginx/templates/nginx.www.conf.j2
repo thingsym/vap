@@ -33,7 +33,7 @@ server {
     location ~ \.php$ {
         #root           {{ DOCUMENT_ROOT }};
 {% if fastcgi == "php-fpm" %}
-        fastcgi_pass    unix:/var/run/php-fpm/php-fcgi.pid;
+        fastcgi_pass    unix:/var/run/php-fcgi.pid;
 {% elif fastcgi == "hhvm" %}
         #fastcgi_pass   unix:/var/run/hhvm/hhvm.pid;
         fastcgi_pass    127.0.0.1:9000;
