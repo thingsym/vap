@@ -1,0 +1,41 @@
+---
+
+- name: mkdir /usr/lib/ssl
+  file: path=/usr/lib/ssl state=directory owner=root
+
+- name: generate a key
+  command: openssl genrsa -out /usr/lib/ssl/server.key 2048
+
+- name: generate a csr
+  command: openssl req -new -key /usr/lib/ssl/server.key -subj "/C=JP/ST=Tokyo-to/L=Minato-ku/O=vap/OU=vap/CN=*.{{ HOSTNAME }}" -out /usr/lib/ssl/server.csr
+
+- name: edited openssl.cnf
+  replace:
+    dest: /etc/pki/tls/openssl.cnf
+    regexp: '\/etc\/pki\/CA'
+    replace: './demoCA'
+    backup: yes
+
+- name: mkdir demoCA private
+  file: path=/usr/lib/ssl/demoCA/private state=directory owner=root
+
+- name: mkdir demoCA private
+  file: path=/usr/lib/ssl/demoCA/crl state=directory owner=root
+
+- name: mkdir demoCA certs
+  file: path=/usr/lib/ssl/demoCA/certs state=directory owner=root
+
+- name: mkdir demoCA newcerts
+  file: path=/usr/lib/ssl/demoCA/newcerts state=directory owner=root
+
+- name: touch serial
+  file: path=/usr/lib/ssl/demoCA/serial state=touch owner=root mode=0644
+
+- name: echo in serial file
+  shell: echo '01' > /usr/lib/ssl/demoCA/serial
+
+- name: touch index.txt
+  file: path=/usr/lib/ssl/demoCA/index.txt state=touch owner=root mode=0644
+
+- name: generate a Certification Authority
+  command: openssl ca -batch -days 365 -policy policy_anything -cert /etc/pki/tls/vap/vap.crt -keyfile /etc/pki/tls/vap/vap.key -in /usr/lib/ssl/server.csr -out /usr/lib/ssl/server.crt chdir=/usr/lib/ssl

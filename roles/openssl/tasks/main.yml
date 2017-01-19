@@ -10,16 +10,8 @@
   package: name=libssl-dev state=latest
   when: ansible_os_family == 'Debian'
 
-- name: stat ssl_path
-  stat: path=/etc/pki/tls/{{ HOSTNAME }}
-  register: is_ssl_path
+- name: include task
+  include: ca.yml
 
-- name: mkdir ssl
-  file: path=/etc/pki/tls/{{ HOSTNAME }} state=directory owner=root
-  when: not is_ssl_path.stat.exists
-
-- name: generate a key
-  command: openssl genrsa -out /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.key 2048
-
-- name: Generate a certificate
-  command: openssl req -new -x509 -key /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.key -out /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.cert -days 3650 -subj /CN={{ HOSTNAME }}
+- name: include task
+  include: server.yml
