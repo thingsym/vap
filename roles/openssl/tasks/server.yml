@@ -7,7 +7,7 @@
   command: openssl genrsa -out /usr/lib/ssl/server.key 2048
 
 - name: generate a csr
-  command: openssl req -new -key /usr/lib/ssl/server.key -subj "/C=JP/ST=Tokyo-to/L=Minato-ku/O=vap/OU=vap/CN=*.{{ HOSTNAME }}" -out /usr/lib/ssl/server.csr
+  command: openssl req -new -key /usr/lib/ssl/server.key -subj "/C=JP/ST=Tokyo/L=Minato-ku/O=vap/OU=vap/CN=*.{{ HOSTNAME }}" -out /usr/lib/ssl/server.csr
 
 - name: edited openssl.cnf
   replace:
@@ -15,6 +15,7 @@
     regexp: '\/etc\/pki\/CA'
     replace: './demoCA'
     backup: yes
+  when: ansible_os_family == 'RedHat'
 
 - name: mkdir demoCA private
   file: path=/usr/lib/ssl/demoCA/private state=directory owner=root

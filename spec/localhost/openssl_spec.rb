@@ -37,7 +37,7 @@ if property["ssl"] then
     it { should be_file }
   end
 
-  describe file('/etc/pki/tls/openssl.cnf') do
+  describe file('/etc/pki/tls/openssl.cnf'), :if => os[:family] == 'redhat' do
     its(:content) { should match /\.\/demoCA/ }
   end
 
