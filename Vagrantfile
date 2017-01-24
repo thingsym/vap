@@ -3,8 +3,12 @@
 
 ## Vagrant Settings ##
 
-vm_box                = 'hansode/centos-7.1.1503-x86_64'
-# vm_box                = 'hansode/centos-6.7-x86_64'
+vm_box                = 'bento/centos-7.2'
+# vm_box                = 'bento/centos-6.7'
+# vm_box                = 'bento/debian-8.6' # jessie
+# vm_box                = 'bento/ubuntu-16.04' # Xenial Xerus
+# vm_box                = 'bento/ubuntu-14.04' # Trusty Tahr
+
 vm_ip                 = '192.168.59.63'
 vm_box_version        = '>= 0'
 vm_hostname           = 'vap.local'
@@ -17,15 +21,52 @@ vbguest_auto_update = false
 ## That's all, stop setting. ##
 
 provision = <<-EOT
+  set -e
   if [ -e /etc/os-release ]; then
+    DISTR=$(awk '/PRETTY_NAME=/' /etc/os-release | sed 's/PRETTY_NAME=//' | sed 's/"//g' | awk '{print $1}' | tr '[:upper:]' '[:lower:]')
+    if [ -e /etc/redhat-release ]; then
+      VERSION=$(awk '{print $4}' /etc/redhat-release)
+    elif [ "$DISTR" = "debian" ] && [ -e /etc/debian_version ]; then
+      VERSION=$(awk '{print $1}' /etc/debian_version)
+    else
+      VERSION=$(awk '/VERSION_ID=/' /etc/os-release | sed 's/VERSION_ID=//' | sed 's/"//g')
+    fi
     MAJOR=$(awk '/VERSION_ID=/' /etc/os-release | sed 's/VERSION_ID=//' | sed 's/"//g' | sed -E 's/\.[0-9]{2}//g')
+    if [ -e /etc/lsb-release ]; then
+      RELEASE=$(awk '/DISTRIB_CODENAME=/' /etc/lsb-release | sed 's/DISTRIB_CODENAME=//' | sed 's/"//g' | tr '[:upper:]' '[:lower:]')
+    else
+      RELEASE=$(awk '/PRETTY_NAME=/' /etc/os-release | sed 's/"//g' | awk '{print $4}' | sed 's/[()]//g' | tr '[:upper:]' '[:lower:]')
+    fi
   elif [ -e /etc/redhat-release ]; then
+    DISTR=$(awk '{print $1}' /etc/redhat-release | tr '[:upper:]' '[:lower:]')
+    VERSION=$(awk '{print $3}' /etc/redhat-release)
     MAJOR=$(awk '{print $3}' /etc/redhat-release | sed -E 's/\.[0-9]+//g')
+    RELEASE=$(awk '{print $4}' /etc/redhat-release | sed 's/[()]//g' | tr '[:upper:]' '[:lower:]')
   fi
-  echo $MAJOR > /etc/yum/vars/releasever
+  ARCH=$(uname -m)
+  BITS=$(uname -m | sed 's/x86_//;s/amd//;s/i[3-6]86/32/')
 
-  yum clean all
-  yum -y install epel-release
+  echo '[OS Info]'
+  echo 'DISTRIBUTE:' $DISTR
+  echo 'ARCHITECTURE:' $ARCH
+  echo 'BITS:' $BITS
+  echo 'RELEASE:' $RELEASE
+  echo 'VERSION:' $VERSION
+  echo 'MAJOR:' $MAJOR
+
+  if [ "$DISTR" = "centos" ]; then
+    echo $MAJOR > /etc/yum/vars/releasever
+    yum clean all
+    yum -y install epel-release
+  fi
+
+  if [ "$DISTR" = "debian" ] && [ "$RELEASE" = "jessie" ]; then
+    echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
+    apt-get update
+    if [ #{ansible_install_mode} = "default" ]; then
+      apt-get -y install -t jessie-backports ansible
+    fi
+  fi
 EOT
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -68,6 +109,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "--memory", "1536",
       '--natdnshostresolver1', 'on',
       '--natdnsproxy1', 'on',
+      "--cableconnected1", "on",
     ]
   end
 
