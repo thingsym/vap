@@ -17,7 +17,15 @@ describe package('software-properties-common'), :if => os[:family] == 'debian' |
   it { should be_installed }
 end
 
-describe package('python-pip') do
+describe package('python2-pip'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+  it { should be_installed }
+end
+
+describe package('python-pip'), :if => os[:family] == 'redhat' && os[:release] == '6' do
+  it { should be_installed }
+end
+
+describe package('python-pip'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
   it { should be_installed }
 end
 
