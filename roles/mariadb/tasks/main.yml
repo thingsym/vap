@@ -1,10 +1,6 @@
 ---
-- name: PGP key installed
-  rpm_key: state=present key=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  when: ansible_os_family == 'RedHat'
-
 - block:
-  - name: MariaDB repository added (CentOS/RHEL 6)
+  - name: MariaDB 10.1 repository added (CentOS/RHEL 6)
     yum_repository:
       name: mariadb
       description: MariaDB 10.1 centos repository
@@ -15,18 +11,17 @@
   - name: MariaDB installed (CentOS/RHEL 6)
     package: name={{ item }} state=latest
     with_items:
+      - MariaDB-server
       - MariaDB-client
       - MariaDB-common
       - MariaDB-compat
       - MariaDB-devel
-      - MariaDB-server
       - MariaDB-shared
       - MySQL-python
-
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int == 6
 
 - block:
-  - name: MariaDB repository installed (CentOS/RHEL 7)
+  - name: MariaDB 10.1 repository installed (CentOS/RHEL 7)
     yum_repository:
       name: mariadb
       description: MariaDB 10.1 centos repository
@@ -34,17 +29,52 @@
       gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
 
-  - name: MariaDB installed (CentOS/RHEL 7)
+  - name: MariaDB 10.1 installed (CentOS/RHEL 7)
     package: name={{ item }} state=latest
     with_items:
+      - mariadb-server
+      - MariaDB-client
       - mariadb
       - mariadb-devel
-      - mariadb-server
       - mariadb-libs
       - mariadb-embedded
       - MySQL-python
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int == 7
 
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
+- block:
+  - name: MariaDB apt_key installed (Ubuntu/xenial)
+    apt_key: keyserver=keyserver.ubuntu.com id=0xF1656F24C74CD1D8
+    when: ansible_distribution_release == 'xenial'
+
+  - name: MariaDB apt_key installed (Ubuntu/trusty or precise)
+    apt_key: keyserver=keyserver.ubuntu.com id=0xcbcb082a1bb943db
+    when: ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
+
+  - name: MariaDB 10.1 repository installed
+    apt_repository: filename='MariaDB' repo='deb [arch=amd64,i386,ppc64el] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu {{ ansible_distribution_release }} main'
+
+  - name: MariaDB 10.1 installed (Ubuntu)
+    package: name={{ item }} state=latest
+    with_items:
+      - mariadb-server
+      - libmariadbd-dev
+      - python-mysqldb
+  when: ansible_distribution == 'Ubuntu'
+
+- block:
+  - name: MariaDB 10.1 apt_key installed (Debian)
+    apt_key: keyserver=keyserver.ubuntu.com id=0xcbcb082a1bb943db
+
+  - name: MariaDB 10.1 repository installed
+    apt_repository: filename='MariaDB' repo='deb [arch=amd64,i386] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/debian {{ ansible_distribution_release }} main'
+
+  - name: MariaDB 10.1 installed (Debian)
+    package: name={{ item }} state=latest
+    with_items:
+      - mariadb-server
+      - libmariadbd-dev
+      - python-mysqldb
+  when: ansible_distribution == 'Debian'
 
 - name: stat custom my.cnf.j2
   stat: path=/vagrant/config/my.cnf.j2
@@ -94,10 +124,7 @@
 
 - name: Drop MariaDB test database
   mysql_db:
-     name: test
-     state: absent
-     login_user: "root"
-     login_password: "{{ db_root_password }}"
-
-- name: create symbolic link
-  file: src=/var/lib/mysql/mysql.sock dest=/tmp/mysql.sock state=link
+    name: test
+    state: absent
+    login_user: "root"
+    login_password: "{{ db_root_password }}"

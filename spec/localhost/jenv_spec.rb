@@ -15,6 +15,16 @@ if property["java_version"] != 0 then
     end
   end
 
+  describe command('which jenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which java') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   describe command('jenv global') do
     let(:sudo_options) { '-u vagrant -i' }
     its(:stdout) { should match /#{property["java_version"]}/ }

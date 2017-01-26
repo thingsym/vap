@@ -1,17 +1,8 @@
 ---
-- name: httpd installed
-  package: name={{ item }} state=latest
-  with_items:
-      - httpd
-      - httpd-devel
+- name: include task (CentOS/RHEL)
+  include: centos.yml
+  when: ansible_os_family == 'RedHat'
 
-- name: httpd config (CentOS/RHEL 6)
-  include: conf-centos6.yml
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
-
-- name: httpd config (CentOS/RHEL 7)
-  include: conf-centos7.yml
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
-
-- name: httpd started and enabled
-  service: name=httpd state=restarted enabled=yes
+- name: include task (Debian)
+  include: debian.yml
+  when: ansible_os_family == 'Debian'

@@ -1,27 +1,17 @@
 ---
 - name: openssl installed
-  package: name={{ item }} state=latest
-  with_items:
-    - openssl
-    - openssl-devel
-    - mod_ssl
+  package: name=openssl state=latest
 
-- name: stat ssl_path
-  stat: path=/etc/pki/tls/{{ HOSTNAME }}
-  register: is_ssl_path
-- name: mkdir ssl
-  file: path=/etc/pki/tls/{{ HOSTNAME }} state=directory owner=root
-  when: not is_ssl_path.stat.exists
+- name: openssl-devel installed (CentOS/RHEL)
+  package: name=openssl-devel state=latest
+  when: ansible_os_family == 'RedHat'
 
-- name: generate a key
-  shell: openssl genrsa -out /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.key 2048
+- name: libssl-dev installed (Debian)
+  package: name=libssl-dev state=latest
+  when: ansible_os_family == 'Debian'
 
-- name: Generate a certificate
-  shell: openssl req -new -x509 -key /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.key -out /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.cert -days 3650 -subj /CN={{ HOSTNAME }}
+- name: include task
+  include: ca.yml
 
-- name: stat ssl.conf
-  stat: path=/etc/httpd/conf.d/ssl.conf
-  register: is_ssl_conf
-- name: delete ssl.conf
-  file: path=/etc/httpd/conf.d/ssl.conf state=absent
-  when: is_ssl_conf.stat.exists
+- name: include task
+  include: server.yml

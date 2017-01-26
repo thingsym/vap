@@ -16,8 +16,14 @@
 - name: edit jenv init on .bashrc
   lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(jenv init -)\""
 
-- name: java added via jenv
+- name: java added via jenv (CentOS/RHEL)
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(1.8) }}.0
+  when: ansible_os_family == 'RedHat'
+  ignore_errors: yes
+
+- name: java added via jenv (Debian)
+  command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
+  when: ansible_os_family == 'Debian'
   ignore_errors: yes
 
 - name: jenv global

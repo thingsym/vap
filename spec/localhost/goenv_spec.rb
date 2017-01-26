@@ -8,6 +8,16 @@ if property["go_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which goenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which go') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["go_version"]].each do |go_version|
     describe command("goenv versions | grep #{go_version}") do
       let(:sudo_options) { '-u vagrant -i' }

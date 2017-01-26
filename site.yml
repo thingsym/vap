@@ -7,6 +7,7 @@
   roles:
     - { role: before-command, tags: [before-command] }
     - { role: common, tags: [common] }
+    - { role: develop-tools, tags: [develop-tools] }
     - { role: git, tags: [git] }
     - { role: gibo, tags: [gibo] }
     - { role: mysql, tags: [mysql], when: "database == 'mysql'" }
@@ -24,5 +25,5 @@
     - { role: openjdk, tags: [openjdk], when: "java_version != 0" }
     - { role: jenv, tags: [jenv], when: "java_version != 0" }
     - { role: scalaenv, tags: [scalaenv], when: "scala_version != 0 and java_version != 0" }
-    - { role: phpmyadmin, tags: [phpmyadmin], when: "phpmyadmin == true and php_version != 0 and database != 'none'" }
+    - { role: phpmyadmin, tags: [phpmyadmin], when: "phpmyadmin == true and php_version != 0 and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
     - { role: after-command, tags: [after-command] }
