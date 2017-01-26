@@ -8,6 +8,16 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which scalaenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which scala') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["scala_version"]].each do |scala_version|
     describe command("scalaenv versions | grep #{scala_version}") do
       let(:sudo_options) { '-u vagrant -i' }
@@ -15,10 +25,10 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
     end
   end
 
-  # describe command('/home/vagrant/.scalaenv/shims/scala -version') do
-  #   let(:sudo_options) { '-u vagrant -i' }
-  #   its(:stdout) { should match /#{Regexp.escape(property["scala_version"])}/ }
-  # end
+  describe command('scala -version') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:stderr) { should match /#{Regexp.escape(property["scala_version"])}/ }
+  end
 
   describe command('scalaenv global') do
     let(:sudo_options) { '-u vagrant -i' }

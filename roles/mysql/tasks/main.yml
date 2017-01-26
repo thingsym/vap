@@ -1,22 +1,68 @@
 ---
-- name: mysql repository installed (CentOS/RHEL 6)
-  yum: name=https://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 6
+- block:
+  - name: mysql repository installed (CentOS/RHEL 6)
+    yum: name=https://dev.mysql.com/get/mysql57-community-release-el6-9.noarch.rpm
+    when: ansible_distribution_major_version|int == 6
 
-- name: mysql repository installed (CentOS/RHEL 7)
-  yum: name=https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
+  - name: mysql repository installed (CentOS/RHEL 7)
+    yum: name=https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+    when: ansible_distribution_major_version|int == 7
 
-- name: mysql installed
+  - name: yum-config disable mysql57-community
+    command: yum-config-manager --disable mysql57-community
+
+  - name: yum-config enable mysql56-community
+    command: yum-config-manager --enable mysql56-community
+
+  - name: mysql 5.6 installed (CentOS/RHEL)
+    package: name={{ item }} state=latest
+    with_items:
+      - mysql-community-server
+      - mysql-community-devel
+      - mysql-community-client
+      - mysql-community-common
+      - mysql-community-libs
+      - mysql-utilities
+      - MySQL-python
+
+  when: ansible_os_family == 'RedHat'
+
+- name: mysql 5.5 installed (Debian)
   package: name={{ item }} state=latest
   with_items:
-    - mysql-community-server
-    - mysql-community-devel
-    - mysql-community-client
-    - mysql-community-common
-    - mysql-community-libs
+    - mysql-server
+    - mysql-common
+    - mysql-client
     - mysql-utilities
-    - MySQL-python
+    - libmysqlclient18
+    - libmysqlclient-dev
+    - python-mysqldb
+  when: ansible_distribution == 'Debian'
+
+- block:
+  - name: mysql 5.7 installed (Ubuntu)
+    package: name={{ item }} state=latest
+    with_items:
+      - mysql-server
+      - mysql-common
+      - mysql-client
+      - mysql-utilities
+      - libmysqlclient20
+      - libmysqlclient-dev
+      - python-mysqldb
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+
+- name: mysql 5.6 installed (Ubuntu)
+  package: name={{ item }} state=latest
+  with_items:
+    - mysql-server-5.6
+    - mysql-common-5.6
+    - mysql-client-5.6
+    - mysql-utilities
+    - libmysqlclient18
+    - libmysqlclient-dev
+    - python-mysqldb
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
 
 - name: stat custom my.cnf.j2
   stat: path=/vagrant/config/my.cnf.j2
@@ -30,8 +76,13 @@
   template: src=my.cnf.j2 dest=/etc/my.cnf
   when: not is_custom_my_conf.stat.exists
 
-- name: mysqld started and enabled
+- name: mysqld started and enabled (CentOS/RHEL)
   service: name=mysqld state=restarted enabled=yes
+  when: ansible_os_family == 'RedHat'
+
+- name: mysql started and enabled (Debian)
+  service: name=mysql state=restarted enabled=yes
+  when: ansible_os_family == 'Debian'
 
 - name: set mysql root password
   mysql_user:
@@ -66,10 +117,7 @@
 
 - name: Drop MySQL test database
   mysql_db:
-     name: test
-     state: absent
-     login_user: "root"
-     login_password: "{{ db_root_password }}"
-
-- name: create symbolic link
-  file: src=/var/lib/mysql/mysql.sock dest=/tmp/mysql.sock state=link
+    name: test
+    state: absent
+    login_user: "root"
+    login_password: "{{ db_root_password }}"

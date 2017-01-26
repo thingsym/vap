@@ -21,18 +21,8 @@
   become: yes
   become_user: vagrant
 
-- name: git checkout rbenv-gem-rehash
-  git: repo=https://github.com/rbenv/rbenv-gem-rehash.git dest={{ home_dir }}/.rbenv/plugins/rbenv-gem-rehash force=yes
-  become: yes
-  become_user: vagrant
-
 - name: git checkout rbenv-default-gems
   git: repo=https://github.com/rbenv/rbenv-default-gems.git dest={{ home_dir }}/.rbenv/plugins/rbenv-default-gems force=yes
-  become: yes
-  become_user: vagrant
-
-- name: git checkout rbenv-bundler
-  git: repo=https://github.com/carsomyr/rbenv-bundler.git dest={{ home_dir }}/.rbenv/plugins/rbenv-bundler force=yes
   become: yes
   become_user: vagrant
 
@@ -41,10 +31,24 @@
   with_items:
     - gcc
     - cmake
+
+- name: build environment (CentOS/RHEL)
+  package: name={{ item }} state=latest
+  with_items:
     - openssl-devel
     - libyaml-devel
     - readline-devel
     - zlib-devel
+  when: ansible_os_family == 'RedHat'
+
+- name: build environment (Debian)
+  package: name={{ item }} state=latest
+  with_items:
+    - libssl-dev
+    - libyaml-dev
+    - libreadline-dev
+    - zlib1g-dev
+  when: ansible_os_family == 'Debian'
 
 - name: stat rbenv_default_gems
   stat: path=/vagrant/config/default-ruby-gems.j2

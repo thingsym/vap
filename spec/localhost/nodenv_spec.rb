@@ -8,6 +8,16 @@ if property["node_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which nodenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which node') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["node_version"]].each do |node_version|
     describe command("nodenv versions | grep #{node_version}") do
       let(:sudo_options) { '-u vagrant -i' }

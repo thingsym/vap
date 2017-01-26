@@ -215,6 +215,10 @@ LoadModule version_module modules/mod_version.so
 #LoadModule unique_id_module modules/mod_unique_id.so
 #
 
+{% if ssl %}
+LoadModule ssl_module modules/mod_ssl.so
+{% endif %}
+
 #
 # Load config files from the config directory "/etc/httpd/conf.d".
 #
@@ -1038,8 +1042,6 @@ NameVirtualHost *:80
 # consult the online docs. You have been warned.
 #
 
-LoadModule ssl_module modules/mod_ssl.so
-
 #
 # When we also provide SSL we have to listen to the
 # the HTTPS port in addition.
@@ -1118,8 +1120,8 @@ SSLCryptoDevice builtin
     </Directory>
 
     SSLEngine On
-    SSLCertificateFile /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.cert
-    SSLCertificateKeyFile /etc/pki/tls/{{ HOSTNAME }}/{{ HOSTNAME }}.key
+    SSLCertificateFile /usr/lib/ssl/server.crt
+    SSLCertificateKeyFile /usr/lib/ssl/server.key
 
 </VirtualHost>
 </IfModule>

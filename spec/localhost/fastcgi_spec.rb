@@ -3,16 +3,16 @@ require 'shellwords'
 
 if property["fastcgi"] == 'php-fpm' then
 
-  describe file('/var/run/php-fpm') do
+  describe file('/var/log/php-fpm'), :if => os[:family] == 'redhat' do
     it { should be_directory }
     it { should be_owned_by 'nginx' }
     it { should be_grouped_into 'nginx' }
   end
 
-  describe file('/var/log/php-fpm') do
+  describe file('/var/log/php-fpm'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_directory }
-    it { should be_owned_by 'nobody' }
-    it { should be_grouped_into 'nobody' }
+    it { should be_owned_by 'www-data' }
+    it { should be_grouped_into 'www-data' }
   end
 
   describe file('/usr/sbin/php-fpm') do
@@ -20,25 +20,29 @@ if property["fastcgi"] == 'php-fpm' then
     it { should be_mode 755 }
   end
 
-  if os[:family] == 'redhat' && os[:release] =~ /^6/
-      describe file('/etc/init.d/php-fpm') do
-        it { should be_file }
-        it { should be_mode 755 }
-      end
+  describe file('/etc/init.d/php-fpm'), :if => os[:family] == 'redhat' && os[:release] == '6' do
+    it { should be_file }
+    it { should be_mode 755 }
   end
 
-  if os[:family] == 'redhat' && os[:release] =~ /^7/
-      describe file('/usr/lib/systemd/system/php-fpm.service') do
-        it { should be_file }
-      end
+  describe file('/usr/lib/systemd/system/php-fpm.service'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+    it { should be_file }
+  end
 
-      describe file('/etc/sysconfig/php-fpm') do
-        it { should be_file }
-      end
+  describe file('/lib/systemd/system/php-fpm.service'), :if => os[:family] == 'debian' do
+    it { should be_file }
+  end
 
-      describe file('/etc/tmpfiles.d/php-fpm.conf') do
-        it { should be_file }
-      end
+  describe file('/lib/systemd/system/php-fpm.service'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    it { should be_file }
+  end
+
+  describe file('/etc/init.d/php-fpm'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
+    it { should be_file }
+  end
+
+  describe file('/etc/sysconfig/php-fpm'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+    it { should be_file }
   end
 
   describe command('php-fpm -v') do

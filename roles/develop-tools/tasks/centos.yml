@@ -1,0 +1,9 @@
+---
+- name: Development Tools installed
+  package: name="@Development Tools" state=present
+
+- name: libraries installed
+  package: name={{ item }} state=latest
+  with_items:
+    - yum-utils
+    - python-pip

@@ -8,6 +8,16 @@ if property["perl_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which plenv') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which perl') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["perl_version"]].each do |perl_version|
     describe command("plenv versions | grep #{perl_version}") do
       let(:sudo_options) { '-u vagrant -i' }
@@ -25,12 +35,32 @@ if property["perl_version"] != 0 then
     its(:stdout) { should match property["perl_version"] }
   end
 
+  describe file('/home/vagrant/.bash_profile') do
+    its(:content) { should match /export PATH=\$HOME\/\.plenv\/bin:\$PATH/ }
+    its(:content) { should match /eval "\$\(plenv init \-\)"/ }
+  end
+
+  describe file('/home/vagrant/.bashrc') do
+    its(:content) { should match /export PATH=\$HOME\/\.plenv\/bin:\$PATH/ }
+    its(:content) { should match /eval "\$\(plenv init \-\)"/ }
+  end
+
   describe file('/home/vagrant/.plenv/plugins/perl-build') do
     it { should be_directory }
   end
 
   describe file('/home/vagrant/.plenv/shims/carton') do
     it { should be_file }
+  end
+
+  describe command('which cpanm') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('which carton') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
   end
 
 end

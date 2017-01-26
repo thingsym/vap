@@ -4,7 +4,11 @@
 
 ## Features
 
-### 1. Build Server and Database environment
+### 1. OS Distribution Compatibility
+
+**VAP** support CentOS, Debian and Ubuntu Boxes.
+
+### 2. Build Server and Database environment
 
 **VAP** will build server from **Apache** or **nginx**, and build database from **MySQL**, **MariaDB** or **Percona MySQL**.
 
@@ -12,7 +16,7 @@ Server nginx is a FastCGI configuration as a reverse proxy. And building a PHP e
 
 By default, the server and the databese is installed in the default settings. Also you can edit configuration files.
 
-### 2. Build Programming environment
+### 3. Build Programming environment
 
 **VAP** will build a Programming languages that specifies the version.
 
@@ -25,7 +29,7 @@ By default, the server and the databese is installed in the default settings. Al
 * [Java (OpenJDK)](http://openjdk.java.net/)
 * [Scala](http://www.scala-lang.org/)
 
-### 3. Develop & Deploy Tools
+### 4. Develop & Deploy Tools
 
 You can install the develop tools or the deploy tools by usage. See Specification for list of installed tools.
 
@@ -84,6 +88,7 @@ ID and password for the initial setting is as follows. Can be set in the provisi
 
 #### Database
 
+* ROOT USER `root`
 * ROOT PASSWORD `admin`
 * HOST `localhost`
 
@@ -100,13 +105,18 @@ Vagrant configuration file is **Vagrantfile**.
 
 Vagrantfile will set the vagrant Box, private IP address, hostname and the document root.
 
-If you launch multiple environments, change the name of the directory. Should rewrite `vm_ip` and` vm_hostname`. Note not to overlap with other environments.
+If you launch multiple environments, change the name of the directory. you should rewrite `vm_ip` and` vm_hostname`. Note not to overlap with other environments.
 
 You can accesse from a terminal in the same LAN to use the public network to Vagrant virtual environment. To use public networks, set IP address for bridged connection to `public_ip`. In that case, recommended that configure the same IP address to `vm_hostname`.
 
+You can choose the ansible install mode, the default or the pip.
+
+The default is to install Ansible from the operating system package manager, via yum or apt.
+The pip is to install Ansible from the Python package manager. In this case, you can install a specific version of Ansible.
+
 	## Vagrant Settings ##
 
-	vm_box                = 'hansode/centos-7.1.1503-x86_64'
+	vm_box                = 'bento/centos-7.2'
 	vm_ip                 = '192.168.59.63'
 	vm_box_version        = '>= 0'
 	vm_hostname           = 'vap.local'
@@ -116,7 +126,10 @@ You can accesse from a terminal in the same LAN to use the public network to Vag
 
 	vbguest_auto_update = false
 
-* `vm_box` (required) name of Vagrant Box (default: `hansode/centos-7.1.1503-x86_64`)
+	ansible_install_mode  = :default    # :default|:pip
+	ansible_version       = 'latest'    # only :pip
+
+* `vm_box` (required) name of Vagrant Box (default: `bento/centos-7.2`)
 * `vm_box_version` (required) version of Vagrant Box (default: `>= 0`)
 * `vm_ip` (required) private IP address (default: `192.168.59.63`)
 * `vm_hostname` (required) hostname (default: `vap.local`)
@@ -124,6 +137,8 @@ You can accesse from a terminal in the same LAN to use the public network to Vag
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: ``)
 * `vbguest_auto_update` update VirtualBox Guest Additions (default: false / value: true | false)
+* `ansible_install_mode` (required)  the way to install Ansible (default: :default / value: :default | :pip)
+* `ansible_version` version of Ansible to install (default: latest)
 
 ### Provisioning configuration file (YAML)
 
@@ -146,7 +161,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 	python_version     : 3.5.1       # 3.5.1
 	php_version        : 7.0.7       # 7.0.7
 	perl_version       : 5.25.1      # 5.25.1
-	node_version       : 4.5.0      # 4.5.0
+	node_version       : 6.9.1       # 6.9.1
 	go_version         : 1.6.3       # 1.6.3
 	java_version       : 1.8         # 1.8
 	scala_version      : 2.11.8      # 2.11.8 (require java)
@@ -154,7 +169,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 	## Develop & Deploy Settings ##
 
 	ssl                : false   # true|false
-	phpmyadmin         : false   # true|false
+	phpmyadmin         : false   # true|false (require PHP and mysql)
 
 	## That's all, stop setting. Let's vagrant up!! ##
 
@@ -172,7 +187,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 * `python_version` version of Python (default: `3.5.1`)
 * `php_version` version of PHP (default: `7.0.7`)
 * `perl_version` version of Perl (default: `5.25.1`)
-* `node_version` version of Node.js (default: `4.5.0`)
+* `node_version` version of Node.js (default: `6.9.1`)
 * `go_version` version of Go (default: `1.6.3`)
 * `java_version` version of Java (default: `1.8`)
 * `scala_version` version of Scala (default: `2.11.8`) require Java
@@ -201,7 +216,6 @@ This directory synchronize to the guest OS side `/vagrant`. `html` creates autom
 	* local (inventory file)
 * html (synchronize to the Document Root. create automatically at `vagrant up`, if it does not exist.)
 * Rakefile (Rakefile of ServerSpec)
-* readme-ja.md
 * readme.md
 * roles (stores Ansible playbook of each role)
 * site.yml (Ansible playbook core file)
@@ -221,9 +235,15 @@ VAP will be built in the directory structure of the following minimum unit.
 * site.yml (Ansible playbook core file)
 * Vagrantfile (Vagrant configuration file)
 
-## Vagrant Box
+## Vagrant Boxs
 
-Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
+**VAP** support CentOS, Debian and Ubuntu Boxes. Details are as follows:
+
+* CentOS 7
+* CentOS 6
+* Debian 8 jessie
+* Ubuntu 16.04 Xenial
+* Ubuntu 14.04 Trusty
 
 ## Specification
 
@@ -266,10 +286,10 @@ Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
 
 * after_provision.sh
 * before_provision.sh
-* rbenv.sh
-* pyenv.sh
 * phpenv.sh
 * plenv.sh
+* pyenv.sh
+* rbenv.sh
 
 ## Helper command
 
@@ -302,9 +322,15 @@ Vagrant Box is probably compatible with centos-7.x x86_64 and centos-6.x x86_64.
 
 ## Custom Config
 
-When you add a tuning configuration file that you edited in the directory `config`, place it at the time of provisioning.
+You can edit the configuration files.
+When you add tuning configuration files in the directory `config`, tuning configuration files are placed at provisioning time.
+
 As follows editable configuration files.
 
+* apache2.000-default.conf.j2
+* apache2.conf.j2
+* apache2.default-ssl.conf.j2
+* apache2.envvars.j2
 * default-node-packages.j2
 * default-ruby-gems.j2
 * httpd.conf.centos6.j2
@@ -314,7 +340,6 @@ As follows editable configuration files.
 * nginx.conf.j2
 * nginx.www.conf.j2
 * php-build.default_configure_options.j2
-* php.conf.j2
 
 ## Contribute
 
@@ -329,6 +354,10 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.0 - 2017.01.26
+	* fix openssl, add vap.crt and server.crt
+	* support Debian and Ubuntu
+	* add develop-tools
 * version 0.1.3 - 2016.10.15
 	* fix tests
 	* fix the inline script to get the major version number
@@ -357,4 +386,4 @@ If you would like to contribute, here are some notes and guidlines.
 
 VAP is distributed under GPLv3.
 
-Copyright (c) 2016 thingsym
+Copyright (c) 2017 thingsym
