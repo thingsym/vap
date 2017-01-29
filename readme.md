@@ -354,6 +354,10 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.0 - 2017.01.26
+	* fix openssl, add vap.crt and server.crt
+	* support Debian and Ubuntu
+	* add develop-tools
 * version 0.1.3 - 2016.10.15
 	* fix tests
 	* fix the inline script to get the major version number
