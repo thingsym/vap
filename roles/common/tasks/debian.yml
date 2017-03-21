@@ -1,4 +1,6 @@
 ---
 - name: sysv-rc-conf installed
-  package: name=sysv-rc-conf state=latest
+  package:
+    name: sysv-rc-conf
+    state: latest
   when: ansible_distribution_release == 'trusty'

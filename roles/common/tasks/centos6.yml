@@ -1,23 +1,33 @@
 ---
 - name: libselinux-python installed
-  package: name=libselinux-python state=latest
+  package:
+    name: libselinux-python
+    state: latest
 
 - name: disable selinux
-  selinux: state=disabled
+  selinux:
+    state: disabled
 
 - name: is_getenforce
   command: /usr/sbin/getenforce
   register: is_getenforce
 
 - name: SELinux is turned off
-  fail: msg="SELinux is turned off. please run again, 'vagrant reload --provision'"
+  fail:
+    msg: "SELinux is turned off. please run again, 'vagrant reload --provision'"
   when: is_getenforce.stdout == 'Enforcing'
 
 - name: iptables stoped and disabled
-  service: name=iptables state=stopped enabled=no
+  service:
+    name: iptables
+    state: stopped
+    enabled: no
 
 - name: epel repository installed (CentOS/RHEL 6)
-  yum: name=epel-release state=present
+  yum:
+    name: epel-release
+    state: present
 
 - name: IUS repository installed (CentOS/RHEL 6)
-  yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm
+  yum:
+    name: http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm

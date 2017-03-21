@@ -1,7 +1,10 @@
 ---
 
 - name: mkdir ssl
-  file: path=/etc/pki/tls/vap state=directory owner=root
+  file:
+    path: /etc/pki/tls/vap
+    state: directory
+    owner: root
 
 - name: generate a key
   command: openssl genrsa -out /etc/pki/tls/vap/vap.key 2048

@@ -1,20 +1,31 @@
 ---
 - name: git checkout pyenv
-  git: repo=https://github.com/yyuu/pyenv.git dest={{ home_dir }}/.pyenv force=yes
+  git:
+    repo: https://github.com/yyuu/pyenv.git
+    dest: "{{ home_dir }}/.pyenv"
+    force: yes
   become: yes
   become_user: vagrant
 
 - name: edit PATH pyenv on .bash_profile
-  lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.pyenv/bin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "export PATH=$HOME/.pyenv/bin:$PATH"
 
 - name: edit PATH pyenv on .bashrc
-  lineinfile: dest={{ home_dir }}/.bashrc line="export PATH=$HOME/.pyenv/bin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "export PATH=$HOME/.pyenv/bin:$PATH"
 
 - name: edit pyenv init on .bash_profile
-  lineinfile: dest={{ home_dir }}/.bash_profile line="eval \"$(pyenv init -)\""
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "eval \"$(pyenv init -)\""
 
 - name: edit pyenv init on .bashrc
-  lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(pyenv init -)\""
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "eval \"$(pyenv init -)\""
 
 - name: Python installed via pyenv
   command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}

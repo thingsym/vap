@@ -12,14 +12,21 @@
   when: ansible_os_family == 'Debian'
 
 - name: ntp installed
-  package: name=ntp
+  package:
+    name: ntp
 
 - name: ntp started and enabled
-  service: name=ntpd state=restarted enabled=yes
+  service:
+    name: ntpd
+    state: restarted
+    enabled: yes
   when: ansible_os_family == 'RedHat'
 
 - name: ntp started and enabled
-  service: name=ntp state=restarted enabled=yes
+  service:
+    name: ntp
+    state: restarted
+    enabled: yes
   when: ansible_os_family == 'Debian'
 
 - name: create swap space
@@ -37,9 +44,15 @@
   ignore_errors: yes
 
 - name: edit PATH on .bash_profile
-  lineinfile: dest={{ home_dir }}/.bash_profile create=yes line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+    create: yes
 
 - name: edit PATH on .bashrc
-  lineinfile: dest={{ home_dir }}/.bashrc create=yes line="export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
+    create: yes
 
 - include: reset.yml

@@ -1,6 +1,8 @@
 ---
 - name: build environment (CentOS/RHEL)
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - libxml2-devel
     - bison
@@ -17,7 +19,9 @@
   when: ansible_os_family == 'RedHat'
 
 - name: build environment (Debian)
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - libxml2-dev
     - bison
@@ -38,7 +42,9 @@
   when: ansible_os_family == 'Debian'
 
 - name: build environment (Debian)
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - libtool-bin
   when: ansible_os_family == 'Debian' and ansible_distribution_release != 'trusty'

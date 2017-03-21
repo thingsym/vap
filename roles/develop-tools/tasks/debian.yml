@@ -1,9 +1,13 @@
 ---
 - name: build-essential installed
-  package: name=build-essential state=latest
+  package:
+    name: build-essential
+    state: latest
 
 - name: libraries installed
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - patch
     - pkg-config

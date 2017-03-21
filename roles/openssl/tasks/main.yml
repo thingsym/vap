@@ -1,13 +1,19 @@
 ---
 - name: openssl installed
-  package: name=openssl state=latest
+  package:
+    name: openssl
+    state: latest
 
 - name: openssl-devel installed (CentOS/RHEL)
-  package: name=openssl-devel state=latest
+  package:
+    name: openssl-devel
+    state: latest
   when: ansible_os_family == 'RedHat'
 
 - name: libssl-dev installed (Debian)
-  package: name=libssl-dev state=latest
+  package:
+    name: libssl-dev
+    state: latest
   when: ansible_os_family == 'Debian'
 
 - name: include task
