@@ -5,11 +5,18 @@
     state: present
   when: java_version == 1.8 and ansible_distribution == 'Ubuntu'
 
-- name: JDK 8 installed
+- name: JDK 8 installed (Ubuntu)
   package:
     name: openjdk-8-jdk
     state: latest
-  when: java_version == 1.8
+  when: java_version == 1.8 and ansible_distribution == 'Ubuntu'
+
+- name: JDK 8 installed (Debian)
+  apt:
+    name: openjdk-8-jdk
+    state: latest
+    default_release: jessie-backports
+  when: java_version == 1.8 and ansible_distribution == 'Debian'
 
 - name: JDK 7 installed
   package:
