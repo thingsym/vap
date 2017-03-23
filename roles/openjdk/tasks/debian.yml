@@ -23,9 +23,3 @@
     name: openjdk-7-jdk
     state: latest
   when: java_version == 1.7
-
-- name: JDK 6 installed
-  package:
-    name: openjdk-6-jdk
-    state: latest
-  when: java_version == 1.6
