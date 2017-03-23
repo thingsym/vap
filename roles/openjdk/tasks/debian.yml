@@ -5,6 +5,12 @@
     state: present
   when: java_version == 1.8 and ansible_distribution == 'Ubuntu'
 
+- name: JDK 9 installed
+  package:
+    name: openjdk-9-jdk
+    state: latest
+  when: java_version == 1.9
+
 - name: JDK 8 installed (Ubuntu)
   package:
     name: openjdk-8-jdk
