@@ -2,11 +2,11 @@
 
 ## Server & Database Settings ##
 
-server             : 'none'   # none|apache|nginx
-fastcgi            : 'none'   # none|php-fpm
-database           : 'none'   # none|mysql|mariadb|percona
+server             : none   # none|apache|nginx
+fastcgi            : none   # none|php-fpm
+database           : none   # none|mysql|mariadb|percona
 
-db_root_password   : 'admin'
+db_root_password   : admin
 
 ## Programming languages Settings ##
 # If the version is set to 0, the programming language does not install
