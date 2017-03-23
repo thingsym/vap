@@ -31,11 +31,11 @@ if property["database"] == 'mysql' then
     it { should be_installed }
   end
 
-  describe package('mysql-server-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04'  do
+  describe package('mysql-server-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
     it { should be_installed }
   end
 
-  describe package('mysql-server-5.6'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04'  do
+  describe package('mysql-server-5.6'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
     it { should be_installed }
   end
 
