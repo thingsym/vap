@@ -4,23 +4,24 @@
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin"
   register: is_phpMyAdmin_path
 
-- name: phpMyAdmin download
-  get_url:
-    url: "{{ phpMyAdmin_url }}"
-    dest: "{{ DOCUMENT_ROOT }}/phpMyAdmin.zip"
-    validate_certs: no
-  when: not is_phpMyAdmin_path.stat.exists
+- block:
+  - name: phpMyAdmin download
+    get_url:
+      url: "{{ phpMyAdmin_zip_url }}"
+      dest: "/tmp/phpMyAdmin.zip"
+      validate_certs: no
 
-- name: unzip phpMyAdmin.zip
-  unarchive:
-    src: "{{ DOCUMENT_ROOT }}/phpMyAdmin.zip"
-    dest: "{{ DOCUMENT_ROOT }}"
-  when: not is_phpMyAdmin_path.stat.exists
+  - name: unzip phpMyAdmin.zip
+    command: unzip -o /tmp/phpMyAdmin.zip -d /tmp
 
-- name: delete phpMyAdmin.zip
-  file:
-    path: "{{ DOCUMENT_ROOT }}/phpMyAdmin.zip"
-    state: absent
+  - name: mv phpMyAdmin.zip
+    command: mv /tmp/{{ phpMyAdmin_dir }} {{ DOCUMENT_ROOT }}/phpMyAdmin
+
+  - name: delete phpMyAdmin.zip
+    file:
+      path: "/tmp/phpMyAdmin.zip"
+      state: absent
+  when: not is_phpMyAdmin_path.stat.exists
 
 - name: stat phpMyAdmin_config
   stat:
@@ -34,11 +35,11 @@
 - name: edit config.inc.php
   replace:
     dest: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
-    regexp: "^$cfg['blowfish_secret'] = '';"
-    replace: "$cfg['blowfish_secret'] = 'E=L(LSpfv9Z5R70)JuCe$Lu#^thWI9xc2-)FziBA1N=';"
+    regexp: "blowfish_secret'] = '';"
+    replace: "blowfish_secret'] = 'E=L(LSpfv9Z5R70)JuCe$Lu#^thWI9xc2-)FziBA1N=';"
 
 - name: edit config.inc.php
   replace:
     dest: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
-    regexp: "^$cfg['Servers'][$i]['host'] = 'localhost';"
-    replace: "$cfg['Servers'][$i]['host'] = '127.0.0.1';"
+    regexp: "host'] = 'localhost';"
+    replace: "host'] = '127.0.0.1';"
