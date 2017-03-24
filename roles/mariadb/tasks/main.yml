@@ -9,7 +9,9 @@
       gpgcheck: yes
 
   - name: MariaDB installed (CentOS/RHEL 6)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - MariaDB-server
       - MariaDB-client
@@ -30,7 +32,9 @@
       gpgcheck: yes
 
   - name: MariaDB 10.1 installed (CentOS/RHEL 7)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - mariadb-server
       - MariaDB-client
@@ -43,18 +47,26 @@
 
 - block:
   - name: MariaDB apt_key installed (Ubuntu/xenial)
-    apt_key: keyserver=keyserver.ubuntu.com id=0xF1656F24C74CD1D8
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xF1656F24C74CD1D8"
     when: ansible_distribution_release == 'xenial'
 
   - name: MariaDB apt_key installed (Ubuntu/trusty or precise)
-    apt_key: keyserver=keyserver.ubuntu.com id=0xcbcb082a1bb943db
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xcbcb082a1bb943db"
     when: ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
 
   - name: MariaDB 10.1 repository installed
-    apt_repository: filename='MariaDB' repo='deb [arch=amd64,i386,ppc64el] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu {{ ansible_distribution_release }} main'
+    apt_repository:
+      filename: MariaDB
+      repo: 'deb [arch=amd64,i386,ppc64el] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/ubuntu {{ ansible_distribution_release }} main'
 
   - name: MariaDB 10.1 installed (Ubuntu)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - mariadb-server
       - libmariadbd-dev
@@ -63,49 +75,63 @@
 
 - block:
   - name: MariaDB 10.1 apt_key installed (Debian)
-    apt_key: keyserver=keyserver.ubuntu.com id=0xcbcb082a1bb943db
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xcbcb082a1bb943db"
 
   - name: MariaDB 10.1 repository installed
-    apt_repository: filename='MariaDB' repo='deb [arch=amd64,i386] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/debian {{ ansible_distribution_release }} main'
+    apt_repository:
+      filename: MariaDB
+      repo: 'deb [arch=amd64,i386] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.1/debian {{ ansible_distribution_release }} main'
 
   - name: MariaDB 10.1 installed (Debian)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - mariadb-server
       - libmariadbd-dev
       - python-mysqldb
   when: ansible_distribution == 'Debian'
 
-- name: stat custom my.cnf.j2
-  stat: path=/vagrant/config/my.cnf.j2
+- name: stat custom mariadb.my.cnf.j2
+  stat:
+    path: /vagrant/config/mariadb.my.cnf.j2
   register: is_custom_my_conf
 
 - name: custom my.cnf changed
-  template: src=/vagrant/config/my.cnf.j2 dest=/etc/my.cnf
+  template:
+    src: /vagrant/config/mariadb.my.cnf.j2
+    dest: /etc/my.cnf
   when: is_custom_my_conf.stat.exists
 
 - name: my.cnf changed
-  template: src=my.cnf.j2 dest=/etc/my.cnf
+  template:
+    src: mariadb.my.cnf.j2
+    dest: /etc/my.cnf
   when: not is_custom_my_conf.stat.exists
 
 - name: mysqld started and enabled
-  service: name=mysql state=restarted enabled=yes
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
 
 - name: set MariaDB root password
   mysql_user:
-    name: "root"
+    name: root
     password: "{{ db_root_password }}"
-    host: "localhost"
+    host: localhost
     state: present
   ignore_errors: yes
 
 - name: set MariaDB root password
   mysql_user:
-    name: "root"
+    name: root
     password: "{{ db_root_password }}"
     host: "{{ item }}"
     state: present
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"
   with_items:
     - "{{ ansible_hostname }}"
@@ -117,7 +143,7 @@
     name: ""
     host: "{{ item }}"
     state: absent
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"
   with_items:
     - localhost
@@ -126,5 +152,5 @@
   mysql_db:
     name: test
     state: absent
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"

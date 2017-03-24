@@ -1,3 +1,6 @@
 ---
 - name: php-fpm start and enabled
-  service: name=php-fpm state=restarted enabled=yes
+  service:
+    name: php-fpm
+    state: restarted
+    enabled: yes

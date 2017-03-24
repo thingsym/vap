@@ -1,20 +1,31 @@
 ---
 - name: git checkout jenv
-  git: repo=https://github.com/gcuisinier/jenv.git dest={{ home_dir }}/.jenv force=yes
+  git:
+    repo: https://github.com/gcuisinier/jenv.git
+    dest: "{{ home_dir }}/.jenv"
+    force: yes
   become: yes
   become_user: vagrant
 
 - name: edit PATH jenv on .bash_profile
-  lineinfile: dest={{ home_dir }}/.bash_profile line="export PATH=$HOME/.jenv/bin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "export PATH=$HOME/.jenv/bin:$PATH"
 
 - name: edit PATH jenv on .bashrc
-  lineinfile: dest={{ home_dir }}/.bashrc line="export PATH=$HOME/.jenv/bin:$PATH"
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "export PATH=$HOME/.jenv/bin:$PATH"
 
 - name: edit jenv init on .bash_profile
-  lineinfile: dest={{ home_dir }}/.bash_profile line="eval \"$(jenv init -)\""
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "eval \"$(jenv init -)\""
 
 - name: edit jenv init on .bashrc
-  lineinfile: dest={{ home_dir }}/.bashrc line="eval \"$(jenv init -)\""
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "eval \"$(jenv init -)\""
 
 - name: java added via jenv (CentOS/RHEL)
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(1.8) }}.0

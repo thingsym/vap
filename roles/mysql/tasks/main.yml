@@ -1,11 +1,13 @@
 ---
 - block:
   - name: mysql repository installed (CentOS/RHEL 6)
-    yum: name=https://dev.mysql.com/get/mysql57-community-release-el6-9.noarch.rpm
+    yum:
+      name: https://dev.mysql.com/get/mysql57-community-release-el6-9.noarch.rpm
     when: ansible_distribution_major_version|int == 6
 
   - name: mysql repository installed (CentOS/RHEL 7)
-    yum: name=https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+    yum:
+      name: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
     when: ansible_distribution_major_version|int == 7
 
   - name: yum-config disable mysql57-community
@@ -15,7 +17,9 @@
     command: yum-config-manager --enable mysql56-community
 
   - name: mysql 5.6 installed (CentOS/RHEL)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - mysql-community-server
       - mysql-community-devel
@@ -28,7 +32,9 @@
   when: ansible_os_family == 'RedHat'
 
 - name: mysql 5.5 installed (Debian)
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - mysql-server
     - mysql-common
@@ -41,7 +47,9 @@
 
 - block:
   - name: mysql 5.7 installed (Ubuntu)
-    package: name={{ item }} state=latest
+    package:
+      name: "{{ item }}"
+      state: latest
     with_items:
       - mysql-server
       - mysql-common
@@ -53,7 +61,9 @@
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
 
 - name: mysql 5.6 installed (Ubuntu)
-  package: name={{ item }} state=latest
+  package:
+    name: "{{ item }}"
+    state: latest
   with_items:
     - mysql-server-5.6
     - mysql-common-5.6
@@ -64,41 +74,52 @@
     - python-mysqldb
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
 
-- name: stat custom my.cnf.j2
-  stat: path=/vagrant/config/my.cnf.j2
+- name: stat custom mysql.my.cnf.j2
+  stat:
+    path: /vagrant/config/mysql.my.cnf.j2
   register: is_custom_my_conf
 
 - name: custom my.cnf changed
-  template: src=/vagrant/config/my.cnf.j2 dest=/etc/my.cnf
+  template:
+    src: /vagrant/config/mysql.my.cnf.j2
+    dest: /etc/my.cnf
   when: is_custom_my_conf.stat.exists
 
 - name: my.cnf changed
-  template: src=my.cnf.j2 dest=/etc/my.cnf
+  template:
+    src: mysql.my.cnf.j2
+    dest: /etc/my.cnf
   when: not is_custom_my_conf.stat.exists
 
 - name: mysqld started and enabled (CentOS/RHEL)
-  service: name=mysqld state=restarted enabled=yes
+  service:
+    name: mysqld
+    state: restarted
+    enabled: yes
   when: ansible_os_family == 'RedHat'
 
 - name: mysql started and enabled (Debian)
-  service: name=mysql state=restarted enabled=yes
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
   when: ansible_os_family == 'Debian'
 
 - name: set mysql root password
   mysql_user:
-    name: "root"
+    name: root
     password: "{{ db_root_password }}"
-    host: "localhost"
+    host: localhost
     state: present
   ignore_errors: yes
 
 - name: set mysql root password
   mysql_user:
-    name: "root"
+    name: root
     password: "{{ db_root_password }}"
     host: "{{ item }}"
     state: present
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"
   with_items:
     - "{{ ansible_hostname }}"
@@ -110,7 +131,7 @@
     name: ""
     host: "{{ item }}"
     state: absent
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"
   with_items:
     - localhost
@@ -119,5 +140,5 @@
   mysql_db:
     name: test
     state: absent
-    login_user: "root"
+    login_user: root
     login_password: "{{ db_root_password }}"

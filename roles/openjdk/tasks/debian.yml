@@ -1,16 +1,31 @@
 ---
 - name: ppa:openjdk-r/ppa repository installed
-  apt_repository: repo='ppa:openjdk-r/ppa' state=present
+  apt_repository:
+    repo: "ppa:openjdk-r/ppa"
+    state: present
   when: java_version == 1.8 and ansible_distribution == 'Ubuntu'
 
-- name: JDK 8 installed
-  package: name=openjdk-8-jdk state=latest
-  when: java_version == 1.8
+- name: JDK 9 installed
+  package:
+    name: openjdk-9-jdk
+    state: latest
+  when: java_version == 1.9
+
+- name: JDK 8 installed (Ubuntu)
+  package:
+    name: openjdk-8-jdk
+    state: latest
+  when: java_version == 1.8 and ansible_distribution == 'Ubuntu'
+
+- name: JDK 8 installed (Debian)
+  apt:
+    name: openjdk-8-jdk
+    state: latest
+    default_release: jessie-backports
+  when: java_version == 1.8 and ansible_distribution == 'Debian'
 
 - name: JDK 7 installed
-  package: name=openjdk-7-jdk state=latest
+  package:
+    name: openjdk-7-jdk
+    state: latest
   when: java_version == 1.7
-
-- name: JDK 6 installed
-  package: name=openjdk-6-jdk state=latest
-  when: java_version == 1.6

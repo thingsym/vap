@@ -43,9 +43,17 @@ describe service('ntpd'), :if => os[:family] == 'redhat' do
   it { should be_running }
 end
 
-describe service('ntp'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+describe service('ntp'), :if => os[:family] == 'debian' || ( os[:family] ==  'ubuntu' && os[:release] == '16.04' ) do
   it { should be_enabled }
   it { should be_running }
+end
+
+describe service('ntpd'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+  it { should be_running }
+end
+
+describe service('ntp'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+  it { should be_enabled }
 end
 
 describe yumrepo('epel'), :if => os[:family] == 'redhat' do

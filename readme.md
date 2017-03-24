@@ -336,10 +336,13 @@ As follows editable configuration files.
 * httpd.conf.centos6.j2
 * httpd.conf.centos7.j2
 * httpd.www.conf.centos7.j2
-* my.cnf.j2
+* mariadb.my.cnf.j2
+* mysql.my.cnf.j2
 * nginx.conf.j2
 * nginx.www.conf.j2
+* percona.my.cnf.j2
 * php-build.default_configure_options.j2
+* ssh-config.j2
 
 ## Contribute
 
@@ -354,6 +357,12 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.1 - 2017.03.24
+	* add custom ~/.ssh/config
+	* fix phpmyadmin task
+	* add my.cnf for each database
+	* fix JDK
+	* using YAML dictionaries in tasks
 * version 0.2.0 - 2017.01.26
 	* fix openssl, add vap.crt and server.crt
 	* support Debian and Ubuntu

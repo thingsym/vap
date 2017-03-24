@@ -1,29 +1,29 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.2.0"
+- name: "VAP (Vagrant Ansible Programming languages) v0.2.1"
   hosts: localhost
   remote_user: vagrant
   become: yes
 
   roles:
-    - { role: before-command, tags: [before-command] }
-    - { role: common, tags: [common] }
-    - { role: develop-tools, tags: [develop-tools] }
-    - { role: git, tags: [git] }
-    - { role: gibo, tags: [gibo] }
-    - { role: mysql, tags: [mysql], when: "database == 'mysql'" }
-    - { role: mariadb, tags: [mariadb], when: "database == 'mariadb'" }
-    - { role: percona, tags: [percona], when: "database == 'percona'" }
-    - { role: openssl, tags: [openssl], when: "ssl == true" }
-    - { role: apache, tags: [apache], when: "server == 'apache'" }
-    - { role: nginx, tags: [nginx], when: "server == 'nginx'" }
-    - { role: plenv, tags: [plenv], when: "perl_version != 0" }
-    - { role: rbenv, tags: [rbenv], when: "ruby_version != 0" }
-    - { role: phpenv, tags: [phpenv], when: "php_version != 0" }
-    - { role: pyenv, tags: [pyenv], when: "python_version != 0" }
-    - { role: nodenv, tags: [nodenv], when: "node_version != 0" }
-    - { role: goenv, tags: [goenv], when: "go_version != 0" }
-    - { role: openjdk, tags: [openjdk], when: "java_version != 0" }
-    - { role: jenv, tags: [jenv], when: "java_version != 0" }
-    - { role: scalaenv, tags: [scalaenv], when: "scala_version != 0 and java_version != 0" }
-    - { role: phpmyadmin, tags: [phpmyadmin], when: "phpmyadmin == true and php_version != 0 and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
-    - { role: after-command, tags: [after-command] }
+    - { role: before-command,  tags: [before-command] }
+    - { role: common,          tags: [common] }
+    - { role: develop-tools,   tags: [develop-tools] }
+    - { role: git,             tags: [git] }
+    - { role: gibo,            tags: [gibo] }
+    - { role: mysql,           tags: [mysql],       when: "database == 'mysql'" }
+    - { role: mariadb,         tags: [mariadb],     when: "database == 'mariadb'" }
+    - { role: percona,         tags: [percona],     when: "database == 'percona'" }
+    - { role: openssl,         tags: [openssl],     when: "ssl == true" }
+    - { role: apache,          tags: [apache],      when: "server == 'apache'" }
+    - { role: nginx,           tags: [nginx],       when: "server == 'nginx'" }
+    - { role: plenv,           tags: [plenv],       when: "perl_version != 0" }
+    - { role: rbenv,           tags: [rbenv],       when: "ruby_version != 0" }
+    - { role: phpenv,          tags: [phpenv],      when: "php_version != 0" }
+    - { role: pyenv,           tags: [pyenv],       when: "python_version != 0" }
+    - { role: nodenv,          tags: [nodenv],      when: "node_version != 0" }
+    - { role: goenv,           tags: [goenv],       when: "go_version != 0" }
+    - { role: openjdk,         tags: [openjdk],     when: "java_version != 0" }
+    - { role: jenv,            tags: [jenv],        when: "java_version != 0" }
+    - { role: scalaenv,        tags: [scalaenv],    when: "scala_version != 0 and java_version != 0" }
+    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin == true and php_version != 0 and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
+    - { role: after-command,   tags: [after-command] }

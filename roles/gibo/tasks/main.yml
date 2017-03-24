@@ -1,6 +1,9 @@
 ---
 - name: gibo initialized
-  get_url: url=https://raw.github.com/simonwhitaker/gibo/master/gibo dest=/usr/bin mode=0755
+  get_url:
+    url: https://raw.github.com/simonwhitaker/gibo/master/gibo
+    dest: /usr/bin
+    mode: 0755
 
 - name: gibo initialized
   command: gibo -u
