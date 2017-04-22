@@ -2,7 +2,7 @@
 
 ## Server & Database Settings ##
 
-server             : none   # none|apache|nginx
+server             : none   # none|apache|nginx|h2o
 fastcgi            : none   # none|php-fpm
 database           : none   # none|mysql|mariadb|percona
 

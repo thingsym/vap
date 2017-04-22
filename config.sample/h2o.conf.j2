@@ -1,0 +1,27 @@
+user: nobody
+hosts:
+{% if ssl %}
+  "localhost:443":
+    listen:
+      port: 443
+      host: 0.0.0.0
+      ssl:
+        certificate-file: "/usr/lib/ssl/server.crt"
+        key-file: "/usr/lib/ssl/server.key"
+    paths:
+      "/":
+        file.dir: {{ DOCUMENT_ROOT }}
+{% endif %}
+  "localhost:80":
+    listen:
+      port: 80
+      host: 0.0.0.0
+    paths:
+      "/":
+        file.dir: {{ DOCUMENT_ROOT }}
+
+access-log: /var/log/h2o/access.log
+error-log: /var/log/h2o/error.log
+pid-file: /var/run/h2o/h2o.pid
+http1-upgrade-to-http2: ON
+http2-reprioritize-blocking-assets: ON
