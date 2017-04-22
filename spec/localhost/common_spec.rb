@@ -72,6 +72,10 @@ describe file('/home/vagrant/.bashrc') do
   its(:content) { should match /export PATH=\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin:\/usr\/local\/sbin:\$PATH/ }
 end
 
+describe package('sysv-rc-conf'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+  it { should be_installed }
+end
+
 describe package('apt-transport-https'), :if => os[:family] == 'debian' do
   it { should be_installed }
 end
