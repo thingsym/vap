@@ -63,3 +63,6 @@
 
 - name: nodenv global
   command: sudo -u vagrant -i -- nodenv global {{ node_version | default('6.9.1') }}
+
+- name: include task
+  include: yarn.yml

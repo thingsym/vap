@@ -53,4 +53,9 @@ if property["node_version"] != 0 then
     it { should be_directory }
   end
 
+  describe command('yarn --version') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
 end

@@ -4,3 +4,9 @@
     name: sysv-rc-conf
     state: latest
   when: ansible_distribution_release == 'trusty'
+
+- name: apt-transport-https installed
+  package:
+    name: apt-transport-https
+    state: latest
+  when: ansible_distribution == 'Debian'
