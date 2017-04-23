@@ -1,20 +1,12 @@
 ---
-- name: openssl installed
-  package:
-    name: openssl
-    state: latest
+- name: stat /tmp/openssl-1.0.2k
+  stat:
+    path: /tmp/openssl-1.0.2k
+  register: is_tmp_openssl_dir
 
-- name: openssl-devel installed (CentOS/RHEL)
-  package:
-    name: openssl-devel
-    state: latest
-  when: ansible_os_family == 'RedHat'
-
-- name: libssl-dev installed (Debian)
-  package:
-    name: libssl-dev
-    state: latest
-  when: ansible_os_family == 'Debian'
+- name: include task
+  include: install.yml
+  when: not is_tmp_openssl_dir.stat.exists
 
 - name: include task
   include: ca.yml
