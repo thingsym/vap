@@ -1,5 +1,5 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.2.1"
+- name: "VAP (Vagrant Ansible Programming languages) v0.2.2"
   hosts: localhost
   remote_user: vagrant
   become: yes
@@ -16,6 +16,7 @@
     - { role: openssl,         tags: [openssl],     when: "ssl == true" }
     - { role: apache,          tags: [apache],      when: "server == 'apache'" }
     - { role: nginx,           tags: [nginx],       when: "server == 'nginx'" }
+    - { role: h2o,             tags: [h2o],         when: "server == 'h2o'" }
     - { role: plenv,           tags: [plenv],       when: "perl_version != 0" }
     - { role: rbenv,           tags: [rbenv],       when: "ruby_version != 0" }
     - { role: phpenv,          tags: [phpenv],      when: "php_version != 0" }

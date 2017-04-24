@@ -58,6 +58,11 @@ if property["ruby_version"] != 0 then
     its(:exit_status) { should eq 0 }
   end
 
+  describe command('bundler --version') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
   describe package('gcc') do
     it { should be_installed }
   end

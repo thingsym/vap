@@ -165,6 +165,14 @@ if property["php_version"] != 0 then
       its(:value) { should match /text\/html/ }
     end
 
+    context php_config('opcache.enable_cli') do
+      its(:value) { should eq 0 }
+    end
+
+    context php_config('opcache.enable') do
+      its(:value) { should eq 0 }
+    end
+
   end
 
   describe package('libxml2-devel'), :if => os[:family] == 'redhat' do

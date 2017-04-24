@@ -7,6 +7,10 @@ if property["ssl"] then
     it { should be_installed }
   end
 
+  describe command('openssl version') do
+    its(:stdout) { should match /#{Regexp.escape('1.0.2k')}/ }
+    its(:exit_status) { should eq 0 }
+  end
 
   describe file("/etc/pki/tls/vap") do
     it { should be_directory }

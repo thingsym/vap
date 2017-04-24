@@ -10,7 +10,7 @@
 
 ### 2. Build Server and Database environment
 
-**VAP** will build server from **Apache** or **nginx**, and build database from **MySQL**, **MariaDB** or **Percona MySQL**.
+**VAP** will build server from **Apache** or **nginx** or **H2O**, and build database from **MySQL**, **MariaDB** or **Percona MySQL**.
 
 Server nginx is a FastCGI configuration as a reverse proxy. And building a PHP execution environment from **PHP-FPM** (FastCGI Process Manager).
 
@@ -123,6 +123,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	vm_document_root      = '/var/www/html'
 
 	public_ip             = ''
+	forwarded_port        = false
 
 	vbguest_auto_update = false
 
@@ -136,6 +137,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 * `vm_document_root` (required) document root path (default: `/var/www/html`)
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: ``)
+* `forwarded_port` enable forwarded port (default: `false` / value: true | false)
 * `vbguest_auto_update` update VirtualBox Guest Additions (default: false / value: true | false)
 * `ansible_install_mode` (required)  the way to install Ansible (default: :default / value: :default | :pip)
 * `ansible_version` version of Ansible to install (default: latest)
@@ -148,11 +150,11 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	## Server & Database Settings ##
 
-	server             : 'none'   # none|apache|nginx
-	fastcgi            : 'none'   # none|php-fpm
-	database           : 'none'   # none|mysql|mariadb|percona
+	server             : none   # none|apache|nginx|h2o
+	fastcgi            : none   # none|php-fpm
+	database           : none   # none|mysql|mariadb|percona
 
-	db_root_password   : 'admin'
+	db_root_password   : admin
 
 	## Programming languages Settings ##
 	# If the version is set to 0, the programming language does not install
@@ -251,6 +253,7 @@ VAP will be built in the directory structure of the following minimum unit.
 
 * [Apache](http://httpd.apache.org)
 * [nginx](http://nginx.org)
+* [H2O](https://h2o.examp1e.net/)
 
 ### FastCGI (Selectable, Only nginx)
 
@@ -333,6 +336,7 @@ As follows editable configuration files.
 * apache2.envvars.j2
 * default-node-packages.j2
 * default-ruby-gems.j2
+* h2o.conf.j2
 * httpd.conf.centos6.j2
 * httpd.conf.centos7.j2
 * httpd.www.conf.centos7.j2
@@ -357,6 +361,14 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.2 - 2017.04.24
+	* add forwarded_port for Browsersync
+	* replace with openssl-1.0.2k
+	* fix opcach disable
+	* add apt-transport-https for debian
+	* add yarn
+	* add h2o HTTP server
+	* fix sendfile off
 * version 0.2.1 - 2017.03.24
 	* add custom ~/.ssh/config
 	* fix phpmyadmin task
