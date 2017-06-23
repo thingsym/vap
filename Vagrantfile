@@ -20,7 +20,7 @@ forwarded_port        = false
 vbguest_auto_update   = false
 
 ansible_install_mode  = :default    # :default|:pip
-ansible_version       = 'latest'    # only :pip
+ansible_version       = 'latest'    # only :pip required
 
 ## That's all, stop setting. ##
 
