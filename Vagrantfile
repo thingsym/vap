@@ -94,7 +94,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.synced_folder '.', '/vagrant', :create => 'true'
-  config.vm.synced_folder 'html/', vm_document_root, :create => 'true'
+  config.vm.synced_folder 'html/', vm_document_root, :create => 'true', :mount_options => ['dmode=755', 'fmode=644']
 
   config.ssh.forward_agent = true
 
