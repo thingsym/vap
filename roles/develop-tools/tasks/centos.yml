@@ -11,3 +11,22 @@
   with_items:
     - yum-utils
     - python-pip
+
+- block:
+  - name: CityFan repository added (CentOS/RHEL 6)
+    yum_repository:
+      name: city-fan
+      description: City Fan Repo
+      baseurl: http://nervion.us.es/city-fan/yum-repo/rhel$releasever/$basearch/
+      gpgcheck: no
+      enabled: no
+
+  - name: libcurl installed
+    yum:
+      name: "{{ item }}"
+      enablerepo: city-fan,epel
+      state: latest
+    with_items:
+      - libcurl
+      - libcurl-devel
+  when: ansible_distribution_major_version|int == 6
