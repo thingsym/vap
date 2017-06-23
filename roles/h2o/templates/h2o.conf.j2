@@ -6,8 +6,8 @@ hosts:
       port: 443
       host: 0.0.0.0
       ssl:
-        certificate-file: "/usr/lib/ssl/server.crt"
-        key-file: "/usr/lib/ssl/server.key"
+        certificate-file: /usr/lib/ssl/server.crt
+        key-file: /usr/lib/ssl/server.key
     paths:
       "/":
         file.dir: {{ DOCUMENT_ROOT }}
