@@ -364,6 +364,12 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.3 - 2017.06.23
+	* set permission to synced_folder html
+	* fix reset
+	* fix certificate file name for h2o
+	* bump up Ruby version number to 2.4.1
+	* add CityFan repository for libcurl, only CentOS 6
 * version 0.2.2 - 2017.04.24
 	* add forwarded_port for Browsersync
 	* replace with openssl-1.0.2k
