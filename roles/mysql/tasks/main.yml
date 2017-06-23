@@ -74,7 +74,7 @@
     - python-mysqldb
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
 
-- name: stat custom mysql.my.cnf.j2
+- name: stat custom my.cnf.j2
   stat:
     path: /vagrant/config/mysql.my.cnf.j2
   register: is_custom_my_conf

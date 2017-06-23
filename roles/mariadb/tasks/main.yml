@@ -94,7 +94,7 @@
       - python-mysqldb
   when: ansible_distribution == 'Debian'
 
-- name: stat custom mariadb.my.cnf.j2
+- name: stat custom my.cnf.j2
   stat:
     path: /vagrant/config/mariadb.my.cnf.j2
   register: is_custom_my_conf

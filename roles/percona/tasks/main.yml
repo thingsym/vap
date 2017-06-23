@@ -29,7 +29,7 @@
       - Percona-Server-shared-56
       - MySQL-python
 
-  - name: stat custom percona.my.cnf.j2
+  - name: stat custom my.cnf.j2
     stat:
       path: /vagrant/config/percona.my.cnf.j2
     register: is_custom_my_conf
