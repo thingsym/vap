@@ -38,17 +38,19 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 * [Virtualbox](https://www.virtualbox.org)
 * [Vagrant](https://www.vagrantup.com) >= 1.8.4
 * [Ansible](https://www.ansible.com) >= 2.1.0.0
-* [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) optional (Vagrant plugin)
-* [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier) optional (Vagrant plugin)
-* [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) optional (Vagrant plugin)
-* [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec) optional (Vagrant plugin)
+
+#### Vagrant plugin (optional)
+
+* [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
+* [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier)
+* [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
+* [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec)
 
 ## Usage
 
 ### 1. Install Virtualbox
 
 Download the VirtualBox form [www.virtualbox.org](https://www.virtualbox.org) and install.
-
 
 ### 2. Install Vagrant
 
@@ -62,7 +64,6 @@ Install the Vagrant plugin on the terminal as necessary.
 	vagrant plugin install vagrant-cachier
 	vagrant plugin install vagrant-vbguest
 	vagrant plugin install vagrant-serverspec
-
 
 ### 4. Download Ansible playbooks of VAP
 
@@ -125,10 +126,10 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	public_ip             = ''
 	forwarded_port        = false
 
-	vbguest_auto_update = false
+	vbguest_auto_update   = false
 
 	ansible_install_mode  = :default    # :default|:pip
-	ansible_version       = 'latest'    # only :pip
+	ansible_version       = 'latest'    # only :pip required
 
 * `vm_box` (required) name of Vagrant Box (default: `bento/centos-7.2`)
 * `vm_box_version` (required) version of Vagrant Box (default: `>= 0`)
@@ -136,7 +137,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 * `vm_hostname` (required) hostname (default: `vap.local`)
 * `vm_document_root` (required) document root path (default: `/var/www/html`)
 	* auto create `html` directory and synchronized
-* `public_ip` IP address of bridged connection (default: ``)
+* `public_ip` IP address of bridged connection (default: `''`)
 * `forwarded_port` enable forwarded port (default: `false` / value: true | false)
 * `vbguest_auto_update` update VirtualBox Guest Additions (default: false / value: true | false)
 * `ansible_install_mode` (required)  the way to install Ansible (default: :default / value: :default | :pip)
@@ -159,7 +160,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 	## Programming languages Settings ##
 	# If the version is set to 0, the programming language does not install
 
-	ruby_version       : 2.3.1       # 2.3.1
+	ruby_version       : 2.4.1       # 2.4.1
 	python_version     : 3.5.1       # 3.5.1
 	php_version        : 7.0.7       # 7.0.7
 	perl_version       : 5.25.1      # 5.25.1
@@ -177,7 +178,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Server & Database Settings ##
 
-* `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx`)
+* `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx` | `h2o` )
 * `fastcgi` name of fastCGI (default: `none` / value: `none` | `php-fpm`)
 	* `fastcgi` is possible only `server 'nginx'`
 * `database` (required) name of databese (default: `none` / value: `none` | `mysql` | `mariadb` | `percona`)
@@ -185,7 +186,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Programming languages Settings ##
 
-* `ruby_version` version of Ruby (default: `2.3.1`)
+* `ruby_version` version of Ruby (default: `2.4.1`)
 * `python_version` version of Python (default: `3.5.1`)
 * `php_version` version of PHP (default: `7.0.7`)
 * `perl_version` version of Perl (default: `5.25.1`)
@@ -246,6 +247,8 @@ VAP will be built in the directory structure of the following minimum unit.
 * Debian 8 jessie
 * Ubuntu 16.04 Xenial
 * Ubuntu 14.04 Trusty
+
+To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://atlas.hashicorp.com/boxes/search).
 
 ## Specification
 
