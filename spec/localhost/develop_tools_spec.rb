@@ -41,10 +41,10 @@ describe yumrepo('city-fan'), :if => os[:family] == 'redhat' && os[:release] == 
   it { should exist }
 end
 
-describe package('libcurl'), :if => os[:family] == 'redhat' && os[:release] == '6' do
+describe package('libcurl'), :if => os[:family] == 'redhat' do
   it { should be_installed }
 end
 
-describe package('libcurl-devel'), :if => os[:family] == 'redhat' && os[:release] == '6' do
+describe package('libcurl-devel'), :if => os[:family] == 'redhat' do
   it { should be_installed }
 end
