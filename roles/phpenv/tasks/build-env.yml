@@ -17,14 +17,6 @@
     - re2c
   when: ansible_os_family == 'RedHat'
 
-- name: build environment (CentOS/RHEL 7)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - curl-devel
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 7
-
 - name: build environment (Debian)
   package:
     name: "{{ item }}"

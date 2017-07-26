@@ -71,6 +71,14 @@ if property["ruby_version"] != 0 then
     it { should be_installed }
   end
 
+  describe package('libcurl'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('libcurl-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
   describe package('openssl-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
