@@ -35,14 +35,13 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 
 ## Requirements
 
-* [Virtualbox](https://www.virtualbox.org)
+* [Oracle VM VirtualBox](https://www.virtualbox.org) >= 5.0
 * [Vagrant](https://www.vagrantup.com) >= 1.8.4
 * [Ansible](https://www.ansible.com) >= 2.1.0.0
 
 #### Vagrant plugin (optional)
 
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
-* [vagrant-cachier](http://fgrehm.viewdocs.io/vagrant-cachier)
 * [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
 * [vagrant-serverspec](https://github.com/jvoorhis/vagrant-serverspec)
 
@@ -61,7 +60,6 @@ Download the Vagrant form [www.vagrantup.com](https://www.vagrantup.com) and ins
 Install the Vagrant plugin on the terminal as necessary.
 
 	vagrant plugin install vagrant-hostsupdater
-	vagrant plugin install vagrant-cachier
 	vagrant plugin install vagrant-vbguest
 	vagrant plugin install vagrant-serverspec
 
