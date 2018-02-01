@@ -50,6 +50,7 @@
   stat:
     path: /usr/bin/openssl
   register: is_openssl_old
+
 - name: mv old openssl
   command: mv /usr/bin/openssl /usr/bin/openssl.bak
   when: is_openssl_old.stat.exists

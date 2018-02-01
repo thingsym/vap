@@ -59,8 +59,8 @@ server {
     error_log   /var/log/nginx/{{ HOSTNAME }}.error.log;
 
     ssl on;
-    ssl_certificate       /usr/lib/ssl/server.crt;
-    ssl_certificate_key   /usr/lib/ssl/server.key;
+    ssl_certificate       /etc/pki/tls/vap/crt.pem;
+    ssl_certificate_key   /etc/pki/tls/vap/privkey.pem;
 
     ssl_session_cache    shared:SSL:1m;
     ssl_session_timeout  5m;
