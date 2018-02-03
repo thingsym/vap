@@ -21,7 +21,7 @@ scala_version      : 2.11.8      # 2.11.8 (require java)
 
 ## Develop & Deploy Settings ##
 
-ssl                : false   # true|false
+ssl                : true    # true|false
 phpmyadmin         : false   # true|false (require PHP and mysql)
 
 ## That's all, stop setting. Let's vagrant up!! ##
