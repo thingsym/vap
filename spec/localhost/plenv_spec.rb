@@ -63,4 +63,9 @@ if property["perl_version"] != 0 then
     its(:exit_status) { should eq 0 }
   end
 
+  describe command('which start_server') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
 end

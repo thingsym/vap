@@ -55,3 +55,6 @@
 
 - name: Carton module installed
   command: sudo -u vagrant -i -- cpanm Carton
+
+- name: Server::Starter module installed
+  command: sudo -u vagrant -i -- cpanm Server::Starter

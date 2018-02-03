@@ -65,10 +65,10 @@
   - name: percona-release repository installed (Debian)
     apt:
       deb: "https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
-      update_cache: yes
 
-  - name: apt-get update
-    command: apt-get update
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
 
   - name: percona 5.6 installed (Debian)
     package:

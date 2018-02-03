@@ -27,6 +27,24 @@
     dest: "{{ home_dir }}/.bashrc"
     line: "eval \"$(pyenv init -)\""
 
+- name: git checkout pyenv-virtualenv
+  git:
+    repo: https://github.com/pyenv/pyenv-virtualenv.git
+    dest: "{{ home_dir }}/.pyenv/plugins/pyenv-virtualenv"
+    force: yes
+  become: yes
+  become_user: vagrant
+
+- name: edit virtualenv-init init on .bash_profile
+  lineinfile:
+    dest: "{{ home_dir }}/.bash_profile"
+    line: "eval \"$(pyenv virtualenv-init -)\""
+
+- name: edit virtualenv-init init on .bashrc
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: "eval \"$(pyenv virtualenv-init -)\""
+
 - name: Python installed via pyenv
   command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}
   ignore_errors: yes

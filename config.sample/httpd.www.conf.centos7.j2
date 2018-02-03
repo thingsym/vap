@@ -4,7 +4,7 @@
 
     <Directory {{ DOCUMENT_ROOT }}>
         Options FollowSymLinks
-        AllowOverride FileInfo Options
+        AllowOverride All
         Order allow,deny
         Allow from all
     </Directory>
@@ -98,7 +98,7 @@ SSLCryptoDevice builtin
 
     <Directory {{ DOCUMENT_ROOT }}>
         Options FollowSymLinks
-        AllowOverride FileInfo Options
+        AllowOverride All
         Order allow,deny
         Allow from all
     </Directory>
@@ -109,8 +109,8 @@ SSLCryptoDevice builtin
     </Directory>
 
     SSLEngine On
-    SSLCertificateFile /usr/lib/ssl/server.crt
-    SSLCertificateKeyFile /usr/lib/ssl/server.key
+    SSLCertificateFile /etc/pki/tls/vap/crt.pem
+    SSLCertificateKeyFile /etc/pki/tls/vap/privkey.pem
 
 </VirtualHost>
 </IfModule>

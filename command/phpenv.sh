@@ -220,6 +220,7 @@ function install() {
     sed -i -e "s/^;opcache.fast_shutdown=0/opcache.fast_shutdown=1/" $PHP_INI
     sed -i -e "s/^;opcache.enable_cli=0/opcache.enable_cli=0/" $PHP_INI
     sed -i -e "s/^;opcache.enable=0/opcache.enable=0/" $PHP_INI
+    sed -i -e "s/^;opcache.enable=1/opcache.enable=0/" $PHP_INI
     echo "[Info]: edit $PHP_INI"
   fi
 
