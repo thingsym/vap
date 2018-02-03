@@ -116,8 +116,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	## Vagrant Settings ##
 
 	vm_box                = 'bento/centos-7.2'
-	vm_ip                 = '192.168.59.63'
 	vm_box_version        = '>= 0'
+	vm_ip                 = '192.168.59.63'
 	vm_hostname           = 'vap.local'
 	vm_document_root      = '/var/www/html'
 
@@ -158,19 +158,19 @@ In YAML format, you can set server, database and Programming environment. And ca
 	## Programming languages Settings ##
 	# If the version is set to 0, the programming language does not install
 
-	ruby_version       : 2.4.1       # 2.4.1
-	python_version     : 3.5.1       # 3.5.1
-	php_version        : 7.0.7       # 7.0.7
-	perl_version       : 5.25.1      # 5.25.1
-	node_version       : 6.9.1       # 6.9.1
-	go_version         : 1.6.3       # 1.6.3
+	python_version     : 3.6.4       # 3.6.4
+	ruby_version       : 2.4.3       # 2.4.3
+	php_version        : 7.2.1       # 7.2.1
+	perl_version       : 5.26.1      # 5.26.1
+	node_version       : 8.9.4       # 8.9.4
+	go_version         : 1.9.2       # 1.9.2
 	java_version       : 1.8         # 1.8
-	scala_version      : 2.11.8      # 2.11.8 (require java)
+	scala_version      : 2.11.12     # 2.11.12 (require java)
 
 	## Develop & Deploy Settings ##
 
-	ssl                : false   # true|false
-	phpmyadmin         : false   # true|false (require PHP and mysql)
+	ssl                : true    # true|false
+	phpmyadmin         : false   # true|false (require PHP and database)
 
 	## That's all, stop setting. Let's vagrant up!! ##
 
@@ -184,14 +184,14 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Programming languages Settings ##
 
-* `ruby_version` version of Ruby (default: `2.4.1`)
-* `python_version` version of Python (default: `3.5.1`)
-* `php_version` version of PHP (default: `7.0.7`)
-* `perl_version` version of Perl (default: `5.25.1`)
-* `node_version` version of Node.js (default: `6.9.1`)
-* `go_version` version of Go (default: `1.6.3`)
+* `ruby_version` version of Ruby (default: `2.4.3`)
+* `python_version` version of Python (default: `3.6.4`)
+* `php_version` version of PHP (default: `7.2.1`)
+* `perl_version` version of Perl (default: `5.26.1`)
+* `node_version` version of Node.js (default: `8.9.4`)
+* `go_version` version of Go (default: `1.9.2`)
 * `java_version` version of Java (default: `1.8`)
-* `scala_version` version of Scala (default: `2.11.8`) require Java
+* `scala_version` version of Scala (default: `2.11.12`) require Java
 
 If the version is set to 0, the programming language does not installation
 
@@ -268,14 +268,36 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://at
 
 ### Programming languages
 
-* [Ruby](https://www.ruby-lang.org/) via [rbenv](https://github.com/rbenv/rbenv)
-* [Python](https://www.python.org/) via [pyenv](https://github.com/yyuu/pyenv)
-* [PHP](https://secure.php.net) via [phpenv](https://github.com/madumlao/phpenv)
-* [Perl](https://www.perl.org/) via [plenv](https://github.com/tokuhirom/plenv)
-* [Node.js](http://nodejs.org) via [nodenv](https://github.com/nodenv/nodenv)
-* [Go](https://golang.org/) via [goenv](https://github.com/wfarr/goenv)
-* [Java (OpenJDK)](http://openjdk.java.net/) via [jenv](http://www.jenv.be/)
-* [Scala](http://www.scala-lang.org/)  via [scalaenv](https://github.com/mazgi/scalaenv)
+* [Ruby](https://www.ruby-lang.org/)
+	* via [rbenv](https://github.com/rbenv/rbenv)
+	* [ruby-build](https://github.com/rbenv/ruby-build)
+	* [rbenv-default-gems](https://github.com/rbenv/rbenv-default-gems)
+* [Python](https://www.python.org/)
+	* via [pyenv](https://github.com/yyuu/pyenv)
+	* [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv)
+* [PHP](https://secure.php.net)
+	* via [phpenv](https://github.com/madumlao/phpenv)
+	* [php-build](https://github.com/php-build/php-build)
+	* [phpenv-composer](https://github.com/ngyuki/phpenv-composer)
+	* [phpenv-apache-version](https://github.com/thingsym/phpenv-apache-version)
+	* [packagist.jp repository](https://packagist.jp/)
+	* [prestissimo](https://github.com/hirak/prestissimo)
+* [Perl](https://www.perl.org/)
+	* via [plenv](https://github.com/tokuhirom/plenv)
+	* [Perl-Build](https://github.com/tokuhirom/Perl-Build)
+	* [cpanm](https://github.com/miyagawa/cpanminus)
+	* [Server::Starter](http://search.cpan.org/~kazuho/Server-Starter/)
+* [Node.js](http://nodejs.org)
+	* via [nodenv](https://github.com/nodenv/nodenv)
+	* [node-build](https://github.com/nodenv/node-build)
+	* [nodenv-default-packages](https://github.com/nodenv/nodenv-default-packages)
+	* [Yarn](https://yarnpkg.com/en/)
+* [Go](https://golang.org/)
+	* via [goenv](https://github.com/wfarr/goenv)
+* [Java (OpenJDK)](http://openjdk.java.net/)
+	* via [jenv](http://www.jenv.be/)
+* [Scala](http://www.scala-lang.org/)
+	* via [scalaenv](https://github.com/mazgi/scalaenv)
 
 ### Develop & Deploy Tools (Activatable)
 
@@ -349,7 +371,7 @@ As follows editable configuration files.
 * php-build.default_configure_options.j2
 * ssh-config.j2
 
-## Contribute
+## Contribution
 
 Small patches and bug reports can be submitted a issue tracker in Github. Forking on Github is another good way. You can send a pull request.
 
@@ -417,4 +439,4 @@ If you would like to contribute, here are some notes and guidlines.
 
 VAP is distributed under GPLv3.
 
-Copyright (c) 2017 thingsym
+Copyright (c) 2016-2018 thingsym
