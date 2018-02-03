@@ -384,6 +384,14 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## Changelog
 
+* version 0.2.5 - 2018.02.03
+	* fix ssl path
+	* fix self Certification Authority
+	* add pyenv-virtualenv
+	* add Server::Starter
+	* fix opcach disable
+	* fix apt-get update
+	* fix AllowOverride with apache
 * version 0.2.4 - 2017.07.27
 	* fix vb.customize for improve VirutalBox performance
 	* remove vagrant-cachier plugin
