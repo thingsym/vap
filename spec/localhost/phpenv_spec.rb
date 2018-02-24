@@ -18,6 +18,15 @@ if property["php_version"] != 0 then
     its(:exit_status) { should eq 0 }
   end
 
+  describe command('which php-cgi') do
+    let(:sudo_options) { '-u vagrant -i'}
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe file('/usr/bin/php-cgi') do
+    it { should be_symlink }
+  end
+
   [property["php_version"]].each do |php_version|
     describe command("phpenv versions | grep #{php_version}") do
       let(:sudo_options) { '-u vagrant -i' }
