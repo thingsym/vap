@@ -23,6 +23,10 @@ if property["php_version"] != 0 then
     its(:exit_status) { should eq 0 }
   end
 
+  describe file('/usr/bin/php') do
+    it { should be_symlink }
+  end
+
   describe file('/usr/bin/php-cgi') do
     it { should be_symlink }
   end
