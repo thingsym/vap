@@ -20,7 +20,9 @@
       - MariaDB-devel
       - MariaDB-shared
       - MySQL-python
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int == 6
+  when: 
+    - ansible_distribution == 'CentOS' 
+    - ansible_distribution_major_version|int == 6
 
 - block:
   - name: MariaDB 10.1 repository installed (CentOS/RHEL 7)
@@ -43,7 +45,9 @@
       - mariadb-libs
       - mariadb-embedded
       - MySQL-python
-  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int == 7
+  when: 
+    - ansible_distribution == 'CentOS' 
+    - ansible_distribution_major_version|int == 7
 
 - block:
   - name: MariaDB apt_key installed (Ubuntu/xenial)
@@ -56,7 +60,7 @@
     apt_key:
       keyserver: keyserver.ubuntu.com
       id: "0xcbcb082a1bb943db"
-    when: ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
+    when: ansible_distribution_release == 'trusty'
 
   - name: MariaDB 10.1 repository installed
     apt_repository:

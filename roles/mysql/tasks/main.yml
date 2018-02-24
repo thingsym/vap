@@ -58,7 +58,9 @@
       - libmysqlclient20
       - libmysqlclient-dev
       - python-mysqldb
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+  when: 
+    - ansible_distribution == 'Ubuntu' 
+    - ansible_distribution_release == 'xenial'
 
 - name: mysql 5.6 installed (Ubuntu)
   package:
@@ -72,7 +74,9 @@
     - libmysqlclient18
     - libmysqlclient-dev
     - python-mysqldb
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
+  when: 
+    - ansible_distribution == 'Ubuntu' 
+    - ansible_distribution_release == 'trusty'
 
 - name: stat custom my.cnf.j2
   stat:

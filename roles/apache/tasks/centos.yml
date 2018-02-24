@@ -31,7 +31,9 @@
   file:
     path: /etc/httpd/conf.d/ssl.conf
     state: absent
-  when: ssl == true and is_ssl_conf.stat.exists
+  when:
+    - ssl == true
+    - is_ssl_conf.stat.exists
 
 - name: httpd started and enabled
   service:
