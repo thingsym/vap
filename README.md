@@ -197,7 +197,7 @@ If the version is set to 0, the programming language does not installation
 
 #### Develop & Deploy Settings ##
 
-* `ssl` activate ssl (default: `false` / value: `true` | `false`)
+* `ssl` activate ssl (default: `true` / value: `true` | `false`)
 * `phpmyadmin` activate phpMyAdmin (default: `false` / value: `true` | `false`)
 
 ## Directory Layout
@@ -217,7 +217,7 @@ This directory synchronize to the guest OS side `/vagrant`. `html` creates autom
 	* local (inventory file)
 * html (synchronize to the Document Root. create automatically at `vagrant up`, if it does not exist.)
 * Rakefile (Rakefile of ServerSpec)
-* readme.md
+* README.md
 * roles (stores Ansible playbook of each role)
 * site.yml (Ansible playbook core file)
 * spec (stores ServerSpec spec file)
@@ -373,14 +373,15 @@ As follows editable configuration files.
 
 ## Contribution
 
+### Patches and Bug Fixes
+
 Small patches and bug reports can be submitted a issue tracker in Github. Forking on Github is another good way. You can send a pull request.
 
-If you would like to contribute, here are some notes and guidlines.
-
-* All development happens on the **develop** branch, so it is always the most up-to-date
-* The **master** branch only contains tagged releases
-* If you are going to be submitting a pull request, please submit your pull request to the **develop** branch
-* See about [forking](https://help.github.com/articles/fork-a-repo/) and [pull requests](https://help.github.com/articles/using-pull-requests/)
+1. Fork [VAP](https://github.com/thingsym/vap) from GitHub repository
+2. Create a feature branch: git checkout -b my-new-feature
+3. Commit your changes: git commit -am 'Add some feature'
+4. Push to the branch: git push origin my-new-feature
+5. Create new Pull Request
 
 ## Changelog
 
@@ -445,6 +446,10 @@ If you would like to contribute, here are some notes and guidlines.
 
 ## License
 
-VAP is distributed under GPLv3.
+VAP is distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
+
+## Author
+
+[thingsym](https://github.com/thingsym)
 
 Copyright (c) 2016-2018 thingsym
