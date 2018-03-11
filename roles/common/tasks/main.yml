@@ -15,32 +15,14 @@
   include: debian.yml
   when: ansible_os_family == 'Debian'
 
-- name: ntp installed
-  package:
-    name: ntp
+- block:
+  - name: create swap space
+    command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+    ignore_errors: yes
 
-- name: ntp started and enabled
-  service:
-    name: ntpd
-    state: restarted
-    enabled: yes
-  when: ansible_os_family == 'RedHat'
-
-- name: ntp started and enabled
-  service:
-    name: ntp
-    state: restarted
-    enabled: yes
-  when: ansible_os_family == 'Debian'
-
-- name: create swap space
-  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
-  ignore_errors: yes
-  when: ansible_swaptotal_mb < 1
-
-- name: Make swap
-  command: mkswap /swapfile
-  ignore_errors: yes
+  - name: Make swap
+    command: mkswap /swapfile
+    ignore_errors: yes
   when: ansible_swaptotal_mb < 1
 
 - name: swapon
