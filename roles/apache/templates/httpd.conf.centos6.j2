@@ -1028,6 +1028,14 @@ NameVirtualHost *:80
         AllowOverride None
     </Directory>
 
+    DirectoryIndex index.html index.php
+
+{% if fastcgi == "php-fpm" %}
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://localhost:9000/{{ DOCUMENT_ROOT }}
+{% elif fastcgi == "hhvm" %}
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://localhost:9000/{{ DOCUMENT_ROOT }}
+{% endif %}
+
 </VirtualHost>
 
 {% if ssl %}
@@ -1118,6 +1126,14 @@ SSLCryptoDevice builtin
         Options FollowSymLinks
         AllowOverride None
     </Directory>
+
+    DirectoryIndex index.html index.php
+
+{% if fastcgi == "php-fpm" %}
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://localhost:9000/{{ DOCUMENT_ROOT }}
+{% elif fastcgi == "hhvm" %}
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://localhost:9000/{{ DOCUMENT_ROOT }}
+{% endif %}
 
     SSLEngine On
     SSLCertificateFile /etc/pki/tls/vap/crt.pem

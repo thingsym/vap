@@ -10,3 +10,13 @@
     name: apt-transport-https
     state: latest
   when: ansible_distribution == 'Debian'
+
+- name: ntp installed
+  package:
+    name: ntp
+
+- name: ntp started and enabled
+  service:
+    name: ntp
+    state: restarted
+    enabled: yes

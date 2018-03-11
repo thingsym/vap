@@ -28,7 +28,6 @@
   - name: apt-get update
     apt:
       update_cache: yes
-      cache_valid_time: 3600
 
   - name: h2o installed
     package:
@@ -42,13 +41,15 @@
       path: /var/run/h2o
     register: is_h2o_dir
 
-  - name: mkdie /var/run/h2o
+  - name: mkdir /var/run/h2o
     file:
       path: /var/run/h2o
       state: directory
     when: not is_h2o_dir.stat.exists
 
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty' or ansible_distribution_release == 'precise'
+  when: 
+    - ansible_distribution == 'Ubuntu' 
+    - ansible_distribution_release == 'trusty'
 
 - name: stat custom h2o.j2
   stat:
@@ -59,16 +60,18 @@
   template:
     src: /vagrant/config/h2o.conf.j2
     dest: /etc/h2o/h2o.conf
+  notify: h2o restarted
   when: is_custom_h2o_conf.stat.exists
 
 - name: h2o.conf changed
   template:
     src: h2o.conf.j2
     dest: /etc/h2o/h2o.conf
+  notify: h2o restarted
   when: not is_custom_h2o_conf.stat.exists
 
-- name: h2o started and enabled
+- name: h2o enabled
   service:
     name: h2o
-    state: restarted
     enabled: yes
+  notify: h2o restarted
