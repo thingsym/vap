@@ -45,4 +45,93 @@ if property["python_version"] != 0 then
     its(:content) { should match /eval "\$\(pyenv init \-\)"/ }
   end
 
+
+  describe package('zlib-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('bzip2'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('readline-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('sqlite'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('sqlite-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('openssl-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('xz'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('xz-devel'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('make'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('build-essential'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libssl-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('zlib1g-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libbz2-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libreadline-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libsqlite3-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('wget'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('curl'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('llvm'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libncurses5-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('libncursesw5-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('xz-utils'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
+  describe package('tk-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
+  end
+
 end
