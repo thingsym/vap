@@ -34,11 +34,20 @@ describe service('firewalld'), :if => os[:family] == 'redhat' && os[:release] ==
   it { should_not be_running }
 end
 
-describe package('ntp') do
+describe package('chrony'), :if => os[:family] == 'redhat' && os[:release] == '7' do
   it { should be_installed }
 end
 
-describe service('ntpd'), :if => os[:family] == 'redhat' do
+describe service('chronyd'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+  it { should be_enabled }
+  it { should be_running }
+end
+
+describe package('ntp'), :if => ( os[:family] == 'redhat' && os[:release] == '6' ) || os[:family] == 'debian' || os[:family] ==  'ubuntu' do
+  it { should be_installed }
+end
+
+describe service('ntpd'), :if => os[:family] == 'redhat' && os[:release] == '6' do
   it { should be_enabled }
   it { should be_running }
 end
