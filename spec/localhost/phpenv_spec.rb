@@ -82,43 +82,45 @@ if property["php_version"] != 0 then
       it { should be_directory }
     end
 
-    describe file('/etc/httpd/conf.d/php.conf'), :if => os[:family] == 'redhat' do
-      it { should be_file }
-    end
-
-    if property["php_version"] =~ /^7/
-      describe file('/etc/httpd/modules/libphp7.so'), :if => os[:family] == 'redhat' do
+    if property["fastcgi"] == 'none' then
+      describe file('/etc/httpd/conf.d/php.conf'), :if => os[:family] == 'redhat' do
         it { should be_file }
       end
 
-      describe file('/etc/apache2/mods-available/php7.load'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
+      if property["php_version"] =~ /^7/
+        describe file('/etc/httpd/modules/libphp7.so'), :if => os[:family] == 'redhat' do
+          it { should be_file }
+        end
+
+        describe file('/etc/apache2/mods-available/php7.load'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
+
+        describe file('/etc/apache2/mods-available/php7.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
+
+        describe file('/usr/lib/apache2/modules/libphp7.so'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
       end
 
-      describe file('/etc/apache2/mods-available/php7.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
-      end
+      if property["php_version"] =~ /^5/
+        describe file('/etc/httpd/modules/libphp5.so'), :if => os[:family] == 'redhat' do
+          it { should be_file }
+        end
 
-      describe file('/usr/lib/apache2/modules/libphp7.so'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
-      end
-    end
+        describe file('/etc/apache2/mods-available/php5.load'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
 
-    if property["php_version"] =~ /^5/
-      describe file('/etc/httpd/modules/libphp5.so'), :if => os[:family] == 'redhat' do
-        it { should be_file }
-      end
+        describe file('/etc/apache2/mods-available/php5.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
 
-      describe file('/etc/apache2/mods-available/php5.load'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
-      end
-
-      describe file('/etc/apache2/mods-available/php5.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
-      end
-
-      describe file('/usr/lib/apache2/modules/libphp5.so'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-        it { should be_file }
+        describe file('/usr/lib/apache2/modules/libphp5.so'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+          it { should be_file }
+        end
       end
     end
 

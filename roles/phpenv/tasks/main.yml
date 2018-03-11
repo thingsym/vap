@@ -72,10 +72,30 @@
     dest: "{{ home_dir }}/.phpenv/plugins/php-build/share/php-build/default_configure_options"
   when: not is_custom_default_configure_options.stat.exists
 
-- name: stat php_path
+- name: stat libphp5.so
   stat:
-    path: "{{ home_dir }}/.phpenv/versions/{{ php_version | default(7.0.7) }}"
-  register: is_php_path
+    path: /usr/lib64/httpd/modules/libphp5.so
+  register: is_libphp5_path
+
+- name: change owner and group
+  file:
+    path: /usr/lib64/httpd/modules/libphp5.so
+    owner: vagrant
+    group: vagrant
+  when: is_libphp5_path.stat.exists
+
+- name: stat libphp7.so
+  stat:
+    path: /usr/lib64/httpd/modules/libphp7.so
+  register: is_libphp7_path
+
+- name: change owner and group
+  file:
+    path: /usr/lib64/httpd/modules/libphp7.so
+    owner: vagrant
+    group: vagrant
+  when: is_libphp7_path.stat.exists
+
 
 - name: php installed via phpenv.sh
   command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh {{ php_version | default(7.0.7) }}
