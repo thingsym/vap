@@ -149,11 +149,11 @@ if property["php_version"] != 0 then
     end
 
     context php_config('post_max_size') do
-      its(:value) { should eq '36M' }
+      its(:value) { should eq '32M' }
     end
 
     context php_config('upload_max_filesize') do
-      its(:value) { should eq '36M' }
+      its(:value) { should eq '32M' }
     end
 
     context php_config('default_charset') do
