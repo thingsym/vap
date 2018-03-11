@@ -32,10 +32,9 @@ server {
     location ~ \.php$ {
         #root           {{ DOCUMENT_ROOT }};
 {% if fastcgi == "php-fpm" %}
-        fastcgi_pass    unix:/var/run/php-fcgi.pid;
+        fastcgi_pass    unix:/var/run/php-fpm/php-fcgi.pid;
 {% elif fastcgi == "hhvm" %}
-        #fastcgi_pass   unix:/var/run/hhvm/hhvm.pid;
-        fastcgi_pass    127.0.0.1:9000;
+        fastcgi_pass    unix:/var/run/hhvm/hhvm.sock;
 {% endif %}
         fastcgi_index   index.php;
         fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -88,10 +87,9 @@ server {
     location ~ \.php$ {
         #root           {{ DOCUMENT_ROOT }};
 {% if fastcgi == "php-fpm" %}
-        fastcgi_pass    unix:/var/run/php-fcgi.pid;
+        fastcgi_pass    unix:/var/run/php-fpm/php-fcgi.pid;
 {% elif fastcgi == "hhvm" %}
-        #fastcgi_pass   unix:/var/run/hhvm/hhvm.pid;
-        fastcgi_pass    127.0.0.1:9000;
+        fastcgi_pass    unix:/var/run/hhvm/hhvm.sock;
 {% endif %}
         fastcgi_index   index.php;
         fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;

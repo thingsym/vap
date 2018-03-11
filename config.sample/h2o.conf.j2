@@ -1,4 +1,4 @@
-user: nobody
+user: vagrant
 hosts:
 {% if ssl %}
   "localhost:443":
@@ -6,11 +6,21 @@ hosts:
       port: 443
       host: 0.0.0.0
       ssl:
-        certificate-file: "/etc/pki/tls/vap/crt.pem"
-        key-file: "/etc/pki/tls/vap/privkey.pem"
+        certificate-file: /etc/pki/tls/vap/crt.pem
+        key-file: /etc/pki/tls/vap/privkey.pem
     paths:
       "/":
         file.dir: {{ DOCUMENT_ROOT }}
+
+{% if php_version and phpmyadmin %}
+      "/phpMyAdmin/":
+        file.dir: {{ DOCUMENT_ROOT }}/phpMyAdmin
+        redirect:
+          url: /index.php/
+          internal: YES
+          status: 307
+{% endif %}
+
 {% endif %}
   "localhost:80":
     listen:
@@ -19,6 +29,39 @@ hosts:
     paths:
       "/":
         file.dir: {{ DOCUMENT_ROOT }}
+
+{% if php_version and phpmyadmin %}
+      "/phpMyAdmin/":
+        file.dir: {{ DOCUMENT_ROOT }}/phpMyAdmin
+        redirect:
+          url: /index.php/
+          internal: YES
+          status: 307
+{% endif %}
+
+{% if php_version %}
+file.custom-handler:
+  extension: .php
+{% if fastcgi == "php-fpm" %}
+  fastcgi.connect:
+    port: /var/run/php-fpm/php-fcgi.pid
+    type: unix
+{% elif fastcgi == "hhvm" %}
+  fastcgi.connect:
+    port: /var/run/hhvm/hhvm.sock
+    type: unix
+    # host: 127.0.0.1
+    # port: 9000
+    # type: tcp
+{% else %}
+  fastcgi.spawn:
+    command: "PHP_FCGI_CHILDREN=10 exec /usr/bin/php-cgi"
+    user: vagrant
+{% endif %}
+  fastcgi.timeout.keepalive: 10000
+
+file.index: [ 'index.html', 'index.php' ]
+{% endif %}
 
 access-log: /var/log/h2o/access.log
 error-log: /var/log/h2o/error.log
