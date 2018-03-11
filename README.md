@@ -385,6 +385,21 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.2.6 - 2018.03.11
+	* add chrony with centos 7
+	* add fastcgi to h2o
+	* fix php installation via phpenv.sh
+	* improve phpenv.sh version 0.3.0
+	* fix mod_php
+	* add fastcgi to apache
+	* add mod_proxy_fcgi for centos 6
+	* change server user
+	* fix fastcgi_pass
+	* remove cache_valid_time
+	* fix openjdk-8-jdk installation with Debian
+	* fix common role with CentOS 7
+	* change multiple conditions of the when statement to as a list
+	* add php-cgi symbolic link
 * version 0.2.5 - 2018.02.03
 	* fix ssl path
 	* fix self Certification Authority
