@@ -11,6 +11,14 @@ if property["server"] == 'apache' then
     it { should be_installed }
   end
 
+  describe command("httpd -M | grep 'proxy_fcgi_module'") do
+    its(:stdout) { should match(/proxy_fcgi_module/) }
+  end
+
+  describe package('mod_proxy_fcgi'), :if => os[:family] == 'redhat' && os[:release] == '6' do
+    it { should be_installed }
+  end
+
   describe service('httpd'), :if => os[:family] == 'redhat' do
     it { should be_enabled }
     it { should be_running }
