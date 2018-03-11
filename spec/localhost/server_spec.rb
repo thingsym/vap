@@ -124,6 +124,12 @@ elsif property["server"] == 'h2o' then
     its(:stdout) { should match /vagrant/ }
   end
 
+  if property["fastcgi"] == 'none' then
+    describe command("ps -C php-cgi -o user") do
+      its(:stdout) { should match /vagrant/ }
+    end
+  end
+
   describe file('/etc/h2o/h2o.conf') do
     it { should be_file }
   end
