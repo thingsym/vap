@@ -16,6 +16,10 @@ if property["server"] == 'apache' then
     it { should be_running }
   end
 
+  describe command("ps -C httpd -o user") do
+    its(:stdout) { should match /vagrant/ }
+  end
+
   describe file('/etc/httpd/conf/httpd.conf'), :if => os[:family] == 'redhat' do
     it { should be_file }
   end
@@ -68,6 +72,10 @@ elsif property["server"] == 'nginx' then
     it { should be_running }
   end
 
+  describe command("ps -C nginx -o user") do
+    its(:stdout) { should match /vagrant/ }
+  end
+
   describe file('/etc/nginx/nginx.conf') do
     it { should be_file }
   end
@@ -89,6 +97,10 @@ elsif property["server"] == 'h2o' then
   describe service('h2o') do
     it { should be_enabled }
     it { should be_running }
+  end
+
+  describe command("ps -C h2o -o user") do
+    its(:stdout) { should match /vagrant/ }
   end
 
   describe file('/etc/h2o/h2o.conf') do
