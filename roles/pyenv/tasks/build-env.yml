@@ -1,0 +1,35 @@
+---
+- name: build environment (CentOS/RHEL)
+  package:
+    name: "{{ item }}"
+  with_items:
+    - zlib-devel
+    - bzip2
+    - bzip2-devel
+    - readline-devel
+    - sqlite
+    - sqlite-devel
+    - openssl-devel
+    - xz
+    - xz-devel
+  when: ansible_os_family == 'RedHat'
+
+- name: build environment (Debian/Ubuntu)
+  package:
+    name: "{{ item }}"
+  with_items:
+    - make
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - wget
+    - curl
+    - llvm
+    - libncurses5-dev
+    - libncursesw5-dev
+    - xz-utils
+    - tk-dev
+  when: ansible_os_family == 'Debian'

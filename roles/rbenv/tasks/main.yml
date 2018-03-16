@@ -43,35 +43,6 @@
   become: yes
   become_user: vagrant
 
-- name: build environment
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - gcc
-    - cmake
-
-- name: build environment (CentOS/RHEL)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - openssl-devel
-    - libyaml-devel
-    - readline-devel
-    - zlib-devel
-  when: ansible_os_family == 'RedHat'
-
-- name: build environment (Debian)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - libssl-dev
-    - libyaml-dev
-    - libreadline-dev
-    - zlib1g-dev
-  when: ansible_os_family == 'Debian'
 
 - name: stat rbenv_default_gems
   stat:
@@ -86,6 +57,8 @@
     group: vagrant
     mode: 0755
   when: is_rbenv_default_gems.stat.exists
+
+- include: build-env.yml
 
 - name: ruby installed via rbenv
   command: sudo -u vagrant -i -- rbenv install {{ ruby_version | default(2.4.1) }}

@@ -45,6 +45,8 @@
     dest: "{{ home_dir }}/.bashrc"
     line: "eval \"$(pyenv virtualenv-init -)\""
 
+- include: build-env.yml
+
 - name: Python installed via pyenv
   command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}
   ignore_errors: yes
