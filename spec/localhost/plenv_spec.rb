@@ -35,11 +35,6 @@ if property["perl_version"] != 0 then
     its(:stdout) { should match property["perl_version"] }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.plenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(plenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.bashrc') do
     its(:content) { should match /export PATH=\$HOME\/\.plenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(plenv init \-\)"/ }

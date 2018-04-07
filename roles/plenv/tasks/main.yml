@@ -7,20 +7,10 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH plenv on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "export PATH=$HOME/.plenv/bin:$PATH"
-
 - name: edit PATH plenv on .bashrc
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"
     line: "export PATH=$HOME/.plenv/bin:$PATH"
-
-- name: edit plenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(plenv init -)\""
 
 - name: edit plenv init on .bashrc
   lineinfile:

@@ -7,20 +7,10 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH pyenv on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "export PATH=$HOME/.pyenv/bin:$PATH"
-
 - name: edit PATH pyenv on .bashrc
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"
     line: "export PATH=$HOME/.pyenv/bin:$PATH"
-
-- name: edit pyenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(pyenv init -)\""
 
 - name: edit pyenv init on .bashrc
   lineinfile:
@@ -34,11 +24,6 @@
     force: yes
   become: yes
   become_user: vagrant
-
-- name: edit virtualenv-init init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(pyenv virtualenv-init -)\""
 
 - name: edit virtualenv-init init on .bashrc
   lineinfile:

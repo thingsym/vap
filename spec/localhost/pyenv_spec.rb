@@ -35,11 +35,6 @@ if property["python_version"] != 0 then
     its(:stdout) { should match property["python_version"] }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.pyenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(pyenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.bashrc') do
     its(:content) { should match /export PATH=\$HOME\/\.pyenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(pyenv init \-\)"/ }

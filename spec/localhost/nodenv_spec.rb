@@ -35,11 +35,6 @@ if property["node_version"] != 0 then
     its(:stdout) { should match property["node_version"] }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.nodenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(nodenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.bashrc') do
     its(:content) { should match /export PATH=\$HOME\/\.nodenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(nodenv init \-\)"/ }

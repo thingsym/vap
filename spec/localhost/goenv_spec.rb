@@ -35,11 +35,6 @@ if property["go_version"] != 0 then
     its(:stdout) { should match property["go_version"] }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.goenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(goenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.bashrc') do
     its(:content) { should match /export PATH=\$HOME\/\.goenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(goenv init \-\)"/ }
