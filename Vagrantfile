@@ -9,8 +9,8 @@ vm_box                = 'bento/centos-7.2'
 # vm_box                = 'bento/ubuntu-16.04' # Xenial Xerus
 # vm_box                = 'bento/ubuntu-14.04' # Trusty Tahr
 
-vm_ip                 = '192.168.59.63'
 vm_box_version        = '>= 0'
+vm_ip                 = '192.168.59.63'
 vm_hostname           = 'vap.local'
 vm_document_root      = '/var/www/html'
 
