@@ -43,9 +43,6 @@
   template:
     src: /vagrant/config/default-ruby-gems.j2
     dest: "{{ home_dir }}/.rbenv/default-gems"
-    owner: vagrant
-    group: vagrant
-    mode: 0755
   when: is_rbenv_default_gems.stat.exists
 
 - include: build-env.yml
