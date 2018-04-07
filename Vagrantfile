@@ -3,9 +3,9 @@
 
 ## Vagrant Settings ##
 
-vm_box                = 'bento/centos-7.2'
-# vm_box                = 'bento/centos-6.7'
-# vm_box                = 'bento/debian-8.6' # jessie
+vm_box                = 'bento/centos-7.3'
+# vm_box                = 'bento/centos-6.9'
+# vm_box                = 'bento/debian-8.6' # Jessie
 # vm_box                = 'bento/ubuntu-16.04' # Xenial Xerus
 # vm_box                = 'bento/ubuntu-14.04' # Trusty Tahr
 
