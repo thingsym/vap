@@ -34,10 +34,10 @@
     dest: /etc/nginx/nginx.conf
   when: not is_custom_nginx_conf.stat.exists
 
-- name: change user form nginx to www-data
+- name: change user form vagrant to www-data
   replace:
     dest: /etc/nginx/nginx.conf
-    regexp: "user              nginx;"
+    regexp: "user              vagrant;"
     replace: "user              www-data;"
   when: ansible_os_family == 'Debian'
 
