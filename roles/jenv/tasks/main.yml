@@ -7,20 +7,10 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH jenv on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "export PATH=$HOME/.jenv/bin:$PATH"
-
 - name: edit PATH jenv on .bashrc
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
-
-- name: edit jenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(jenv init -)\""
 
 - name: edit jenv init on .bashrc
   lineinfile:

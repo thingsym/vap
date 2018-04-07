@@ -7,20 +7,10 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH goenv on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "export PATH=$HOME/.goenv/bin:$PATH"
-
 - name: edit PATH goenv on .bashrc
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"
     line: "export PATH=$HOME/.goenv/bin:$PATH"
-
-- name: edit goenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(goenv init -)\""
 
 - name: edit goenv init on .bashrc
   lineinfile:
