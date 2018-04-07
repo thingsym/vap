@@ -48,11 +48,18 @@
 - include: build-env.yml
 
 - name: Python installed via pyenv
-  command: sudo -u vagrant -i -- pyenv install {{ python_version | default(3.5.1) }}
-  ignore_errors: yes
+  command: ~/.pyenv/bin/pyenv install {{ python_version | default(3.5.1) }}
+#  ignore_errors: yes
+  failed_when: false
+  become: yes
+  become_user: vagrant
 
 - name: pyenv global
-  command: sudo -u vagrant -i -- pyenv global {{ python_version | default(3.5.1) }}
+  command: ~/.pyenv/bin/pyenv global {{ python_version | default(3.5.1) }}
+  become: yes
+  become_user: vagrant
 
 - name: pyenv rehash
-  command: sudo -u vagrant -i -- pyenv rehash
+  command: ~/.pyenv/bin/pyenv rehash
+  become: yes
+  become_user: vagrant
