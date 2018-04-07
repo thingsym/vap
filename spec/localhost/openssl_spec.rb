@@ -12,6 +12,10 @@ if property["ssl"] then
     its(:exit_status) { should eq 0 }
   end
 
+  describe file("/etc/pki/tls/vap") do
+    it { should be_directory }
+  end
+
   describe file("/etc/pki/tls/vap/privkey.pem") do
     it { should be_file }
   end

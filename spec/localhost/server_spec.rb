@@ -19,6 +19,12 @@ if property["server"] == 'apache' then
     it { should be_installed }
   end
 
+  if property["ssl"] then
+    describe command("httpd -M | grep 'ssl_module'") do
+      its(:stdout) { should match(/ssl_module/) }
+    end
+  end
+
   describe service('httpd'), :if => os[:family] == 'redhat' do
     it { should be_enabled }
     it { should be_running }
