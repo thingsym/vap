@@ -36,9 +36,13 @@
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
   when: ansible_os_family == 'Debian'
   ignore_errors: yes
-
+  
 - name: jenv global
-  command: sudo -u vagrant -i -- jenv global {{ java_version | default(1.8) }}
+  shell: ~/.jenv/bin/jenv global {{ java_version | default(1.8) }}
+  become: yes
+  become_user: vagrant
 
 - name: jenv rehash
-  command: sudo -u vagrant -i -- jenv rehash
+  shell: ~/.jenv/bin/jenv rehash
+  become: yes
+  become_user: vagrant

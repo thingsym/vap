@@ -103,13 +103,17 @@
     mode: 0666
 
 - name: php installed via phpenv.sh (mod_php)
-  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m mod_php
+  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m mod_php
+  become: yes
+  become_user: vagrant
   when:
     - server == "apache"
     - fastcgi == "none"
 
 - name: php installed via phpenv.sh (php-fpm tcp connection / CentOS6 and apache only)
-  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm -s tcp
+  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm -s tcp
+  become: yes
+  become_user: vagrant
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 6
@@ -117,7 +121,9 @@
     - fastcgi == "php-fpm"
 
 - name: php installed via phpenv.sh (php-fpm / CentOS7 and apache only)
-  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
+  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
+  become: yes
+  become_user: vagrant
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 7
@@ -125,13 +131,17 @@
     - fastcgi == "php-fpm"
 
 - name: php installed via phpenv.sh (php-fpm)
-  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
+  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
+  become: yes
+  become_user: vagrant
   when:
     - server != "apache"
     - fastcgi == "php-fpm"
 
 - name: php installed via phpenv.sh
-  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }}
+  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }}
+  become: yes
+  become_user: vagrant
   when: not ( ( server == "apache" and fastcgi == "none" ) or fastcgi == "php-fpm" )
 
 - include: php-fpm.yml
@@ -152,7 +162,11 @@
     force: yes
 
 - name: packagist.jp repository added
-  command: sudo -u vagrant -i -- {{ home_dir }}/.phpenv/shims/composer config -g repos.packagist composer https://packagist.jp
+  command: ~/.phpenv/shims/composer config -g repos.packagist composer https://packagist.jp
+  become: yes
+  become_user: vagrant
 
 - name: prestissimo installed
-  command: sudo -u vagrant -i -- {{ home_dir }}/.phpenv/shims/composer global require 'hirak/prestissimo=^0.3'
+  command: ~/.phpenv/shims/composer global require 'hirak/prestissimo=^0.3'
+  become: yes
+  become_user: vagrant

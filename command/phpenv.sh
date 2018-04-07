@@ -25,10 +25,10 @@ while getopts "v:m:s:rlih" OPT ; do
         ;;
     r)  REMOVE=true
         ;;
-    l)  phpenv install -l;
+    l)  $HOME/.phpenv/bin/phpenv install -l;
         exit 0
         ;;
-    i)  phpenv versions;
+    i)  $HOME/.phpenv/bin/phpenv versions;
         exit 0
         ;;
     h)  usage_exit
@@ -84,7 +84,8 @@ function gather_facts() {
 }
 
 function global() {
-  phpenv global $PHP_VERSION
+  $HOME/.phpenv/bin/phpenv global $PHP_VERSION
+  $HOME/.phpenv/bin/phpenv rehash
 
   if [ -f "$APACHE_PHP_CONF" ]; then
     if [ "$DISTR" = "centos" ]; then
@@ -125,7 +126,7 @@ function global() {
       fi
     fi
 
-    phpenv apache-version ${PHP_VERSION}
+    $HOME/.phpenv/bin/phpenv apache-version ${PHP_VERSION}
   fi
 
   if [ "$MODE" = "php-fpm" ]; then
@@ -216,7 +217,7 @@ function install() {
     sudo chown vagrant:vagrant /var/lib/apache2/module/enabled_by_admin
   fi
 
-  phpenv install ${PHP_VERSION} /home/vagrant/.phpenv/versions/${PHP_VERSION}
+  $HOME/.phpenv/bin/phpenv install ${PHP_VERSION}
 
   if [ "$DISTR" = "centos" ] && [ -d /etc/httpd/conf.d ] && [ ! -f "$APACHE_PHP_CONF" ]; then
     echo -e "#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
@@ -422,8 +423,6 @@ function install() {
       fi
     fi
   fi
-
-  phpenv rehash
 }
 
 function remove() {
