@@ -53,11 +53,6 @@ if property["php_version"] != 0 then
     its(:content) { should match /eval "\$\(phpenv init \-\)"/ }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.phpenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(phpenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.phpenv/plugins/php-build') do
     it { should be_directory }
   end

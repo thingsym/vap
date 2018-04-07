@@ -30,11 +30,6 @@ if property["java_version"] != 0 then
     its(:stdout) { should match /#{property["java_version"]}/ }
   end
 
-  describe file('/home/vagrant/.bash_profile') do
-    its(:content) { should match /export PATH=\$HOME\/\.jenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(jenv init \-\)"/ }
-  end
-
   describe file('/home/vagrant/.bashrc') do
     its(:content) { should match /export PATH=\$HOME\/\.jenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(jenv init \-\)"/ }
