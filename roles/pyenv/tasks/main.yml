@@ -7,14 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH pyenv on .bashrc
+- name: edit PATH pyenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.pyenv/bin:$PATH"
 
-- name: edit pyenv init on .bashrc
+- name: edit pyenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(pyenv init -)\""
 
 - name: git checkout pyenv-virtualenv
@@ -25,9 +25,9 @@
   become: yes
   become_user: vagrant
 
-- name: edit virtualenv-init init on .bashrc
+- name: edit virtualenv-init init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(pyenv virtualenv-init -)\""
 
 - include: build-env.yml

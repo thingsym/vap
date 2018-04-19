@@ -7,14 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH goenv on .bashrc
+- name: edit PATH goenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.goenv/bin:$PATH"
 
-- name: edit goenv init on .bashrc
+- name: edit goenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(goenv init -)\""
 
 - name: Go installed via goenv
