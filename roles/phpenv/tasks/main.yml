@@ -104,6 +104,7 @@
   shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm -s tcp
   become: yes
   become_user: vagrant
+  notify: php-fpm restarted
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 6
@@ -114,6 +115,7 @@
   shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
   become: yes
   become_user: vagrant
+  notify: php-fpm restarted
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 7
@@ -124,6 +126,7 @@
   shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
   become: yes
   become_user: vagrant
+  notify: php-fpm restarted
   when:
     - server != "apache"
     - fastcgi == "php-fpm"

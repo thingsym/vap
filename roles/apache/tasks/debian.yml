@@ -16,12 +16,14 @@
   template:
     src: /vagrant/config/apache2.conf.j2
     dest: /etc/apache2/apache2.conf
+  notify: apache2 restarted
   when: is_custom_apache2_conf.stat.exists
 
 - name: apache2.conf changed
   template:
     src: apache2.conf.j2
     dest: /etc/apache2/apache2.conf
+  notify: apache2 restarted
   when: not is_custom_apache2_conf.stat.exists
 
 - name: stat custom apache2.envvars.j2
@@ -33,18 +35,21 @@
   template:
     src: /vagrant/config/apache2.envvars.j2
     dest: /etc/apache2/envvars
+  notify: apache2 restarted
   when: is_custom_apache2_envvars.stat.exists
 
 - name: apache2 envvars changed
   template:
     src: apache2.envvars.j2
     dest: /etc/apache2/envvars
+  notify: apache2 restarted
   when: not is_custom_apache2_envvars.stat.exists
 
 - name: edit charset on charset.conf
   lineinfile:
     dest: /etc/apache2/conf-available/charset.conf
     line: "AddDefaultCharset UTF-8"
+  notify: apache2 restarted
 
 - name: stat custom 000-default.conf
   stat:
@@ -55,12 +60,14 @@
   template:
     src: /vagrant/config/apache2.000-default.conf.j2
     dest: /etc/apache2/sites-available/000-default.conf
+  notify: apache2 restarted
   when: is_custom_apache2_000_default.stat.exists
 
 - name: 000-default.conf changed
   template:
     src: apache2.000-default.conf.j2
     dest: /etc/apache2/sites-available/000-default.conf
+  notify: apache2 restarted
   when: not is_custom_apache2_000_default.stat.exists
 
 - block:
@@ -73,33 +80,39 @@
     template:
       src: /vagrant/config/apache2.default-ssl.conf.j2
       dest: /etc/apache2/sites-available/default-ssl.conf
+    notify: apache2 restarted
     when: is_custom_apache2_default_ssl.stat.exists
 
   - name: default-ssl.conf changed
     template:
       src: apache2.default-ssl.conf.j2
       dest: /etc/apache2/sites-available/default-ssl.conf
+    notify: apache2 restarted
     when: not is_custom_apache2_default_ssl.stat.exists
   when: ssl == true
 
 - block:
   - name: enables Apache2 module default-ssl
     command: sudo a2ensite default-ssl
+    notify: apache2 restarted
 
   - name: enables Apache2 module ssl
     apache2_module:
       name: ssl
       state: present
+    notify: apache2 restarted
   when: ssl == true
 
 - name: disables Apache2 module mpm_event
   command: sudo a2dismod mpm_event
+  notify: apache2 restarted
 
 - name: enables Apache2 module mpm_prefork
   command: sudo a2enmod mpm_prefork
+  notify: apache2 restarted
 
-- name: apache2 started and enabled
+- name: apache2 enabled
   service:
     name: apache2
-    state: restarted
     enabled: yes
+  notify: apache2 restarted
