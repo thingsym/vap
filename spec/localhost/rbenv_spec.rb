@@ -35,7 +35,7 @@ if property["ruby_version"] != 0 then
     its(:stdout) { should match property["ruby_version"] }
   end
 
-  describe file('/home/vagrant/.bashrc') do
+  describe file('/home/vagrant/.bashrc_vap') do
     its(:content) { should match /export PATH=\$HOME\/\.rbenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(rbenv init \-\)"/ }
   end

@@ -77,8 +77,20 @@ describe command('ansible --version') do
   its(:exit_status) { should eq 0 }
 end
 
-describe file('/home/vagrant/.bashrc') do
+describe file('/home/vagrant/.bashrc_vap') do
+  it { should be_file }
+end
+
+describe file('/home/vagrant/.bashrc_vap') do
   its(:content) { should match /export PATH=\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin:\/usr\/local\/sbin:\$PATH/ }
+end
+
+describe file('/home/vagrant/.bashrc'), :if => os[:family] == 'redhat' do
+  its(:content) { should match /if \[ \-f ~\/\.bashrc_vap \]; then\n        \. ~\/\.bashrc_vap\nfi/ }
+end
+
+describe file('/home/vagrant/.profile'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  its(:content) { should match /if \[ \-f ~\/\.bashrc_vap \]; then\n        \. ~\/\.bashrc_vap\nfi/ }
 end
 
 describe package('sysv-rc-conf'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do

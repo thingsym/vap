@@ -7,14 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH jenv on .bashrc
+- name: edit PATH jenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
 
-- name: edit jenv init on .bashrc
+- name: edit jenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(jenv init -)\""
 
 - name: java added via jenv (CentOS/RHEL)
