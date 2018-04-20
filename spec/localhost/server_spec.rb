@@ -30,7 +30,7 @@ if property["server"] == 'apache' then
     it { should be_running }
   end
 
-  describe command("ps -C httpd -o user") do
+  describe command("ps -C httpd -o user"), :if => os[:family] == 'redhat' do
     its(:stdout) { should match /vagrant/ }
   end
 
@@ -53,6 +53,10 @@ if property["server"] == 'apache' then
   describe service('apache2'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_enabled }
     it { should be_running }
+  end
+
+  describe command("ps -C apache2 -o user"), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /vagrant/ }
   end
 
   describe file('/etc/apache2/apache2.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
