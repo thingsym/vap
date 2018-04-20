@@ -43,7 +43,7 @@ describe service('chronyd'), :if => os[:family] == 'redhat' && os[:release] == '
   it { should be_running }
 end
 
-describe package('ntp'), :if => ( os[:family] == 'redhat' && os[:release] == '6' ) || os[:family] == 'debian' || os[:family] ==  'ubuntu' do
+describe package('ntp'), :if => ( os[:family] == 'redhat' && os[:release] == '6' ) || os[:family] == 'debian' || os[:family] == 'ubuntu' do
   it { should be_installed }
 end
 
@@ -52,16 +52,16 @@ describe service('ntpd'), :if => os[:family] == 'redhat' && os[:release] == '6' 
   it { should be_running }
 end
 
-describe service('ntp'), :if => os[:family] == 'debian' || ( os[:family] ==  'ubuntu' && os[:release] == '16.04' ) do
+describe service('ntp'), :if => os[:family] == 'debian' || ( os[:family] == 'ubuntu' && os[:release] == '16.04' ) do
   it { should be_enabled }
   it { should be_running }
 end
 
-describe service('ntpd'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe service('ntpd'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_running }
 end
 
-describe service('ntp'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe service('ntp'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_enabled }
 end
 
@@ -93,7 +93,7 @@ describe file('/home/vagrant/.profile'), :if => os[:family] == 'debian' || os[:f
   its(:content) { should match /if \[ \-f ~\/\.bashrc_vap \]; then\n        \. ~\/\.bashrc_vap\nfi/ }
 end
 
-describe package('sysv-rc-conf'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe package('sysv-rc-conf'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_installed }
 end
 

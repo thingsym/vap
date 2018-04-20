@@ -23,7 +23,6 @@
     state: stopped
     enabled: no
 
-
 - name: ntp installed
   package:
     name: ntp
