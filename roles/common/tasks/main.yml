@@ -15,19 +15,6 @@
   include: debian.yml
   when: ansible_os_family == 'Debian'
 
-- block:
-  - name: create swap space
-    command: dd if=/dev/zero of=/swapfile bs=1M count=1024
-    ignore_errors: yes
-
-  - name: Make swap
-    command: mkswap /swapfile
-    ignore_errors: yes
-  when: ansible_swaptotal_mb < 1
-
-- name: swapon
-  command: swapon /swapfile
-  ignore_errors: yes
 - name: edit PATH on .bashrc_vap
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
@@ -48,5 +35,6 @@
     create: yes
   when: ansible_os_family == 'Debian'
 
+- include: swap.yml
 - include: ssh-config.yml
 - include: reset.yml
