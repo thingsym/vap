@@ -53,6 +53,14 @@ if property["database"] == 'mysql' then
   end
 elsif property["database"] == 'mariadb' then
 
+  describe command('mysql -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '16.04') do
+    its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
+  end
+
+  describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
+    its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
+  end
+
   describe yumrepo('mariadb'), :if => os[:family] == 'redhat' do
     it { should exist }
   end
@@ -71,7 +79,7 @@ elsif property["database"] == 'mariadb' then
     it { should be_running }
   end
 
-  describe package('mariadb-server'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('mariadb-server-10.1'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 
