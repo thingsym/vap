@@ -152,4 +152,9 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     its(:stdout) { should match /mysqld is alive/ }
   end
 
+  describe file('/var/log/mysql') do
+    it { should be_directory }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
 end

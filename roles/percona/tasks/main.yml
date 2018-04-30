@@ -101,6 +101,13 @@
       enabled: yes
   when: ansible_os_family == 'Debian'
 
+- name: mkdir /var/log/mysql
+  file:
+    path: /var/log/mysql
+    state: directory
+    owner: mysql
+    group: mysql
+
 - name: set percona root password
   mysql_user:
     name: root

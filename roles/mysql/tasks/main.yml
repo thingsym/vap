@@ -95,6 +95,13 @@
     dest: /etc/my.cnf
   when: not is_custom_my_conf.stat.exists
 
+- name: mkdir /var/log/mysql
+  file:
+    path: /var/log/mysql
+    state: directory
+    owner: mysql
+    group: mysql
+
 - name: mysqld started and enabled (CentOS/RHEL)
   service:
     name: mysqld
