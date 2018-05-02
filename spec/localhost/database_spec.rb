@@ -111,6 +111,10 @@ elsif property["database"] == 'mariadb' then
   end
 elsif property["database"] == 'percona' then
 
+  describe command('mysqld -V') do
+    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
+  end
+
   describe yumrepo('percona-release-noarch'), :if => os[:family] == 'redhat' do
     it { should exist }
   end
@@ -142,11 +146,19 @@ elsif property["database"] == 'percona' then
     it { should be_running }
   end
 
-  describe file('/etc/my.cnf'), :if => os[:family] == 'redhat' do
-    it { should be_file }
+  describe file('/var/lib/mysql/mysql.sock'), :if => os[:family] == 'redhat' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
   end
 
-  describe file('/etc/mysql/my.cnf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe file('/var/run/mysqld/mysqld.sock'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
+  describe file('/etc/my.cnf') do
     it { should be_file }
   end
 end
