@@ -3,12 +3,20 @@ require 'shellwords'
 
 if property["database"] == 'mysql' then
 
-  describe yumrepo('mysql56-community'), :if => os[:family] == 'redhat' do
-    it { should exist }
+  describe command('mysqld -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
   end
 
-  describe package('mysql-community-server'), :if => os[:family] == 'redhat' do
+  describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
+  end
+
+  describe package('mysql-community-server') do
     it { should be_installed }
+  end
+
+  describe yumrepo('mysql56-community'), :if => os[:family] == 'redhat' do
+    it { should exist }
   end
 
   describe package('MySQL-python'), :if => os[:family] == 'redhat' do
@@ -27,16 +35,12 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
-  describe package('mysql-server-5.5'), :if => os[:family] == 'debian' do
-    it { should be_installed }
+  describe command('apt-cache policy | grep mysql-5.6'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('mysql-5.6')}/ }
   end
 
-  describe package('mysql-server-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-    it { should be_installed }
-  end
-
-  describe package('mysql-server-5.6'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
-    it { should be_installed }
+  describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
   end
 
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do

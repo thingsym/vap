@@ -22,61 +22,56 @@
       state: latest
     with_items:
       - mysql-community-server
-      - mysql-community-devel
       - mysql-community-client
       - mysql-community-common
+      - mysql-community-devel
       - mysql-community-libs
       - mysql-utilities
       - MySQL-python
-
   when: ansible_os_family == 'RedHat'
 
-- name: mysql 5.5 installed (Debian)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - mysql-server
-    - mysql-common
-    - mysql-client
-    - mysql-utilities
-    - libmysqlclient18
-    - libmysqlclient-dev
-    - python-mysqldb
-  when: ansible_distribution == 'Debian'
-
 - block:
-  - name: mysql 5.7 installed (Ubuntu)
+  - name: set mysql-apt-config to mysql version 5.6
+    debconf:
+      name: mysql-apt-config
+      question: "{{ item.question }}"
+      value: "{{ item.value }}"
+      vtype: "{{ item.vtype | default ('select') }}"
+    with_items:
+      - question: mysql-apt-config/select-server
+        value: mysql-5.6
+      - question: mysql-apt-config/select-tools
+        value: Enabled
+
+  - name: set mysql-apt-config to mysql version 5.7 (only xenial)
+    debconf:
+      name: mysql-apt-config
+      question: "{{ item.question }}"
+      value: "{{ item.value }}"
+      vtype: "{{ item.vtype | default ('select') }}"
+    with_items:
+      - question: mysql-apt-config/select-server
+        value: mysql-5.7
+    when: ansible_distribution_release == 'xenial'
+
+  - name: mysql-apt-config installed (Debian)
+    apt:
+      deb: https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+
+  - name: apt-get update
+    command: apt-get update
+
+  - name: mysql installed (Debian)
     package:
       name: "{{ item }}"
       state: latest
     with_items:
-      - mysql-server
+      - mysql-community-server
+      - mysql-community-client
       - mysql-common
-      - mysql-client
       - mysql-utilities
-      - libmysqlclient20
-      - libmysqlclient-dev
       - python-mysqldb
-  when: 
-    - ansible_distribution == 'Ubuntu' 
-    - ansible_distribution_release == 'xenial'
-
-- name: mysql 5.6 installed (Ubuntu)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - mysql-server-5.6
-    - mysql-common-5.6
-    - mysql-client-5.6
-    - mysql-utilities
-    - libmysqlclient18
-    - libmysqlclient-dev
-    - python-mysqldb
-  when: 
-    - ansible_distribution == 'Ubuntu' 
-    - ansible_distribution_release == 'trusty'
+  when: ansible_os_family == 'Debian'
 
 - name: stat custom my.cnf.j2
   stat:
