@@ -63,11 +63,14 @@ provision = <<-EOT
     yum -y install epel-release
   fi
 
-  if [ "$DISTR" = "debian" ] && [ "$RELEASE" = "jessie" ]; then
-    echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
-    apt-get update
-    if [ #{ansible_install_mode} = "default" ]; then
-      apt-get -y install -t jessie-backports ansible
+  if [ "$DISTR" = "debian" ]; then
+    apt-get -y install dirmngr
+    echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 93C4A3FD7BB9C367
+
+    if [ "$RELEASE" = "jessie" ]; then
+      echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
+      apt-get update
     fi
   fi
 EOT
