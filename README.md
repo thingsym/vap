@@ -386,6 +386,31 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.2.7 - 2018.05.03
+	* change user/group from www-data to vagrant with debian
+	* add debian/stretch64 to vm_box
+	* fix vbguest_auto_update
+	* change official Vagrant box to official distributor
+	* install the latest version of ansible with debian
+	* change from yum claen all to yum makecache fast
+	* fix mysql.sock path
+	* add debconf-utils
+	* fix mysql/mariadb/percona tasks
+	* fix reset database tasks
+	* enable Apache2 module proxy_fcgi
+	* enable swap space with only Ubuntu
+	* revert SELinux with only CentOS7
+	* add .bashrc_vap
+	* add handlers
+	* improve phpenv.sh version 0.4.0
+	* remove mount_options
+	* add type option into config.vm.synced_folder
+	* change nginx user
+	* remove CityFan repo
+	* remove bash settings into .bash_profile, integrate into .bashrc
+	* using 'become' and 'become_user' rather than running sudo
+	* fix ruby build env
+	* add python build env
 * version 0.2.6 - 2018.03.11
 	* add chrony with centos 7
 	* add fastcgi to h2o
