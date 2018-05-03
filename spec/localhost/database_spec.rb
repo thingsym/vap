@@ -52,6 +52,12 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
+  describe file('/var/lib/mysql/mysql.sock') do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
   describe file('/etc/my.cnf') do
     it { should be_file }
   end
@@ -104,6 +110,18 @@ elsif property["database"] == 'mariadb' then
   describe service('mysql'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
     it { should be_enabled }
     it { should be_running }
+  end
+
+  describe file('/var/lib/mysql/mysql.sock'), :if => os[:family] == 'redhat' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
+  describe file('/var/run/mysqld/mysqld.sock'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
   end
 
   describe file('/etc/my.cnf') do

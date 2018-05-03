@@ -20,7 +20,7 @@
 port = 3306
 {% if ansible_os_family == "RedHat" %}
 socket = /var/lib/mysql/mysql.sock
-{% else %}
+{% elif ansible_os_family == 'Debian' %}
 socket = /var/run/mysqld/mysqld.sock
 {% endif %}
 
@@ -31,7 +31,7 @@ socket = /var/run/mysqld/mysqld.sock
 [mysqld_safe]
 {% if ansible_os_family == "RedHat" %}
 socket = /var/lib/mysql/mysql.sock
-{% else %}
+{% elif ansible_os_family == 'Debian' %}
 socket = /var/run/mysqld/mysqld.sock
 {% endif %}
 nice = 0
@@ -44,7 +44,7 @@ user = mysql
 pid-file = /var/run/mysqld/mysqld.pid
 {% if ansible_os_family == "RedHat" %}
 socket = /var/lib/mysql/mysql.sock
-{% else %}
+{% elif ansible_os_family == 'Debian' %}
 socket = /var/run/mysqld/mysqld.sock
 lc-messages-dir = /usr/share/mysql
 {% endif %}
