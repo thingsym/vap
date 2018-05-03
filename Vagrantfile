@@ -3,11 +3,11 @@
 
 ## Vagrant Settings ##
 
-vm_box                = 'bento/centos-7.3'
-# vm_box                = 'bento/centos-6.9'
-# vm_box                = 'bento/debian-8.6' # Jessie
-# vm_box                = 'bento/ubuntu-16.04' # Xenial Xerus
-# vm_box                = 'bento/ubuntu-14.04' # Trusty Tahr
+vm_box                = 'centos/7'
+# vm_box                = 'centos/6'
+# vm_box                = 'debian/jessie64'
+# vm_box                = 'ubuntu/xenial64'
+# vm_box                = 'ubuntu/trusty64'
 
 vm_box_version        = '>= 0'
 vm_ip                 = '192.168.59.63'
