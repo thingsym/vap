@@ -93,48 +93,40 @@
     mode: 0666
 
 - name: php installed via phpenv.sh (mod_php)
-  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m mod_php
-  become: yes
-  become_user: vagrant
+  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }} -m mod_php
   when:
     - server == "apache"
     - fastcgi == "none"
 
-- name: php installed via phpenv.sh (php-fpm tcp connection / CentOS6 and apache only)
-  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm -s tcp
-  become: yes
-  become_user: vagrant
-  notify: php-fpm restarted
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int == 6
-    - server == "apache"
-    - fastcgi == "php-fpm"
+- block:
+  - name: php installed via phpenv.sh (php-fpm tcp connection / CentOS6 and apache only)
+    command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }} -m php-fpm -s tcp
+    when:
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version|int == 6
 
-- name: php installed via phpenv.sh (php-fpm / CentOS7 and apache only)
-  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
-  become: yes
-  become_user: vagrant
-  notify: php-fpm restarted
+  - name: php installed via phpenv.sh (php-fpm / CentOS7 and apache only)
+    command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }} -m php-fpm
+    when:
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version|int == 7
+
+  - name: php installed via phpenv.sh (php-fpm / Debian and apache)
+    command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }} -m php-fpm
+    when:
+      - ansible_os_family == 'Debian'
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int == 7
     - server == "apache"
     - fastcgi == "php-fpm"
 
 - name: php installed via phpenv.sh (php-fpm)
-  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }} -m php-fpm
-  become: yes
-  become_user: vagrant
-  notify: php-fpm restarted
+  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }} -m php-fpm
   when:
     - server != "apache"
     - fastcgi == "php-fpm"
 
 - name: php installed via phpenv.sh
-  shell: /vagrant/command/phpenv.sh -v {{ php_version | default(7.1.7) }}
-  become: yes
-  become_user: vagrant
+  command: sudo -u vagrant -i -- /vagrant/command/phpenv.sh -v {{ php_version | default(7.2.1) }}
   when: not ( ( server == "apache" and fastcgi == "none" ) or fastcgi == "php-fpm" )
 
 - include: php-fpm.yml
