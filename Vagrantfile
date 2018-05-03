@@ -58,9 +58,8 @@ provision = <<-EOT
   echo 'VERSION:' $VERSION
   echo 'MAJOR:' $MAJOR
 
-  if [ "$DISTR" = "centos" ]; then
-    echo $MAJOR > /etc/yum/vars/releasever
-    yum clean all
+  if [ "$DISTR" = "centos" ] && [ "$MAJOR" = "6" ]; then
+    yum makecache fast
     yum -y install epel-release
   fi
 
