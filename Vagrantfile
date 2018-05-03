@@ -3,11 +3,12 @@
 
 ## Vagrant Settings ##
 
-vm_box                = 'bento/centos-7.3'
-# vm_box                = 'bento/centos-6.9'
-# vm_box                = 'bento/debian-8.6' # Jessie
-# vm_box                = 'bento/ubuntu-16.04' # Xenial Xerus
-# vm_box                = 'bento/ubuntu-14.04' # Trusty Tahr
+vm_box                = 'centos/7'
+# vm_box                = 'centos/6'
+# vm_box                = 'debian/stretch64'
+# vm_box                = 'debian/jessie64'
+# vm_box                = 'ubuntu/xenial64'
+# vm_box                = 'ubuntu/trusty64'
 
 vm_box_version        = '>= 0'
 vm_ip                 = '192.168.59.63'
@@ -17,7 +18,7 @@ vm_document_root      = '/var/www/html'
 public_ip             = ''
 forwarded_port        = false
 
-vbguest_auto_update   = false
+vbguest_auto_update   = true
 
 ansible_install_mode  = :default    # :default|:pip
 ansible_version       = 'latest'    # only :pip required
@@ -58,17 +59,19 @@ provision = <<-EOT
   echo 'VERSION:' $VERSION
   echo 'MAJOR:' $MAJOR
 
-  if [ "$DISTR" = "centos" ]; then
-    echo $MAJOR > /etc/yum/vars/releasever
-    yum clean all
+  if [ "$DISTR" = "centos" ] && [ "$MAJOR" = "6" ]; then
+    yum makecache fast
     yum -y install epel-release
   fi
 
-  if [ "$DISTR" = "debian" ] && [ "$RELEASE" = "jessie" ]; then
-    echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
-    apt-get update
-    if [ #{ansible_install_mode} = "default" ]; then
-      apt-get -y install -t jessie-backports ansible
+  if [ "$DISTR" = "debian" ]; then
+    apt-get -y install dirmngr
+    echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 93C4A3FD7BB9C367
+
+    if [ "$RELEASE" = "jessie" ]; then
+      echo 'deb http://ftp.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
+      apt-get update
     fi
   fi
 EOT
