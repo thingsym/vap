@@ -3,16 +3,16 @@
 set -e
 
 usage_exit() {
-  echo "[Error]: Not Found php version"
-  echo "[Info]: phpenv.sh version 0.3.0"
+  echo "[Info]: phpenv.sh version 0.4.0"
   echo "[Info]: Usage: phpenv.sh <-v x.x.x> <-m [mod_php|php-fpm]> <-s [tcp|unix]>"
-  echo "[Info]: or Not Found Sub Commnad"
-  echo "[Info]: Usage: phpenv.sh <[-r|-l|-i|-h]>"
+  echo "[Info]: Usage: phpenv.sh <-v x.x.x> [<-r>]"
+  echo "[Info]: Usage: phpenv.sh <-l|-i|-h]>"
   exit 0
 }
 
 if [ "$#" -eq 0 ]; then
-  usage_exit
+  echo "[Info]: Not Found Sub Commnad"
+  exit 1
 fi
 
 while getopts "v:m:s:rlih" OPT ; do
@@ -25,10 +25,10 @@ while getopts "v:m:s:rlih" OPT ; do
         ;;
     r)  REMOVE=true
         ;;
-    l)  phpenv install -l;
+    l)  $HOME/.phpenv/bin/phpenv install -l;
         exit 0
         ;;
-    i)  phpenv versions;
+    i)  $HOME/.phpenv/bin/phpenv versions;
         exit 0
         ;;
     h)  usage_exit
@@ -63,13 +63,13 @@ function gather_facts() {
     if [ -e /etc/lsb-release ]; then
       RELEASE=$(awk '/DISTRIB_CODENAME=/' /etc/lsb-release | sed 's/DISTRIB_CODENAME=//' | sed 's/"//g' | tr '[:upper:]' '[:lower:]')
     else
-      RELEASE=$(awk '/PRETTY_NAME=/' /etc/os-release | sed 's/"//g' | awk '{print $4}' | sed 's/[()]//g' | tr '[:upper:]' '[:lower:]')
+      RELEASE=$(awk '/PRETTY_NAME=/' /etc/os-release | sed 's/"//g' | awk '{print $4}' | sed 's/[\(\)]//g' | tr '[:upper:]' '[:lower:]')
     fi
   elif [ -e /etc/redhat-release ]; then
     DISTR=$(awk '{print $1}' /etc/redhat-release | tr '[:upper:]' '[:lower:]')
     VERSION=$(awk '{print $3}' /etc/redhat-release)
     MAJOR=$(awk '{print $3}' /etc/redhat-release | sed -E 's/\.[0-9]+//g')
-    RELEASE=$(awk '{print $4}' /etc/redhat-release | sed 's/[()]//g' | tr '[:upper:]' '[:lower:]')
+    RELEASE=$(awk '{print $4}' /etc/redhat-release | sed 's/[\(\)]//g' | tr '[:upper:]' '[:lower:]')
   fi
   ARCH=$(uname -m)
   BITS=$(uname -m | sed 's/x86_//;s/amd//;s/i[3-6]86/32/')
@@ -84,7 +84,8 @@ function gather_facts() {
 }
 
 function global() {
-  phpenv global $PHP_VERSION
+  $HOME/.phpenv/bin/phpenv global $PHP_VERSION
+  $HOME/.phpenv/bin/phpenv rehash
 
   if [ -f "$APACHE_PHP_CONF" ]; then
     if [ "$DISTR" = "centos" ]; then
@@ -125,7 +126,7 @@ function global() {
       fi
     fi
 
-    phpenv apache-version ${PHP_VERSION}
+    $HOME/.phpenv/bin/phpenv apache-version ${PHP_VERSION}
   fi
 
   if [ "$MODE" = "php-fpm" ]; then
@@ -158,9 +159,9 @@ function global() {
         sudo service php-fpm stop
       fi
 
-      if [ -f "/home/vagrant/.phpenv/versions/${PHP_VERSION}/sbin/php-fpm" ] && [ -d /usr/sbin ]; then
-        sudo cp /home/vagrant/.phpenv/versions/${PHP_VERSION}/sbin/php-fpm /usr/sbin/php-fpm
-        echo "[Info]: add php-fpm to /usr/sbin/"
+      if [ -f "$PHP_FPM_BIN" ] && [ -d /usr/sbin ]; then
+        sudo cp $PHP_FPM_BIN /usr/sbin/php-fpm
+        echo "[Info]: add ${PHP_FPM_BIN} to /usr/sbin/"
         sudo chmod 755 /usr/sbin/php-fpm
       fi
 
@@ -168,13 +169,13 @@ function global() {
         if type systemctl > /dev/null 2>&1; then
           if [ -f "$PHP_FPM_SERVICE" ] && [ -d /usr/lib/systemd/system ]; then
             sudo cp $PHP_FPM_SERVICE /usr/lib/systemd/system/php-fpm.service
-            echo "[Info]: add php-fpm.service to /usr/lib/systemd/system/"
+            echo "[Info]: add ${PHP_FPM_SERVICE} to /usr/lib/systemd/system/"
             sudo systemctl daemon-reload
           fi
         elif type service > /dev/null 2>&1; then
           if [ -f "$PHP_FPM_INITD" ] && [ -d /etc/init.d ]; then
             sudo cp $PHP_FPM_INITD /etc/init.d/php-fpm
-            echo "[Info]: add php-fpm.init.d to /etc/init.d/"
+            echo "[Info]: add ${PHP_FPM_INITD} to /etc/init.d/"
             sudo chmod 755 /etc/init.d/php-fpm
             sudo chkconfig --add php-fpm
           fi
@@ -183,13 +184,13 @@ function global() {
         if type systemctl > /dev/null 2>&1; then
           if [ -f "$PHP_FPM_SERVICE" ] && [ -d /lib/systemd/system ]; then
             sudo cp $PHP_FPM_SERVICE /lib/systemd/system/php-fpm.service
-            echo "[Info]: add php-fpm.service to /lib/systemd/system/"
+            echo "[Info]: add ${PHP_FPM_SERVICE} to /lib/systemd/system/"
             sudo systemctl daemon-reload
           fi
         elif type service > /dev/null 2>&1; then
           if [ -f "$PHP_FPM_INITD" ] && [ -d /etc/init.d ]; then
             sudo cp $PHP_FPM_INITD /etc/init.d/php-fpm
-            echo "[Info]: add php-fpm.init.d to /etc/init.d/"
+            echo "[Info]: add ${PHP_FPM_INITD} to /etc/init.d/"
             sudo chmod 755 /etc/init.d/php-fpm
           fi
         fi
@@ -216,12 +217,14 @@ function install() {
     sudo chown vagrant:vagrant /var/lib/apache2/module/enabled_by_admin
   fi
 
-  phpenv install ${PHP_VERSION} /home/vagrant/.phpenv/versions/${PHP_VERSION}
+  $HOME/.phpenv/bin/phpenv install ${PHP_VERSION}
 
   if [ "$DISTR" = "centos" ] && [ -d /etc/httpd/conf.d ] && [ ! -f "$APACHE_PHP_CONF" ]; then
     echo -e "#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
+    echo "[Info]: add ${APACHE_PHP_CONF}"
   elif ( [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ] ) && [ -d /etc/apache2/mods-available ] && [ ! -f "$APACHE_PHP_CONF" ]; then
     echo -e "<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
+    echo "[Info]: add ${APACHE_PHP_CONF}"
   fi
 
   if [ -d /etc/httpd/modules ]; then
@@ -281,6 +284,12 @@ function install() {
     echo "[Info]: edit ${PHP_INI}"
   fi
 
+  if [ ! -d /var/run/php-fpm ]; then
+    sudo mkdir /var/run/php-fpm
+    sudo chmod 755 /var/run/php-fpm
+    echo "[Info]: add /var/run/php-fpm"
+  fi
+
   if [ ! -d /var/log/php-fpm ]; then
     sudo mkdir /var/log/php-fpm
     echo "[Info]: add /var/log/php-fpm"
@@ -292,17 +301,16 @@ function install() {
     echo "[Info]: add /var/log/php-fpm/error.log"
   fi
 
-  if [ "$DISTR" = "centos" ]; then
-    sudo chown vagrant:vagrant /var/log/php-fpm
-    sudo chown vagrant:vagrant /var/log/php-fpm/error.log
-  elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-    sudo chown www-data:www-data /var/log/php-fpm
-    sudo chown www-data:www-data /var/log/php-fpm/error.log
-  fi
+  sudo chown vagrant:vagrant /var/run/php-fpm
+  sudo chown vagrant:vagrant /var/log/php-fpm
+  sudo chown vagrant:vagrant /var/log/php-fpm/error.log
+
 
   if type systemctl > /dev/null 2>&1; then
     if [ -f "/tmp/php-build/source/${PHP_VERSION}/sapi/fpm/php-fpm.service" ]; then
       sudo cp /tmp/php-build/source/${PHP_VERSION}/sapi/fpm/php-fpm.service $PHP_FPM_SERVICE
+      echo "[Info]: add ${PHP_FPM_SERVICE}"
+
       sed -i -e "s/^PIDFile=\${prefix}\/var\/run\/php-fpm.pid/PIDFile=\/run\/php-fpm.pid/" $PHP_FPM_SERVICE
       sed -i -e "s/^ExecStart=\${exec_prefix}\/sbin\/php-fpm --nodaemonize --fpm-config \${prefix}\/etc\/php-fpm.conf/ExecStart=\/usr\/sbin\/php-fpm --nodaemonize --fpm-config \/home\/vagrant\/.phpenv\/versions\/${PHP_VERSION}\/etc\/php-fpm.conf/" $PHP_FPM_SERVICE
       sed -i -e "8i EnvironmentFile=\/etc\/sysconfig\/php-fpm" $PHP_FPM_SERVICE
@@ -310,19 +318,12 @@ function install() {
       echo "[Info]: edit ${PHP_FPM_SERVICE}"
     fi
 
-    if [ ! -d /var/run/php-fpm ]; then
-      sudo mkdir /var/run/php-fpm
-    fi
-    if [ -d /var/run/php-fpm ]; then
-      sudo chmod 755 /var/run/php-fpm
-      sudo chown vagrant:vagrant /var/run/php-fpm
-      echo "[Info]: add /var/run/php-fpm"
-    fi
-    if [ ! -f /etc/sysconfig/php-fpm ]; then
+    if [ -d /etc/sysconfig ] && [ ! -f /etc/sysconfig/php-fpm ]; then
       sudo touch /etc/sysconfig/php-fpm
       sudo sh -c "echo '# Additional environment file for php-fpm' > /etc/sysconfig/php-fpm"
       echo "[Info]: add /etc/sysconfig/php-fpm"
     fi
+
     if [ ! -f /etc/tmpfiles.d/php-fpm.conf ]; then
       sudo touch /etc/tmpfiles.d/php-fpm.conf
       sudo sh -c "echo 'd /var/run/php-fpm 0775 vagrant vagrant' > /etc/tmpfiles.d/php-fpm.conf"
@@ -330,33 +331,26 @@ function install() {
     fi
   elif type service > /dev/null 2>&1; then
     if [ "$PHP_FPM_ACTIVE" -eq 0 ]; then
-      if [ -f /tmp/php-build/source/${PHP_VERSION}/sapi/fpm/init.d.php-fpm ]; then
-        sudo cp /tmp/php-build/source/${PHP_VERSION}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
-        echo "[Info]: add init.d.php-fpm to /etc/init.d/"
+      if [ -f "/tmp/php-build/source/${PHP_VERSION}/sapi/fpm/init.d.php-fpm" ]; then
+        sudo cp /tmp/php-build/source/${PHP_VERSION}/sapi/fpm/init.d.php-fpm $PHP_FPM_INITD
+        echo "[Info]: add init.d.php-fpm to ${PHP_FPM_INITD}"
       fi
     fi
   fi
 
   if [ -f "${PHP_FPM_CONF}.default" ]; then
     sudo cp $PHP_FPM_CONF.default $PHP_FPM_CONF
-    echo "[Info]: add php-fpm.conf"
+    echo "[Info]: add ${PHP_FPM_CONF}"
 
     sed -i -e "s/^;pid = run\/php-fpm.pid/pid = run\/php-fpm.pid/" $PHP_FPM_CONF
     sed -i -e "s/^;error_log = log\/php-fpm.log/error_log = \/var\/log\/php-fpm\/error.log/" $PHP_FPM_CONF
     sed -i -e "s/^;daemonize = yes/daemonize = yes/" $PHP_FPM_CONF
     echo "[Info]: edit ${PHP_FPM_CONF} [global]"
 
-    if [ "$DISTR" = "centos" ]; then
-      sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_CONF
-    elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-      sed -i -e "s/^user = nobody/user = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^group = nobody/group = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = www-data/" $PHP_FPM_CONF
-    fi
+    sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_CONF
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_CONF
@@ -367,17 +361,10 @@ function install() {
     sudo cp ${PHP_FPM_WWW_CONF}.default $PHP_FPM_WWW_CONF
     echo "[Info]: add ${PHP_FPM_WWW_CONF}"
 
-    if [ "$DISTR" = "centos" ]; then
-      sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_WWW_CONF
-    elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-      sed -i -e "s/^user = nobody/user = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^group = nobody/group = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = www-data/" $PHP_FPM_WWW_CONF
-    fi
+    sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_WWW_CONF
@@ -385,9 +372,9 @@ function install() {
   fi
 
   if [ "$PHP_FPM_ACTIVE" -eq 0 ]; then
-    if [ -f /home/vagrant/.phpenv/versions/${PHP_VERSION}/sbin/php-fpm ] && [ -d /usr/sbin ]; then
-      sudo cp /home/vagrant/.phpenv/versions/${PHP_VERSION}/sbin/php-fpm /usr/sbin/php-fpm
-      echo "[Info]: add php-fpm to /usr/sbin/"
+    if [ -f "$PHP_FPM_BIN" ] && [ -d /usr/sbin ]; then
+      sudo cp $PHP_FPM_BIN /usr/sbin/php-fpm
+      echo "[Info]: add ${PHP_FPM_BIN} to /usr/sbin/"
       sudo chmod 755 /usr/sbin/php-fpm
     fi
 
@@ -395,13 +382,13 @@ function install() {
       if type systemctl > /dev/null 2>&1; then
         if [ -f "$PHP_FPM_SERVICE" ] && [ -d /usr/lib/systemd/system ]; then
           sudo cp $PHP_FPM_SERVICE /usr/lib/systemd/system/php-fpm.service
-          echo "[Info]: add php-fpm.service to /usr/lib/systemd/system/"
+          echo "[Info]: add ${PHP_FPM_SERVICE} to /usr/lib/systemd/system/"
           sudo systemctl daemon-reload
         fi
       elif type service > /dev/null 2>&1; then
         if [ -f "$PHP_FPM_INITD" ] && [ -d /etc/init.d ]; then
           sudo cp $PHP_FPM_INITD /etc/init.d/php-fpm
-          echo "[Info]: add php-fpm.init.d to /etc/init.d/"
+          echo "[Info]: add ${PHP_FPM_INITD} to /etc/init.d/"
           sudo chmod 755 /etc/init.d/php-fpm
           sudo chkconfig --add php-fpm
         fi
@@ -410,20 +397,18 @@ function install() {
       if type systemctl > /dev/null 2>&1; then
         if [ -f "$PHP_FPM_SERVICE" ] && [ -d /lib/systemd/system ]; then
           sudo cp $PHP_FPM_SERVICE /lib/systemd/system/php-fpm.service
-          echo "[Info]: add php-fpm.service to /lib/systemd/system/"
+          echo "[Info]: add ${PHP_FPM_SERVICE} to /lib/systemd/system/"
           sudo systemctl daemon-reload
         fi
       elif type service > /dev/null 2>&1; then
         if [ -f "$PHP_FPM_INITD" ] && [ -d /etc/init.d ]; then
           sudo cp $PHP_FPM_INITD /etc/init.d/php-fpm
-          echo "[Info]: add php-fpm.init.d to /etc/init.d/"
+          echo "[Info]: add ${PHP_FPM_INITD} to /etc/init.d/"
           sudo chmod 755 /etc/init.d/php-fpm
         fi
       fi
     fi
   fi
-
-  phpenv rehash
 }
 
 function remove() {
@@ -431,7 +416,7 @@ function remove() {
     rm -rf /home/vagrant/.phpenv/versions/${PHP_VERSION}
     echo "Remove PHP ${PHP_VERSION}"
   else
-    echo "Cannot Remove PHP ${PHP_VERSION} (Not Found)"
+    echo "Cannot remove PHP ${PHP_VERSION}"
   fi
 }
 
@@ -446,20 +431,13 @@ function gather_conf() {
     fi
   fi
 
-  if [ "$MODE" = "mod_php" ]; then
-    if [ ! -f "$APACHE_PHP_CONF" ]; then
-      echo "[Error]: Make sure the specified php.conf is installed." >&2
-      echo "[Error]: php.conf not found ${APACHE_PHP_CONF}" >&2
-      exit 1
-    fi
-  fi
-
   PHP_FPM_ACTIVE=`ps -ef | grep php-fpm.conf | grep -v grep | wc -l`
   PHP_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php.ini"
+  PHP_FPM_BIN="/home/vagrant/.phpenv/versions/${PHP_VERSION}/sbin/php-fpm"
   PHP_FPM_CONF="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php-fpm.conf"
   PHP_FPM_WWW_CONF="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php-fpm.d/www.conf"
   PHP_FPM_SERVICE="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php-fpm.service"
-  PHP_FPM_INITD="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php-fpm.init.d"
+  PHP_FPM_INITD="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/init.d.php-fpm"
 }
 
 if [ "$REMOVE" = "true" ]; then

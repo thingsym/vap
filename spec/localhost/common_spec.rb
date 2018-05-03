@@ -16,6 +16,10 @@ describe command('ansible --version') do
   its(:exit_status) { should eq 0 }
 end
 
+describe command('apt-cache policy | grep ansible'), :if => os[:family] == 'debian' do
+  its(:stdout) { should match /#{Regexp.escape('ansible')}/ }
+end
+
 describe package('libselinux-python'), :if => os[:family] == 'redhat' do
   it { should be_installed }
 end
@@ -43,7 +47,7 @@ describe service('chronyd'), :if => os[:family] == 'redhat' && os[:release] == '
   it { should be_running }
 end
 
-describe package('ntp'), :if => ( os[:family] == 'redhat' && os[:release] == '6' ) || os[:family] == 'debian' || os[:family] ==  'ubuntu' do
+describe package('ntp'), :if => ( os[:family] == 'redhat' && os[:release] == '6' ) || os[:family] == 'debian' || os[:family] == 'ubuntu' do
   it { should be_installed }
 end
 
@@ -52,16 +56,16 @@ describe service('ntpd'), :if => os[:family] == 'redhat' && os[:release] == '6' 
   it { should be_running }
 end
 
-describe service('ntp'), :if => os[:family] == 'debian' || ( os[:family] ==  'ubuntu' && os[:release] == '16.04' ) do
+describe service('ntp'), :if => os[:family] == 'debian' || ( os[:family] == 'ubuntu' && os[:release] == '16.04' ) do
   it { should be_enabled }
   it { should be_running }
 end
 
-describe service('ntpd'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe service('ntpd'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_running }
 end
 
-describe service('ntp'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe service('ntp'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_enabled }
 end
 
@@ -77,15 +81,23 @@ describe command('ansible --version') do
   its(:exit_status) { should eq 0 }
 end
 
-describe file('/home/vagrant/.bash_profile') do
+describe file('/home/vagrant/.bashrc_vap') do
+  it { should be_file }
+end
+
+describe file('/home/vagrant/.bashrc_vap') do
   its(:content) { should match /export PATH=\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin:\/usr\/local\/sbin:\$PATH/ }
 end
 
-describe file('/home/vagrant/.bashrc') do
-  its(:content) { should match /export PATH=\/usr\/local\/bin:\/usr\/bin:\/bin:\/usr\/sbin:\/sbin:\/usr\/local\/sbin:\$PATH/ }
+describe file('/home/vagrant/.bashrc'), :if => os[:family] == 'redhat' do
+  its(:content) { should match /if \[ \-f ~\/\.bashrc_vap \]; then\n        \. ~\/\.bashrc_vap\nfi/ }
 end
 
-describe package('sysv-rc-conf'), :if => os[:family] ==  'ubuntu' && os[:release] == '14.04' do
+describe file('/home/vagrant/.profile'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  its(:content) { should match /if \[ \-f ~\/\.bashrc_vap \]; then\n        \. ~\/\.bashrc_vap\nfi/ }
+end
+
+describe package('sysv-rc-conf'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
   it { should be_installed }
 end
 

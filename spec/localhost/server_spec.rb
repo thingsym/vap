@@ -11,7 +11,7 @@ if property["server"] == 'apache' then
     it { should be_installed }
   end
 
-  describe command("httpd -M | grep 'proxy_fcgi_module'") do
+  describe command("apachectl -M | grep 'proxy_fcgi_module'") do
     its(:stdout) { should match(/proxy_fcgi_module/) }
   end
 
@@ -19,12 +19,18 @@ if property["server"] == 'apache' then
     it { should be_installed }
   end
 
+  if property["ssl"] then
+    describe command("apachectl -M | grep 'ssl_module'") do
+      its(:stdout) { should match(/ssl_module/) }
+    end
+  end
+
   describe service('httpd'), :if => os[:family] == 'redhat' do
     it { should be_enabled }
     it { should be_running }
   end
 
-  describe command("ps -C httpd -o user") do
+  describe command("ps -C httpd -o user"), :if => os[:family] == 'redhat' do
     its(:stdout) { should match /vagrant/ }
   end
 
@@ -49,6 +55,10 @@ if property["server"] == 'apache' then
     it { should be_running }
   end
 
+  describe command("ps -C apache2 -o user"), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /vagrant/ }
+  end
+
   describe file('/etc/apache2/apache2.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_file }
   end
@@ -67,12 +77,12 @@ if property["server"] == 'apache' then
 
   if property["fastcgi"] == 'none' then
     if property["php_version"] =~ /^7/ then
-      describe command("httpd -M | grep 'php7_module'") do
+      describe command("apachectl -M | grep 'php7_module'") do
         its(:stdout) { should match(/php7_module/) }
       end
     end
     if property["php_version"] =~ /^5/ then
-      describe command("httpd -M | grep 'php5_module'") do
+      describe command("apachectl -M | grep 'php5_module'") do
         its(:stdout) { should match(/php5_module/) }
       end
     end

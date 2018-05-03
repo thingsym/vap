@@ -7,32 +7,28 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH goenv on .bash_profile
+- name: edit PATH goenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.goenv/bin:$PATH"
 
-- name: edit PATH goenv on .bashrc
+- name: edit goenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
-    line: "export PATH=$HOME/.goenv/bin:$PATH"
-
-- name: edit goenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(goenv init -)\""
-
-- name: edit goenv init on .bashrc
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(goenv init -)\""
 
 - name: Go installed via goenv
-  command: sudo -u vagrant -i -- goenv install {{ go_version | default(1.6.3) }}
+  command: ~/.goenv/bin/goenv install {{ go_version | default(1.6.3) }}
   ignore_errors: yes
-
-- name: goenv rehash
-  command: sudo -u vagrant -i -- goenv rehash
+  become: yes
+  become_user: vagrant
 
 - name: goenv global
-  command: sudo -u vagrant -i -- goenv global {{ go_version | default(1.6.3) }}
+  command: ~/.goenv/bin/goenv global {{ go_version | default(1.6.3) }}
+  become: yes
+  become_user: vagrant
+
+- name: goenv rehash
+  command: ~/.goenv/bin/goenv rehash
+  become: yes
+  become_user: vagrant

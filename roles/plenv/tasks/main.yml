@@ -7,24 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH plenv on .bash_profile
+- name: edit PATH plenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.plenv/bin:$PATH"
 
-- name: edit PATH plenv on .bashrc
+- name: edit plenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
-    line: "export PATH=$HOME/.plenv/bin:$PATH"
-
-- name: edit plenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(plenv init -)\""
-
-- name: edit plenv init on .bashrc
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(plenv init -)\""
 
 - name: git checkout perl-build
@@ -41,20 +31,32 @@
   register: is_perl_path
 
 - name: perl installed via plenv
-  command: sudo -u vagrant -i -- plenv install {{ perl_version | default(5.25.1) }}
+  command: ~/.plenv/bin/plenv install {{ perl_version | default(5.25.1) }}
+  become: yes
+  become_user: vagrant
   when: not is_perl_path.stat.exists
 
-- name: plenv rehash
-  command: sudo -u vagrant -i -- plenv rehash
-
 - name: plenv global
-  command: sudo -u vagrant -i -- plenv global {{ perl_version | default(5.25.1) }}
+  command: ~/.plenv/bin/plenv global {{ perl_version | default(5.25.1) }}
+  become: yes
+  become_user: vagrant
+
+- name: plenv rehash
+  command: ~/.plenv/bin/plenv rehash
+  become: yes
+  become_user: vagrant
 
 - name: cpanm module installed
-  command: sudo -u vagrant -i -- plenv install-cpanm
+  command: ~/.plenv/bin/plenv install-cpanm
+  become: yes
+  become_user: vagrant
 
 - name: Carton module installed
-  command: sudo -u vagrant -i -- cpanm Carton
+  command: ~/.plenv/shims/cpanm Carton
+  become: yes
+  become_user: vagrant
 
 - name: Server::Starter module installed
-  command: sudo -u vagrant -i -- cpanm Server::Starter
+  command: ~/.plenv/shims/cpanm Server::Starter
+  become: yes
+  become_user: vagrant

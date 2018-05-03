@@ -1,5 +1,5 @@
 ---
-- name: gibo initialized
+- name: gibo installed
   get_url:
     url: https://raw.github.com/simonwhitaker/gibo/master/gibo
     dest: /usr/bin

@@ -7,24 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH jenv on .bash_profile
+- name: edit PATH jenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
 
-- name: edit PATH jenv on .bashrc
+- name: edit jenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
-    line: "export PATH=$HOME/.jenv/bin:$PATH"
-
-- name: edit jenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(jenv init -)\""
-
-- name: edit jenv init on .bashrc
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(jenv init -)\""
 
 - name: java added via jenv (CentOS/RHEL)
@@ -36,9 +26,13 @@
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
   when: ansible_os_family == 'Debian'
   ignore_errors: yes
-
+  
 - name: jenv global
-  command: sudo -u vagrant -i -- jenv global {{ java_version | default(1.8) }}
+  shell: ~/.jenv/bin/jenv global {{ java_version | default(1.8) }}
+  become: yes
+  become_user: vagrant
 
 - name: jenv rehash
-  command: sudo -u vagrant -i -- jenv rehash
+  shell: ~/.jenv/bin/jenv rehash
+  become: yes
+  become_user: vagrant

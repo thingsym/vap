@@ -26,20 +26,23 @@
   template:
     src: /vagrant/config/nginx.conf.j2
     dest: /etc/nginx/nginx.conf
+  notify: nginx restarted
   when: is_custom_nginx_conf.stat.exists
 
 - name: nginx.conf changed
   template:
     src: nginx.conf.j2
     dest: /etc/nginx/nginx.conf
+  notify: nginx restarted
   when: not is_custom_nginx_conf.stat.exists
 
-- name: change user form nginx to www-data
-  replace:
-    dest: /etc/nginx/nginx.conf
-    regexp: "user              nginx;"
-    replace: "user              www-data;"
-  when: ansible_os_family == 'Debian'
+# - name: change user form vagrant to www-data
+#   replace:
+#     dest: /etc/nginx/nginx.conf
+#     regexp: "user              vagrant;"
+#     replace: "user              www-data;"
+#   notify: nginx restarted
+#   when: ansible_os_family == 'Debian'
 
 - name: stat custom nginx.www.conf.j2
   stat:
@@ -50,16 +53,18 @@
   template:
     src: /vagrant/config/nginx.www.conf.j2
     dest: /etc/nginx/conf.d/www.conf
+  notify: nginx restarted
   when: is_custom_www_conf.stat.exists
 
 - name: www.conf changed
   template:
     src: nginx.www.conf.j2
     dest: /etc/nginx/conf.d/www.conf
+  notify: nginx restarted
   when: not is_custom_www_conf.stat.exists
 
-- name: nginx started and enabled
+- name: nginx enabled
   service:
     name: nginx
-    state: restarted
     enabled: yes
+  notify: nginx restarted

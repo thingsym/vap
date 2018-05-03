@@ -33,12 +33,12 @@ describe package('pkg-config'), :if => os[:family] == 'debian' || os[:family] ==
   it { should be_installed }
 end
 
-describe package('curl') do
+describe package('debconf-utils'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
   it { should be_installed }
 end
 
-describe yumrepo('city-fan'), :if => os[:family] == 'redhat' && os[:release] == '6' do
-  it { should exist }
+describe package('curl') do
+  it { should be_installed }
 end
 
 describe package('libcurl'), :if => os[:family] == 'redhat' do

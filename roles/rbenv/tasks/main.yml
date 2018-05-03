@@ -7,24 +7,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH rbenv on .bash_profile
+- name: edit PATH rbenv on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.rbenv/bin:$PATH"
 
-- name: edit PATH rbenv on .bashrc
+- name: edit rbenv init on .bashrc_vap
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
-    line: "export PATH=$HOME/.rbenv/bin:$PATH"
-
-- name: edit rbenv init on .bash_profile
-  lineinfile:
-    dest: "{{ home_dir }}/.bash_profile"
-    line: "eval \"$(rbenv init -)\""
-
-- name: edit rbenv init on .bashrc
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(rbenv init -)\""
 
 - name: git checkout ruby-build
@@ -43,35 +33,6 @@
   become: yes
   become_user: vagrant
 
-- name: build environment
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - gcc
-    - cmake
-
-- name: build environment (CentOS/RHEL)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - openssl-devel
-    - libyaml-devel
-    - readline-devel
-    - zlib-devel
-  when: ansible_os_family == 'RedHat'
-
-- name: build environment (Debian)
-  package:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - libssl-dev
-    - libyaml-dev
-    - libreadline-dev
-    - zlib1g-dev
-  when: ansible_os_family == 'Debian'
 
 - name: stat rbenv_default_gems
   stat:
@@ -82,17 +43,22 @@
   template:
     src: /vagrant/config/default-ruby-gems.j2
     dest: "{{ home_dir }}/.rbenv/default-gems"
-    owner: vagrant
-    group: vagrant
-    mode: 0755
   when: is_rbenv_default_gems.stat.exists
 
-- name: ruby installed via rbenv
-  command: sudo -u vagrant -i -- rbenv install {{ ruby_version | default(2.4.1) }}
-  ignore_errors: yes
+- include: build-env.yml
 
-- name: rbenv rehash
-  command: sudo -u vagrant -i -- rbenv rehash
+- name: ruby installed via rbenv
+  command: ~/.rbenv/bin/rbenv install {{ ruby_version | default(2.4.1) }}
+  ignore_errors: yes
+  become: yes
+  become_user: vagrant
 
 - name: rbenv global
-  command: sudo -u vagrant -i -- rbenv global {{ ruby_version | default(2.4.1) }}
+  command: ~/.rbenv/bin/rbenv global {{ ruby_version | default(2.4.1) }}
+  become: yes
+  become_user: vagrant
+
+- name: rbenv rehash
+  command: ~/.rbenv/bin/rbenv rehash
+  become: yes
+  become_user: vagrant
