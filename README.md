@@ -37,7 +37,7 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 
 * [Oracle VM VirtualBox](https://www.virtualbox.org) >= 5.0
 * [Vagrant](https://www.vagrantup.com) >= 1.8.4
-* [Ansible](https://www.ansible.com) >= 2.1.0.0
+* [Ansible](https://www.ansible.com) >= 2.2.1.0
 
 #### Vagrant plugin (optional)
 
@@ -115,7 +115,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 
 	## Vagrant Settings ##
 
-	vm_box                = 'bento/centos-7.2'
+	vm_box                = 'centos/7'
 	vm_box_version        = '>= 0'
 	vm_ip                 = '192.168.59.63'
 	vm_hostname           = 'vap.local'
@@ -124,22 +124,22 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	public_ip             = ''
 	forwarded_port        = false
 
-	vbguest_auto_update   = false
+	vbguest_auto_update   = true
 
 	ansible_install_mode  = :default    # :default|:pip
 	ansible_version       = 'latest'    # only :pip required
 
-* `vm_box` (required) name of Vagrant Box (default: `bento/centos-7.2`)
+* `vm_box` (required) name of Vagrant Box (default: `centos/7`)
 * `vm_box_version` (required) version of Vagrant Box (default: `>= 0`)
 * `vm_ip` (required) private IP address (default: `192.168.59.63`)
 * `vm_hostname` (required) hostname (default: `vap.local`)
 * `vm_document_root` (required) document root path (default: `/var/www/html`)
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: `''`)
-* `forwarded_port` enable forwarded port (default: `false` / value: true | false)
-* `vbguest_auto_update` update VirtualBox Guest Additions (default: false / value: true | false)
-* `ansible_install_mode` (required)  the way to install Ansible (default: :default / value: :default | :pip)
-* `ansible_version` version of Ansible to install (default: latest)
+* `forwarded_port` enable forwarded port (default: `false` / value: `true` | `false`)
+* `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
+* `ansible_install_mode` (required)  the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
+* `ansible_version` version of Ansible to install (default: `latest`)
 
 ### Provisioning configuration file (YAML)
 
@@ -242,11 +242,12 @@ VAP will be built in the directory structure of the following minimum unit.
 
 * CentOS 7
 * CentOS 6
-* Debian 8 jessie
+* Debian 9 Stretch
+* Debian 8 Jessie
 * Ubuntu 16.04 Xenial
 * Ubuntu 14.04 Trusty
 
-To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://atlas.hashicorp.com/boxes/search).
+To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search).
 
 ## Specification
 
@@ -338,7 +339,7 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://at
 
 `phpenv.sh` will prepare the specified version of PHP execution environment. You can install the specified version of PHP. Switching the PHP version. And then restart Apache or PHP-FPM by switching the server configuration environment.
 
-	/vagrant/command/phpenv.sh 5.6.21
+	/vagrant/command/phpenv.sh -v 7.2.1
 
 ### plenv.sh
 
