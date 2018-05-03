@@ -33,6 +33,10 @@ describe package('pkg-config'), :if => os[:family] == 'debian' || os[:family] ==
   it { should be_installed }
 end
 
+describe package('debconf-utils'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  it { should be_installed }
+end
+
 describe package('curl') do
   it { should be_installed }
 end

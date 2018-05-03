@@ -14,3 +14,4 @@
     - curl
     - software-properties-common
     - python-pip
+    - debconf-utils

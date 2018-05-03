@@ -3,12 +3,20 @@ require 'shellwords'
 
 if property["database"] == 'mysql' then
 
-  describe yumrepo('mysql56-community'), :if => os[:family] == 'redhat' do
-    it { should exist }
+  describe command('mysqld -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
   end
 
-  describe package('mysql-community-server'), :if => os[:family] == 'redhat' do
+  describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
+  end
+
+  describe package('mysql-community-server') do
     it { should be_installed }
+  end
+
+  describe yumrepo('mysql56-community'), :if => os[:family] == 'redhat' do
+    it { should exist }
   end
 
   describe package('MySQL-python'), :if => os[:family] == 'redhat' do
@@ -27,16 +35,12 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
-  describe package('mysql-server-5.5'), :if => os[:family] == 'debian' do
-    it { should be_installed }
+  describe command('apt-cache policy | grep mysql-5.6'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('mysql-5.6')}/ }
   end
 
-  describe package('mysql-server-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-    it { should be_installed }
-  end
-
-  describe package('mysql-server-5.6'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
-    it { should be_installed }
+  describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
   end
 
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -48,10 +52,20 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
+  describe file('/var/lib/mysql/mysql.sock') do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
   describe file('/etc/my.cnf') do
     it { should be_file }
   end
 elsif property["database"] == 'mariadb' then
+
+  describe command('mysqld -V') do
+    its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
+  end
 
   describe yumrepo('mariadb'), :if => os[:family] == 'redhat' do
     it { should exist }
@@ -71,8 +85,12 @@ elsif property["database"] == 'mariadb' then
     it { should be_running }
   end
 
-  describe package('mariadb-server'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('mariadb-server-10.1'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
+  end
+
+  describe command('apt-cache policy | grep mariadb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /#{Regexp.escape('mariadb')}/ }
   end
 
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -94,10 +112,26 @@ elsif property["database"] == 'mariadb' then
     it { should be_running }
   end
 
+  describe file('/var/lib/mysql/mysql.sock'), :if => os[:family] == 'redhat' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
+  describe file('/var/run/mysqld/mysqld.sock'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
   describe file('/etc/my.cnf') do
     it { should be_file }
   end
 elsif property["database"] == 'percona' then
+
+  describe command('mysqld -V') do
+    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
+  end
 
   describe yumrepo('percona-release-noarch'), :if => os[:family] == 'redhat' do
     it { should exist }
@@ -121,6 +155,10 @@ elsif property["database"] == 'percona' then
     it { should be_installed }
   end
 
+  describe command('apt-cache policy | grep percona'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /#{Regexp.escape('percona')}/ }
+  end
+
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
@@ -130,11 +168,19 @@ elsif property["database"] == 'percona' then
     it { should be_running }
   end
 
-  describe file('/etc/my.cnf'), :if => os[:family] == 'redhat' do
-    it { should be_file }
+  describe file('/var/lib/mysql/mysql.sock'), :if => os[:family] == 'redhat' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
   end
 
-  describe file('/etc/mysql/my.cnf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe file('/var/run/mysqld/mysqld.sock'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_socket }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
+
+  describe file('/etc/my.cnf') do
     it { should be_file }
   end
 end
@@ -152,4 +198,9 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     its(:stdout) { should match /mysqld is alive/ }
   end
 
+  describe file('/var/log/mysql') do
+    it { should be_directory }
+    it { should be_owned_by 'mysql' }
+    it { should be_grouped_into 'mysql' }
+  end
 end
