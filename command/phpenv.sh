@@ -318,11 +318,12 @@ function install() {
       echo "[Info]: edit ${PHP_FPM_SERVICE}"
     fi
 
-    if [ ! -f /etc/sysconfig/php-fpm ]; then
+    if [ -d /etc/sysconfig ] && [ ! -f /etc/sysconfig/php-fpm ]; then
       sudo touch /etc/sysconfig/php-fpm
       sudo sh -c "echo '# Additional environment file for php-fpm' > /etc/sysconfig/php-fpm"
       echo "[Info]: add /etc/sysconfig/php-fpm"
     fi
+
     if [ ! -f /etc/tmpfiles.d/php-fpm.conf ]; then
       sudo touch /etc/tmpfiles.d/php-fpm.conf
       sudo sh -c "echo 'd /var/run/php-fpm 0775 vagrant vagrant' > /etc/tmpfiles.d/php-fpm.conf"
