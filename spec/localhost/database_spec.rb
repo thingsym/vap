@@ -63,11 +63,7 @@ if property["database"] == 'mysql' then
   end
 elsif property["database"] == 'mariadb' then
 
-  describe command('mysql -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '16.04') do
-    its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
-  end
-
-  describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '14.04' do
+  describe command('mysqld -V') do
     its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
   end
 
@@ -91,6 +87,10 @@ elsif property["database"] == 'mariadb' then
 
   describe package('mariadb-server-10.1'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
+  end
+
+  describe command('apt-cache policy | grep mariadb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /#{Regexp.escape('mariadb')}/ }
   end
 
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -153,6 +153,10 @@ elsif property["database"] == 'percona' then
 
   describe package('percona-server-server-5.6'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
+  end
+
+  describe command('apt-cache policy | grep percona'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    its(:stdout) { should match /#{Regexp.escape('percona')}/ }
   end
 
   describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
