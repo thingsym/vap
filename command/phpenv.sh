@@ -301,15 +301,10 @@ function install() {
     echo "[Info]: add /var/log/php-fpm/error.log"
   fi
 
-  if [ "$DISTR" = "centos" ]; then
-    sudo chown vagrant:vagrant /var/run/php-fpm
-    sudo chown vagrant:vagrant /var/log/php-fpm
-    sudo chown vagrant:vagrant /var/log/php-fpm/error.log
-  elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-    sudo chown www-data:www-data /var/run/php-fpm
-    sudo chown www-data:www-data /var/log/php-fpm
-    sudo chown www-data:www-data /var/log/php-fpm/error.log
-  fi
+  sudo chown vagrant:vagrant /var/run/php-fpm
+  sudo chown vagrant:vagrant /var/log/php-fpm
+  sudo chown vagrant:vagrant /var/log/php-fpm/error.log
+
 
   if type systemctl > /dev/null 2>&1; then
     if [ -f "/tmp/php-build/source/${PHP_VERSION}/sapi/fpm/php-fpm.service" ]; then
@@ -351,17 +346,10 @@ function install() {
     sed -i -e "s/^;daemonize = yes/daemonize = yes/" $PHP_FPM_CONF
     echo "[Info]: edit ${PHP_FPM_CONF} [global]"
 
-    if [ "$DISTR" = "centos" ]; then
-      sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_CONF
-    elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-      sed -i -e "s/^user = nobody/user = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^group = nobody/group = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = www-data/" $PHP_FPM_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = www-data/" $PHP_FPM_CONF
-    fi
+    sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_CONF
+    sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_CONF
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_CONF
@@ -372,17 +360,10 @@ function install() {
     sudo cp ${PHP_FPM_WWW_CONF}.default $PHP_FPM_WWW_CONF
     echo "[Info]: add ${PHP_FPM_WWW_CONF}"
 
-    if [ "$DISTR" = "centos" ]; then
-      sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_WWW_CONF
-    elif [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ]; then
-      sed -i -e "s/^user = nobody/user = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^group = nobody/group = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.owner = nobody/listen.owner = www-data/" $PHP_FPM_WWW_CONF
-      sed -i -e "s/^;listen.group = nobody/listen.group = www-data/" $PHP_FPM_WWW_CONF
-    fi
+    sed -i -e "s/^user = nobody/user = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^group = nobody/group = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;listen.owner = nobody/listen.owner = vagrant/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;listen.group = nobody/listen.group = vagrant/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_WWW_CONF
