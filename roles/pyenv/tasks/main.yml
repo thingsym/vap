@@ -2,7 +2,7 @@
 - name: git checkout pyenv
   git:
     repo: https://github.com/yyuu/pyenv.git
-    dest: "{{ home_dir }}/.pyenv"
+    dest: "{{ pyenv_dir }}"
     force: yes
   become: yes
   become_user: vagrant
@@ -20,7 +20,7 @@
 - name: git checkout pyenv-virtualenv
   git:
     repo: https://github.com/pyenv/pyenv-virtualenv.git
-    dest: "{{ home_dir }}/.pyenv/plugins/pyenv-virtualenv"
+    dest: "{{ pyenv_dir }}/plugins/pyenv-virtualenv"
     force: yes
   become: yes
   become_user: vagrant
@@ -33,17 +33,17 @@
 - include: build-env.yml
 
 - name: Python installed via pyenv
-  command: ~/.pyenv/bin/pyenv install {{ python_version | default(3.5.1) }}
+  command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.5.1) }}"
   ignore_errors: yes
   become: yes
   become_user: vagrant
 
 - name: pyenv global
-  command: ~/.pyenv/bin/pyenv global {{ python_version | default(3.5.1) }}
+  command: "{{ pyenv_dir }}/bin/pyenv global {{ python_version | default(3.5.1) }}"
   become: yes
   become_user: vagrant
 
 - name: pyenv rehash
-  command: ~/.pyenv/bin/pyenv rehash
+  command: "{{ pyenv_dir }}/bin/pyenv rehash"
   become: yes
   become_user: vagrant

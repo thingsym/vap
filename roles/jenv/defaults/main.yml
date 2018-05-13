@@ -1,2 +1,3 @@
 home_dir: /home/vagrant
+jenv_dir: /home/vagrant/.jenv
 java_version: 1.8

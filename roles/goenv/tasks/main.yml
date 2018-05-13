@@ -2,7 +2,7 @@
 - name: git checkout goenv
   git:
     repo: https://github.com/wfarr/goenv.git
-    dest: "{{ home_dir }}/.goenv"
+    dest: "{{ goenv_dir }}"
     force: yes
   become: yes
   become_user: vagrant
@@ -18,17 +18,17 @@
     line: "eval \"$(goenv init -)\""
 
 - name: Go installed via goenv
-  command: ~/.goenv/bin/goenv install {{ go_version | default(1.6.3) }}
+  command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.6.3) }}"
   ignore_errors: yes
   become: yes
   become_user: vagrant
 
 - name: goenv global
-  command: ~/.goenv/bin/goenv global {{ go_version | default(1.6.3) }}
+  command: "{{ goenv_dir }}/bin/goenv global {{ go_version | default(1.6.3) }}"
   become: yes
   become_user: vagrant
 
 - name: goenv rehash
-  command: ~/.goenv/bin/goenv rehash
+  command: "{{ goenv_dir }}/bin/goenv rehash"
   become: yes
   become_user: vagrant

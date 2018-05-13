@@ -2,7 +2,7 @@
 - name: git checkout scalaenv
   git:
     repo: https://github.com/mazgi/scalaenv.git
-    dest: "{{ home_dir }}/.scalaenv"
+    dest: "{{ scalaenv_dir }}"
     force: yes
   become: yes
   become_user: vagrant
@@ -18,17 +18,17 @@
     line: "eval \"$(scalaenv init -)\""
 
 - name: Scala installed via scalaenv
-  command: ~/.scalaenv/bin/scalaenv install scala-{{ scala_version | default(2.11.8) }}
+  command: "{{ scalaenv_dir }}/bin/scalaenv install scala-{{ scala_version | default(2.11.8) }}"
   ignore_errors: yes
   become: yes
   become_user: vagrant
 
-- name: ~/.scalaenv/bin/scalaenv global
-  command: ~/.scalaenv/bin/scalaenv global scala-{{ scala_version | default(2.11.8) }}
+- name: scalaenv global
+  command: "{{ scalaenv_dir }}/bin/scalaenv global scala-{{ scala_version | default(2.11.8) }}"
   become: yes
   become_user: vagrant
 
 - name: scalaenv rehash
-  command: ~/.scalaenv/bin/scalaenv rehash
+  command: "{{ scalaenv_dir }}/bin/scalaenv rehash"
   become: yes
   become_user: vagrant
