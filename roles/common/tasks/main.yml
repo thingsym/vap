@@ -20,12 +20,16 @@
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
     create: yes
+  become: yes
+  become_user: vagrant
 
 - name: edit PATH on .bashrc
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"
     line: "if [ -f ~/.bashrc_vap ]; then\n        . ~/.bashrc_vap\nfi"
     create: yes
+  become: yes
+  become_user: vagrant
   when: ansible_os_family == 'RedHat'
 
 - name: edit PATH on .profile
@@ -33,6 +37,8 @@
     dest: "{{ home_dir }}/.profile"
     line: "if [ -f ~/.bashrc_vap ]; then\n        . ~/.bashrc_vap\nfi"
     create: yes
+  become: yes
+  become_user: vagrant
   when: ansible_os_family == 'Debian'
 
 - include: swap.yml

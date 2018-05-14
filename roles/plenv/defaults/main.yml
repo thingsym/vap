@@ -1,2 +1,3 @@
 home_dir: /home/vagrant
+plenv_dir: /home/vagrant/.plenv
 perl_version: 5.25.1

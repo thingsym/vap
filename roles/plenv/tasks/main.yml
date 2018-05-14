@@ -2,7 +2,7 @@
 - name: git checkout plenv
   git:
     repo: https://github.com/tokuhirom/plenv.git
-    dest: "{{ home_dir }}/.plenv"
+    dest: "{{ plenv_dir }}"
     force: yes
   become: yes
   become_user: vagrant
@@ -20,43 +20,43 @@
 - name: git checkout perl-build
   git:
     repo: https://github.com/tokuhirom/Perl-Build.git
-    dest: "{{ home_dir }}/.plenv/plugins/perl-build"
+    dest: "{{ plenv_dir }}/plugins/perl-build"
     force: yes
   become: yes
   become_user: vagrant
 
 - name: stat perl_path
   stat:
-    path: "{{ home_dir }}/.plenv/versions/{{ perl_version | default(5.25.1) }}"
+    path: "{{ plenv_dir }}/versions/{{ perl_version | default(5.25.1) }}"
   register: is_perl_path
 
 - name: perl installed via plenv
-  command: ~/.plenv/bin/plenv install {{ perl_version | default(5.25.1) }}
+  command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.25.1) }}"
   become: yes
   become_user: vagrant
   when: not is_perl_path.stat.exists
 
 - name: plenv global
-  command: ~/.plenv/bin/plenv global {{ perl_version | default(5.25.1) }}
+  command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.25.1) }}"
   become: yes
   become_user: vagrant
 
 - name: plenv rehash
-  command: ~/.plenv/bin/plenv rehash
+  command: "{{ plenv_dir }}/bin/plenv rehash"
   become: yes
   become_user: vagrant
 
 - name: cpanm module installed
-  command: ~/.plenv/bin/plenv install-cpanm
+  command: "{{ plenv_dir }}/bin/plenv install-cpanm"
   become: yes
   become_user: vagrant
 
 - name: Carton module installed
-  command: ~/.plenv/shims/cpanm Carton
+  command: "{{ plenv_dir }}/shims/cpanm Carton"
   become: yes
   become_user: vagrant
 
 - name: Server::Starter module installed
-  command: ~/.plenv/shims/cpanm Server::Starter
+  command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
   become: yes
   become_user: vagrant

@@ -19,10 +19,6 @@ if property["database"] == 'mysql' then
     it { should exist }
   end
 
-  describe package('MySQL-python'), :if => os[:family] == 'redhat' do
-    it { should be_installed }
-  end
-
   describe service('mysqld'), :if => os[:family] == 'redhat' do
     it { should be_enabled }
   end
@@ -43,24 +39,11 @@ if property["database"] == 'mysql' then
     its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
   end
 
-  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-    it { should be_installed }
-  end
-
   describe service('mysql'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_enabled }
     it { should be_running }
   end
 
-  describe file('/var/lib/mysql/mysql.sock') do
-    it { should be_socket }
-    it { should be_owned_by 'mysql' }
-    it { should be_grouped_into 'mysql' }
-  end
-
-  describe file('/etc/my.cnf') do
-    it { should be_file }
-  end
 elsif property["database"] == 'mariadb' then
 
   describe command('mysqld -V') do
@@ -93,10 +76,6 @@ elsif property["database"] == 'mariadb' then
     its(:stdout) { should match /#{Regexp.escape('mariadb')}/ }
   end
 
-  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-    it { should be_installed }
-  end
-
   describe service('mariadb'), :if => os[:family] == 'debian' do
     it { should be_enabled }
     it { should be_running }
@@ -124,9 +103,6 @@ elsif property["database"] == 'mariadb' then
     it { should be_grouped_into 'mysql' }
   end
 
-  describe file('/etc/my.cnf') do
-    it { should be_file }
-  end
 elsif property["database"] == 'percona' then
 
   describe command('mysqld -V') do
@@ -159,13 +135,16 @@ elsif property["database"] == 'percona' then
     its(:stdout) { should match /#{Regexp.escape('percona')}/ }
   end
 
-  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-    it { should be_installed }
-  end
-
   describe service('mysql'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_enabled }
     it { should be_running }
+  end
+
+end
+
+if property["database"] == 'mysql' || property["database"] == 'mariadb' || property["database"] == 'percona' then
+  describe file('/etc/my.cnf') do
+    it { should be_file }
   end
 
   describe file('/var/lib/mysql/mysql.sock'), :if => os[:family] == 'redhat' do
@@ -180,12 +159,6 @@ elsif property["database"] == 'percona' then
     it { should be_grouped_into 'mysql' }
   end
 
-  describe file('/etc/my.cnf') do
-    it { should be_file }
-  end
-end
-
-if property["database"] == 'mysql' || property["database"] == 'mariadb' || property["database"] == 'percona' then
   describe port(3306) do
     it { should be_listening }
   end
@@ -196,6 +169,14 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
 
   describe command( "mysqladmin -u root -p#{property["db_root_password"]} ping" ) do
     its(:stdout) { should match /mysqld is alive/ }
+  end
+
+  describe package('MySQL-python'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
+  end
+
+  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+    it { should be_installed }
   end
 
   describe file('/var/log/mysql') do
