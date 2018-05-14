@@ -6,13 +6,13 @@
 
 ### 1. OS Distribution Compatibility
 
-**VAP** support CentOS, Debian and Ubuntu Boxes.
+**VAP** support **CentOS**, **Debian** and **Ubuntu** Boxes.
 
 ### 2. Build Server and Database environment
 
 **VAP** will build server from **Apache** or **nginx** or **H2O**, and build database from **MySQL**, **MariaDB** or **Percona MySQL**.
 
-Server nginx is a FastCGI configuration as a reverse proxy. And building a PHP execution environment from **PHP-FPM** (FastCGI Process Manager).
+On all web servers, FastCGI configuration is possible. Build PHP execution environment from **PHP-FPM** (FastCGI Process Manager).
 
 By default, the server and the databese is installed in the default settings. Also you can edit configuration files.
 
@@ -178,9 +178,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 * `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx` | `h2o` )
 * `fastcgi` name of fastCGI (default: `none` / value: `none` | `php-fpm`)
-	* `fastcgi` is possible only `server 'nginx'`
 * `database` (required) name of databese (default: `none` / value: `none` | `mysql` | `mariadb` | `percona`)
-
 
 #### Programming languages Settings ##
 
@@ -238,7 +236,7 @@ VAP will be built in the directory structure of the following minimum unit.
 
 ## Vagrant Boxs
 
-**VAP** support CentOS, Debian and Ubuntu Boxes. Details are as follows:
+**VAP** supports VirtualBox for providers of Vagrant. Operating system supported CentOS, Debian and Ubuntu Boxes. OS architecture supported x86_64. Details are as follows:
 
 * CentOS 7
 * CentOS 6
@@ -247,7 +245,7 @@ VAP will be built in the directory structure of the following minimum unit.
 * Ubuntu 16.04 Xenial
 * Ubuntu 14.04 Trusty
 
-To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search).
+To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
 ## Specification
 
@@ -339,7 +337,10 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 `phpenv.sh` will prepare the specified version of PHP execution environment. You can install the specified version of PHP. Switching the PHP version. And then restart Apache or PHP-FPM by switching the server configuration environment.
 
-	/vagrant/command/phpenv.sh -v 7.2.1
+	/vagrant/command/phpenv.sh -v 7.2.1 -m php-fpm -s unix
+
+	# help
+	/vagrant/command/phpenv.sh -h
 
 ### plenv.sh
 
