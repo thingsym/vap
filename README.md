@@ -387,6 +387,9 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.2.8 - 2018.05.14
+	* fix mysql.my.cnf.j2
+	* fix *env path
 * version 0.2.7 - 2018.05.03
 	* change user/group from www-data to vagrant with debian
 	* add debian/stretch64 to vm_box
