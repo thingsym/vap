@@ -19,6 +19,7 @@ public_ip             = ''
 forwarded_port        = false
 
 vbguest_auto_update   = true
+synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 
 ansible_install_mode  = :default    # :default|:pip
 ansible_version       = 'latest'    # only :pip required
@@ -96,8 +97,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network :forwarded_port, guest: 3001, host: 3001, auto_correct: true
   end
 
-  config.vm.synced_folder '.', '/vagrant', :type => "virtualbox", :create => 'true'
-  config.vm.synced_folder 'html/', vm_document_root, :type => "virtualbox", :create => 'true'
+  config.vm.synced_folder '.', '/vagrant', :type => synced_folder_type, :create => 'true'
+  config.vm.synced_folder 'html/', vm_document_root, :type => synced_folder_type, :create => 'true'
 
   config.ssh.forward_agent = true
 
