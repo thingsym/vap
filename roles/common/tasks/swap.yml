@@ -24,6 +24,6 @@
       dump: 0
       state: present
 
-  when: 
+  when:
     - ansible_swaptotal_mb < 1
     - ansible_distribution == 'Ubuntu'

@@ -44,6 +44,6 @@
     state: latest
   with_items:
     - libtool-bin
-  when: 
+  when:
     - ansible_os_family == 'Debian' 
     - ansible_distribution_release != 'trusty'
