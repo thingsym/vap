@@ -125,6 +125,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	forwarded_port        = false
 
 	vbguest_auto_update   = true
+	synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 
 	ansible_install_mode  = :default    # :default|:pip
 	ansible_version       = 'latest'    # only :pip required
@@ -138,7 +139,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 * `public_ip` IP address of bridged connection (default: `''`)
 * `forwarded_port` enable forwarded port (default: `false` / value: `true` | `false`)
 * `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
-* `ansible_install_mode` (required)  the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
+* `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
+* `ansible_install_mode` (required) the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
 * `ansible_version` version of Ansible to install (default: `latest`)
 
 ### Provisioning configuration file (YAML)
