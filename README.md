@@ -389,6 +389,8 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.2.8 - 2018.05.27
+	* add option synced_folder_type with Vagrant Settings
 * version 0.2.8 - 2018.05.14
 	* fix mysql.my.cnf.j2
 	* fix *env path
