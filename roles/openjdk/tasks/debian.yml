@@ -3,7 +3,7 @@
   apt_repository:
     repo: "ppa:openjdk-r/ppa"
     state: present
-  when: 
+  when:
     - java_version == 1.8 
     - ansible_distribution == 'Ubuntu'
 
@@ -17,7 +17,7 @@
   package:
     name: openjdk-8-jdk
     state: latest
-  when: 
+  when:
     - java_version == 1.8 
     - ansible_distribution == 'Ubuntu'
 
@@ -26,7 +26,7 @@
     name: openjdk-8-jdk
     state: latest
     default_release: jessie-backports
-  when: 
+  when:
     - java_version == 1.8
     - ansible_distribution == 'Debian'
     - ansible_distribution_release == 'jessie'
@@ -35,7 +35,7 @@
   apt:
     name: openjdk-8-jdk
     state: latest
-  when: 
+  when:
     - java_version == 1.8
     - ansible_distribution == 'Debian'
     - ansible_distribution_release == 'stretch'
