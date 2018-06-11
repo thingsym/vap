@@ -389,6 +389,9 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.3.0 - 2018.06.11
+	* add other versions database tasks
+	* bump up MariaDB 10.3, MySQL 5.7, Percona 5.7
 * version 0.2.9 - 2018.05.27
 	* add option synced_folder_type with Vagrant Settings
 * version 0.2.8 - 2018.05.14
