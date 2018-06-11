@@ -4,7 +4,7 @@ require 'shellwords'
 if property["database"] == 'mysql' then
 
   describe command('mysqld -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
-    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
+    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
   end
 
   describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
@@ -15,7 +15,7 @@ if property["database"] == 'mysql' then
     it { should be_installed }
   end
 
-  describe yumrepo('mysql56-community'), :if => os[:family] == 'redhat' do
+  describe yumrepo('mysql57-community'), :if => os[:family] == 'redhat' do
     it { should exist }
   end
 
@@ -31,8 +31,8 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
-  describe command('apt-cache policy | grep mysql-5.6'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
-    its(:stdout) { should match /#{Regexp.escape('mysql-5.6')}/ }
+  describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
   end
 
   describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
@@ -47,7 +47,7 @@ if property["database"] == 'mysql' then
 elsif property["database"] == 'mariadb' then
 
   describe command('mysqld -V') do
-    its(:stdout) { should match /#{Regexp.escape('10.1')}/ }
+    its(:stdout) { should match /#{Regexp.escape('10.3')}/ }
   end
 
   describe yumrepo('mariadb'), :if => os[:family] == 'redhat' do
@@ -68,7 +68,7 @@ elsif property["database"] == 'mariadb' then
     it { should be_running }
   end
 
-  describe package('mariadb-server-10.1'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('mariadb-server-10.3'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 
@@ -106,14 +106,14 @@ elsif property["database"] == 'mariadb' then
 elsif property["database"] == 'percona' then
 
   describe command('mysqld -V') do
-    its(:stdout) { should match /#{Regexp.escape('5.6')}/ }
+    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
   end
 
   describe yumrepo('percona-release-noarch'), :if => os[:family] == 'redhat' do
     it { should exist }
   end
 
-  describe package('Percona-Server-server-56'), :if => os[:family] == 'redhat' do
+  describe package('Percona-Server-server-57'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
@@ -127,7 +127,7 @@ elsif property["database"] == 'percona' then
     it { should be_running }
   end
 
-  describe package('percona-server-server-5.6'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('percona-server-server-5.7'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 

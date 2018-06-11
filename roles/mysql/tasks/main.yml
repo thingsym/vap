@@ -1,77 +1,6 @@
 ---
-- block:
-  - name: mysql repository installed (CentOS/RHEL 6)
-    yum:
-      name: https://dev.mysql.com/get/mysql57-community-release-el6-9.noarch.rpm
-    when: ansible_distribution_major_version|int == 6
-
-  - name: mysql repository installed (CentOS/RHEL 7)
-    yum:
-      name: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
-    when: ansible_distribution_major_version|int == 7
-
-  - name: yum-config disable mysql57-community
-    command: yum-config-manager --disable mysql57-community
-
-  - name: yum-config enable mysql56-community
-    command: yum-config-manager --enable mysql56-community
-
-  - name: mysql 5.6 installed (CentOS/RHEL)
-    package:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - mysql-community-server
-      - mysql-community-client
-      - mysql-community-common
-      - mysql-community-devel
-      - mysql-community-libs
-      - mysql-utilities
-      - MySQL-python
-  when: ansible_os_family == 'RedHat'
-
-- block:
-  - name: set mysql-apt-config to mysql version 5.6
-    debconf:
-      name: mysql-apt-config
-      question: "{{ item.question }}"
-      value: "{{ item.value }}"
-      vtype: "{{ item.vtype | default ('select') }}"
-    with_items:
-      - question: mysql-apt-config/select-server
-        value: mysql-5.6
-      - question: mysql-apt-config/select-tools
-        value: Enabled
-
-  - name: set mysql-apt-config to mysql version 5.7 (only xenial)
-    debconf:
-      name: mysql-apt-config
-      question: "{{ item.question }}"
-      value: "{{ item.value }}"
-      vtype: "{{ item.vtype | default ('select') }}"
-    with_items:
-      - question: mysql-apt-config/select-server
-        value: mysql-5.7
-    when: ansible_distribution_release == 'xenial'
-
-  - name: mysql-apt-config installed (Debian)
-    apt:
-      deb: https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
-
-  - name: apt-get update
-    command: apt-get update
-
-  - name: mysql installed (Debian)
-    package:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - mysql-community-server
-      - mysql-community-client
-      - mysql-common
-      - mysql-utilities
-      - python-mysqldb
-  when: ansible_os_family == 'Debian'
+- name: include task
+  include: "mysql-{{ mysql_version | default(5.7) }}.yml"
 
 - name: stat custom my.cnf.j2
   stat:
@@ -111,38 +40,61 @@
     enabled: yes
   when: ansible_os_family == 'Debian'
 
-- name: set mysql root password
-  mysql_user:
-    name: root
-    password: "{{ db_root_password }}"
-    host: localhost
-    state: present
-  ignore_errors: yes
+- block:
+  - name: get temporary password from mysqld.log
+    shell: cat /var/log/mysql/mysqld.log | grep "temporary password" | awk '{print $11}'
+    register: mysql_temp_password
 
-- name: set mysql root password
+  - name: change password validation
+    shell: |
+      mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=4;"
+      mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
+
+  - name: set mysql 5.7 root password from temporary password (CentOS/RHEL)
+    shell: mysql -uroot -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET PASSWORD=PASSWORD('{{ db_root_password }}');"
+  when:
+    - ansible_os_family == 'RedHat'
+    - mysql_version == 5.7
+
+- name: set mysql 5.7 root password (Debian)
   mysql_user:
     name: root
     password: "{{ db_root_password }}"
     host: "{{ item }}"
     state: present
-    login_user: root
-    login_password: "{{ db_root_password }}"
+    check_implicit_admin: yes
+    priv: "*.*:ALL,GRANT"
   with_items:
-    - "{{ ansible_hostname }}"
+    - localhost
     - 127.0.0.1
     - ::1
+  ignore_errors: yes
+  when:
+    - ansible_os_family == 'Debian'
+    - mysql_version == 5.7
 
-- name: Delete blank MySQL users
+- name: set mysql 5.6 root password
+  mysql_user:
+    name: root
+    password: "{{ db_root_password }}"
+    host: "{{ item }}"
+    state: present
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+  ignore_errors: yes
+  when: mysql_version == 5.6
+
+- name: delete blank mysql users
   mysql_user:
     name: ""
-    host: "{{ item }}"
+    host: localhost
     state: absent
     login_user: root
     login_password: "{{ db_root_password }}"
-  with_items:
-    - localhost
 
-- name: Drop MySQL test database
+- name: drop mysql test database
   mysql_db:
     name: test
     state: absent

@@ -1,41 +1,6 @@
 ---
-- block:
-  - name: percona repository installed (CentOS/RHEL)
-    yum:
-      name: http://www.percona.com/downloads/percona-release/redhat/0.1-4/percona-release-0.1-4.noarch.rpm
-
-  - name: percona 5.6 installed (CentOS/RHEL)
-    package:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - Percona-Server-server-56
-      - Percona-Server-client-56
-      - Percona-Server-shared-56
-      - Percona-Server-devel-56
-      - MySQL-python
-  when: ansible_os_family == 'RedHat'
-
-- block:
-  - name: percona-release repository installed (Debian)
-    apt:
-      deb: "https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
-
-  - name: apt-get update
-    apt:
-      update_cache: yes
-
-  - name: percona 5.6 installed (Debian)
-    package:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - percona-server-server-5.6
-      - percona-server-client-5.6
-      - percona-server-common-5.6
-      - libperconaserverclient18.1-dev
-      - python-mysqldb
-  when: ansible_os_family == 'Debian'
+- name: include task
+  include: "percona-{{ percona_version | default(5.7) }}.yml"
 
 - name: stat custom my.cnf.j2
   stat:
@@ -77,40 +42,60 @@
     state: restarted
     enabled: yes
 
-- name: set percona root password
-  mysql_user:
-    name: root
-    password: "{{ db_root_password }}"
-    host: localhost
-    priv: "*.*:ALL,GRANT"
-    state: present
-  ignore_errors: yes
+- block:
+  - name: get temporary password from mysqld.log
+    shell: cat /var/log/mysql/mysqld.log | grep "temporary password" | awk '{print $11}'
+    register: mysql_temp_password
 
-- name: set percona root password
+  - name: change password validation
+    shell: |
+      mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=4;"
+      mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
+
+  - name: set percona 5.7 root password from temporary password (CentOS/RHEL)
+    shell: mysql -uroot -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET PASSWORD=PASSWORD('{{ db_root_password }}');"
+  when:
+    - ansible_os_family == 'RedHat'
+    - percona_version == 5.7
+
+- name: set percona 5.7 root password (Debian)
   mysql_user:
     name: root
     password: "{{ db_root_password }}"
     host: "{{ item }}"
     state: present
-    login_user: root
-    login_password: "{{ db_root_password }}"
+    check_implicit_admin: yes
     priv: "*.*:ALL,GRANT"
   with_items:
-    - "{{ ansible_hostname }}"
+    - localhost
     - 127.0.0.1
     - ::1
+  ignore_errors: yes
+  when:
+    - ansible_os_family == 'Debian'
+    - percona_version == 5.7
+  
+- name: set percona 5.6 root password
+  mysql_user:
+    name: root
+    password: "{{ db_root_password }}"
+    host: "{{ item }}"
+    state: present
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+  when: percona_version == 5.6
 
-- name: Delete blank Percona users
+- name: delete blank percona users
   mysql_user:
     name: ""
-    host: "{{ item }}"
+    host: localhost
     state: absent
     login_user: root
     login_password: "{{ db_root_password }}"
-  with_items:
-    - localhost
 
-- name: Drop Percona test database
+- name: drop percona test database
   mysql_db:
     name: test
     state: absent
