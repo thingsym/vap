@@ -124,8 +124,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	public_ip             = ''
 	forwarded_port        = false
 
-	vbguest_auto_update   = true
 	synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
+	vbguest_auto_update   = true
 
 	ansible_install_mode  = :default    # :default|:pip
 	ansible_version       = 'latest'    # only :pip required
@@ -138,8 +138,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: `''`)
 * `forwarded_port` enable forwarded port (default: `false` / value: `true` | `false`)
-* `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
 * `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
+* `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
 * `ansible_install_mode` (required) the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
 * `ansible_version` version of Ansible to install (default: `latest`)
 
@@ -263,8 +263,8 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 ### Database (Selectable)
 
-* [MySQL](http://www.mysql.com)
 * [MariaDB](https://mariadb.org)
+* [MySQL](http://www.mysql.com)
 * [Percona MySQL](http://www.percona.com/software/percona-server)
 
 ### Programming languages
@@ -389,7 +389,10 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
-* version 0.2.8 - 2018.05.27
+* version 0.3.0 - 2018.06.11
+	* add other versions database tasks
+	* bump up MariaDB 10.3, MySQL 5.7, Percona 5.7
+* version 0.2.9 - 2018.05.27
 	* add option synced_folder_type with Vagrant Settings
 * version 0.2.8 - 2018.05.14
 	* fix mysql.my.cnf.j2
