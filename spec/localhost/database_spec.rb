@@ -163,11 +163,11 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     it { should be_listening }
   end
 
-  describe command("mysqlshow -u root -p#{property["db_root_password"]} mysql") do
+  describe command("mysqlshow -uroot -p'#{property["db_root_password"]}' mysql") do
     its(:stdout) { should match /Database: mysql/ }
   end
 
-  describe command( "mysqladmin -u root -p#{property["db_root_password"]} ping" ) do
+  describe command( "mysqladmin -uroot -p'#{property["db_root_password"]}' ping" ) do
     its(:stdout) { should match /mysqld is alive/ }
   end
 
