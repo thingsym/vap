@@ -263,7 +263,7 @@ function install() {
   $HOME/.phpenv/bin/phpenv install ${PHP_VERSION}
 
   if [ "$DISTR" = "centos" ] && [ -d /etc/httpd/conf.d ] && [ ! -f "$APACHE_PHP_CONF" ]; then
-    echo -e "#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
+    echo -e "<IfModule prefork.c>\n#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n</IfModule>\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
     echo "[Info]: add ${APACHE_PHP_CONF}"
   elif ( [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ] ) && [ -d /etc/apache2/mods-available ] && [ ! -f "$APACHE_PHP_CONF" ]; then
     echo -e "<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
