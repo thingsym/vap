@@ -2,20 +2,60 @@
 
 set -e
 
-usage_exit() {
-  echo "[Info]: phpenv.sh version 0.4.0"
-  echo "[Info]: Usage: phpenv.sh <-v x.x.x> <-m [mod_php|php-fpm]> <-s [tcp|unix]>"
-  echo "[Info]: Usage: phpenv.sh <-v x.x.x> [<-r>]"
-  echo "[Info]: Usage: phpenv.sh <-l|-i|-h]>"
-  exit 0
+version() {
+  echo "$(basename $0) version 0.4.1"
+}
+
+usage() {
+    version
+cat << EOF >&2
+
+Usage:
+  $(basename $0) [command]
+
+Example:
+  $(basename $0) -v 7.2.1 -m mod_php -s tcp
+
+Main Commands:
+  Install specific version php
+
+    $(basename $0) <-v x.x.x> <-m [mod_php|php-fpm]> <-s [unix|tcp]>
+
+    Parameters:
+      -v    php version
+      -m    [mod_php|php-fpm]    php execution environment
+      -s    [unix|tcp]           UNIX socket or TCP/IP communincation
+
+  Remove specific version php
+
+    $(basename $0) <-v x.x.x> -r
+
+    Parameters:
+      -v    php version
+      -r    remove flag
+
+  Switch configuration parameter
+
+    $(basename $0) <-v x.x.x> -c [<opcache|apcu|xdebug] [<on|off]
+
+    Parameters:
+      -v    php version
+      -c    [<opcache|apcu|xdebug]    configuration target
+      [<on|off]                       switch flag
+
+Sub Commands:
+  -l    List all available versions (alias phpenv install --list)
+  -i    List all PHP versions available to phpenv (alias phpenv versions)
+  -h    Display help text
+EOF
 }
 
 if [ "$#" -eq 0 ]; then
-  echo "[Info]: Not Found Sub Commnad"
+  usage
   exit 1
 fi
 
-while getopts "v:m:s:rlih" OPT ; do
+while getopts "v:m:s:c:rlih" OPT ; do
   case $OPT in
     v)  PHP_VERSION=$OPTARG
         ;;
@@ -23,7 +63,7 @@ while getopts "v:m:s:rlih" OPT ; do
         ;;
     s)  SOCKET=$OPTARG
         ;;
-    r)  REMOVE=true
+    r)  COMMAND_LABEL='remove'
         ;;
     l)  $HOME/.phpenv/bin/phpenv install -l;
         exit 0
@@ -31,9 +71,15 @@ while getopts "v:m:s:rlih" OPT ; do
     i)  $HOME/.phpenv/bin/phpenv versions;
         exit 0
         ;;
-    h)  usage_exit
+    c)  COMMAND_LABEL='config'
+        TARGET=$OPTARG
+        FLAG=$5
         ;;
-    \?) usage_exit
+    h)  usage
+        exit 0
+        ;;
+    \?) usage
+        exit 1
         ;;
   esac
 done
@@ -42,12 +88,63 @@ shift $(( $OPTIND - 1 ))
 
 if [ -z "$PHP_VERSION" ]; then
   echo "Not Found PHP version"
+  echo "usage: $(basename $0) -h"
   exit 1
 fi
 
 if [ -z "$SOCKET" ]; then
   SOCKET="unix"
 fi
+
+function switch_config() {
+  PHP_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php.ini"
+  XDEBUG_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/conf.d/xdebug.ini"
+  APCU_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/conf.d/40-apcu.ini"
+
+  if [ -f "$PHP_INI" ] && [ "$TARGET" = "opcache" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^;opcache.enable_cli=0/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable=0/opcache.enable=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable_cli=1/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable=1/opcache.enable=1/" $PHP_INI
+      sed -i -e "s/^opcache.enable_cli=0/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^opcache.enable=0/opcache.enable=1/" $PHP_INI
+      echo "[Info]: edit ${PHP_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^opcache.enable_cli=1/;opcache.enable_cli=0/" $PHP_INI
+      sed -i -e "s/^opcache.enable=1/opcache.enable=0/" $PHP_INI
+      echo "[Info]: edit ${PHP_INI}"
+    fi
+  fi
+
+  if [ -f "$XDEBUG_INI" ] && [ "$TARGET" = "xdebug" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^;zend_extension/zend_extension/" $XDEBUG_INI
+      echo "[Info]: edit ${XDEBUG_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^zend_extension/;zend_extension/" $XDEBUG_INI
+      echo "[Info]: edit ${XDEBUG_INI}"
+    fi
+  fi
+
+  if [ -f "$APCU_INI" ] && [ "$TARGET" = "apcu" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^apc.enabled=0/apc.enabled=1/" $APCU_INI
+      sed -i -e "s/^;apc.enable_cli=0/apc.enable_cli=1/" $APCU_INI
+      sed -i -e "s/^apc.enable_cli=0/apc.enable_cli=1/" $APCU_INI
+      sed -i -e "s/^;apc.shm_size=32M/apc.shm_size=32M/" $APCU_INI
+      echo "[Info]: edit ${APCU_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^apc.enabled=1/apc.enabled=0/" $APCU_INI
+      sed -i -e "s/^apc.enable_cli=1/apc.enable_cli=0/" $APCU_INI
+      echo "[Info]: edit ${APCU_INI}"
+    fi
+  fi
+
+  echo "[Notice]: Please restart the server manually"
+
+  exit 0
+}
 
 function gather_facts() {
   if [ -e /etc/os-release ]; then
@@ -220,7 +317,7 @@ function install() {
   $HOME/.phpenv/bin/phpenv install ${PHP_VERSION}
 
   if [ "$DISTR" = "centos" ] && [ -d /etc/httpd/conf.d ] && [ ! -f "$APACHE_PHP_CONF" ]; then
-    echo -e "#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
+    echo -e "<IfModule prefork.c>\n#LoadModule php5_module modules/libphp5.so\n#LoadModule php7_module modules/libphp7.so\n</IfModule>\n\n<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
     echo "[Info]: add ${APACHE_PHP_CONF}"
   elif ( [ "$DISTR" = "debian" ] || [ "$DISTR" = "ubuntu" ] ) && [ -d /etc/apache2/mods-available ] && [ ! -f "$APACHE_PHP_CONF" ]; then
     echo -e "<FilesMatch \.php$>\nSetHandler application/x-httpd-php\n</FilesMatch>\n\nDirectoryIndex index.php" > $APACHE_PHP_CONF
@@ -354,6 +451,12 @@ function install() {
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_CONF
+
+    sed -i -e "s/^pm.max_children = 5/pm.max_children = 25/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.start_servers = 2/pm.start_servers = 10/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.min_spare_servers = 1/pm.min_spare_servers = 10/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.max_spare_servers = 3/pm.max_spare_servers = 20/" $PHP_FPM_CONF
+    sed -i -e "s/^;pm.max_requests = 500/pm.max_requests = 500/" $PHP_FPM_CONF
     echo "[Info]: edit ${PHP_FPM_CONF} [www]"
   fi
 
@@ -368,6 +471,16 @@ function install() {
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_WWW_CONF
+
+    sed -i -e "s/^pm.max_children = 5/pm.max_children = 25/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.start_servers = 2/pm.start_servers = 10/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.min_spare_servers = 1/pm.min_spare_servers = 10/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.max_spare_servers = 3/pm.max_spare_servers = 20/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;pm.max_requests = 500/pm.max_requests = 500/" $PHP_FPM_WWW_CONF
+
+    sed -i -e "s/^;slowlog = log\/\$pool.log.slow/slowlog = \/var\/log\/php-fpm\/log.slow/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;request_slowlog_timeout = 0/request_slowlog_timeout = 10s/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;catch_workers_output = yes/catch_workers_output = yes/" $PHP_FPM_WWW_CONF
     echo "[Info]: edit ${PHP_FPM_WWW_CONF}"
   fi
 
@@ -440,8 +553,13 @@ function gather_conf() {
   PHP_FPM_INITD="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/init.d.php-fpm"
 }
 
-if [ "$REMOVE" = "true" ]; then
+if [ "$COMMAND_LABEL" = "remove" ]; then
   remove
+  exit 0
+fi
+
+if [ "$COMMAND_LABEL" = "config" ]; then
+  switch_config
   exit 0
 fi
 
