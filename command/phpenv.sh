@@ -451,6 +451,12 @@ function install() {
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_CONF
+
+    sed -i -e "s/^pm.max_children = 5/pm.max_children = 25/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.start_servers = 2/pm.start_servers = 10/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.min_spare_servers = 1/pm.min_spare_servers = 10/" $PHP_FPM_CONF
+    sed -i -e "s/^pm.max_spare_servers = 3/pm.max_spare_servers = 20/" $PHP_FPM_CONF
+    sed -i -e "s/^;pm.max_requests = 500/pm.max_requests = 500/" $PHP_FPM_CONF
     echo "[Info]: edit ${PHP_FPM_CONF} [www]"
   fi
 
@@ -465,6 +471,16 @@ function install() {
     sed -i -e "s/^listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm\/php-fcgi.pid/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.mode = 0660/listen.mode = 0660/" $PHP_FPM_WWW_CONF
     sed -i -e "s/^;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/" $PHP_FPM_WWW_CONF
+
+    sed -i -e "s/^pm.max_children = 5/pm.max_children = 25/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.start_servers = 2/pm.start_servers = 10/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.min_spare_servers = 1/pm.min_spare_servers = 10/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^pm.max_spare_servers = 3/pm.max_spare_servers = 20/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;pm.max_requests = 500/pm.max_requests = 500/" $PHP_FPM_WWW_CONF
+
+    sed -i -e "s/^;slowlog = log\/\$pool.log.slow/slowlog = \/var\/log\/php-fpm\/log.slow/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;request_slowlog_timeout = 0/request_slowlog_timeout = 10s/" $PHP_FPM_WWW_CONF
+    sed -i -e "s/^;catch_workers_output = yes/catch_workers_output = yes/" $PHP_FPM_WWW_CONF
     echo "[Info]: edit ${PHP_FPM_WWW_CONF}"
   fi
 
