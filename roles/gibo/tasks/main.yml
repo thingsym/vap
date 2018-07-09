@@ -6,4 +6,4 @@
     mode: 0755
 
 - name: gibo initialized
-  command: gibo -u
+  command: gibo update

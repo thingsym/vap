@@ -13,6 +13,7 @@ if property["database"] == 'mysql' then
 
   describe package('mysql-community-server') do
     it { should be_installed }
+    it { should be_installed.with_version '5.7' }
   end
 
   describe yumrepo('mysql57-community'), :if => os[:family] == 'redhat' do
@@ -56,6 +57,7 @@ elsif property["database"] == 'mariadb' then
 
   describe package('MariaDB-server'), :if => os[:family] == 'redhat' do
     it { should be_installed }
+    it { should be_installed.with_version '10.3' }
   end
 
   describe service('mysql'), :if => os[:family] == 'redhat' && os[:release] == '6' do
@@ -70,6 +72,7 @@ elsif property["database"] == 'mariadb' then
 
   describe package('mariadb-server-10.3'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
+    it { should be_installed.with_version '10.3' }
   end
 
   describe command('apt-cache policy | grep mariadb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -115,6 +118,7 @@ elsif property["database"] == 'percona' then
 
   describe package('Percona-Server-server-57'), :if => os[:family] == 'redhat' do
     it { should be_installed }
+    it { should be_installed.with_version '5.7' }
   end
 
   describe service('mysql'), :if => os[:family] == 'redhat' && os[:release] == '6' do
@@ -129,6 +133,7 @@ elsif property["database"] == 'percona' then
 
   describe package('percona-server-server-5.7'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
+    it { should be_installed.with_version '5.7' }
   end
 
   describe command('apt-cache policy | grep percona'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -163,11 +168,11 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     it { should be_listening }
   end
 
-  describe command("mysqlshow -u root -p#{property["db_root_password"]} mysql") do
+  describe command("mysqlshow -uroot -p'#{property["db_root_password"]}' mysql") do
     its(:stdout) { should match /Database: mysql/ }
   end
 
-  describe command( "mysqladmin -u root -p#{property["db_root_password"]} ping" ) do
+  describe command( "mysqladmin -uroot -p'#{property["db_root_password"]}' ping" ) do
     its(:stdout) { should match /mysqld is alive/ }
   end
 
