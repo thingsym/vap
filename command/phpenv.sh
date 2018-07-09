@@ -3,7 +3,7 @@
 set -e
 
 version() {
-  echo "$(basename $0) version 0.4.0"
+  echo "$(basename $0) version 0.4.1"
 }
 
 usage() {
