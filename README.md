@@ -389,6 +389,12 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.3.1 - 2018.07.09
+	* improve phpenv.sh version 0.4.1
+	* add command switch_config to phpenv.sh
+	* fix usage of phpenv.sh
+	* fix gibo command
+	* add MySQL 8.0 task
 * version 0.3.0 - 2018.06.11
 	* add other versions database tasks
 	* bump up MariaDB 10.3, MySQL 5.7, Percona 5.7
