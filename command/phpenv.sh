@@ -63,7 +63,7 @@ while getopts "v:m:s:rlih" OPT ; do
         ;;
     s)  SOCKET=$OPTARG
         ;;
-    r)  REMOVE=true
+    r)  COMMAND_LABEL='remove'
         ;;
     l)  $HOME/.phpenv/bin/phpenv install -l;
         exit 0
@@ -483,7 +483,7 @@ function gather_conf() {
   PHP_FPM_INITD="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/init.d.php-fpm"
 }
 
-if [ "$REMOVE" = "true" ]; then
+if [ "$COMMAND_LABEL" = "remove" ]; then
   remove
   exit 0
 fi
