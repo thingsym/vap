@@ -55,7 +55,7 @@ if [ "$#" -eq 0 ]; then
   exit 1
 fi
 
-while getopts "v:m:s:rlih" OPT ; do
+while getopts "v:m:s:c:rlih" OPT ; do
   case $OPT in
     v)  PHP_VERSION=$OPTARG
         ;;
@@ -70,6 +70,10 @@ while getopts "v:m:s:rlih" OPT ; do
         ;;
     i)  $HOME/.phpenv/bin/phpenv versions;
         exit 0
+        ;;
+    c)  COMMAND_LABEL='config'
+        TARGET=$OPTARG
+        FLAG=$5
         ;;
     h)  usage
         exit 0
@@ -91,6 +95,56 @@ fi
 if [ -z "$SOCKET" ]; then
   SOCKET="unix"
 fi
+
+function switch_config() {
+  PHP_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/php.ini"
+  XDEBUG_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/conf.d/xdebug.ini"
+  APCU_INI="/home/vagrant/.phpenv/versions/${PHP_VERSION}/etc/conf.d/40-apcu.ini"
+
+  if [ -f "$PHP_INI" ] && [ "$TARGET" = "opcache" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^;opcache.enable_cli=0/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable=0/opcache.enable=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable_cli=1/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^;opcache.enable=1/opcache.enable=1/" $PHP_INI
+      sed -i -e "s/^opcache.enable_cli=0/opcache.enable_cli=1/" $PHP_INI
+      sed -i -e "s/^opcache.enable=0/opcache.enable=1/" $PHP_INI
+      echo "[Info]: edit ${PHP_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^opcache.enable_cli=1/;opcache.enable_cli=0/" $PHP_INI
+      sed -i -e "s/^opcache.enable=1/opcache.enable=0/" $PHP_INI
+      echo "[Info]: edit ${PHP_INI}"
+    fi
+  fi
+
+  if [ -f "$XDEBUG_INI" ] && [ "$TARGET" = "xdebug" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^;zend_extension/zend_extension/" $XDEBUG_INI
+      echo "[Info]: edit ${XDEBUG_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^zend_extension/;zend_extension/" $XDEBUG_INI
+      echo "[Info]: edit ${XDEBUG_INI}"
+    fi
+  fi
+
+  if [ -f "$APCU_INI" ] && [ "$TARGET" = "apcu" ]; then
+    if [ "$FLAG" = "on" ]; then
+      sed -i -e "s/^apc.enabled=0/apc.enabled=1/" $APCU_INI
+      sed -i -e "s/^;apc.enable_cli=0/apc.enable_cli=1/" $APCU_INI
+      sed -i -e "s/^apc.enable_cli=0/apc.enable_cli=1/" $APCU_INI
+      sed -i -e "s/^;apc.shm_size=32M/apc.shm_size=32M/" $APCU_INI
+      echo "[Info]: edit ${APCU_INI}"
+    elif [ "$FLAG" = "off" ]; then
+      sed -i -e "s/^apc.enabled=1/apc.enabled=0/" $APCU_INI
+      sed -i -e "s/^apc.enable_cli=1/apc.enable_cli=0/" $APCU_INI
+      echo "[Info]: edit ${APCU_INI}"
+    fi
+  fi
+
+  echo "[Notice]: Please restart the server manually"
+
+  exit 0
+}
 
 function gather_facts() {
   if [ -e /etc/os-release ]; then
@@ -485,6 +539,11 @@ function gather_conf() {
 
 if [ "$COMMAND_LABEL" = "remove" ]; then
   remove
+  exit 0
+fi
+
+if [ "$COMMAND_LABEL" = "config" ]; then
+  switch_config
   exit 0
 fi
 
