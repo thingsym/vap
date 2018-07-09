@@ -2,16 +2,56 @@
 
 set -e
 
-usage_exit() {
-  echo "[Info]: phpenv.sh version 0.4.0"
-  echo "[Info]: Usage: phpenv.sh <-v x.x.x> <-m [mod_php|php-fpm]> <-s [tcp|unix]>"
-  echo "[Info]: Usage: phpenv.sh <-v x.x.x> [<-r>]"
-  echo "[Info]: Usage: phpenv.sh <-l|-i|-h]>"
-  exit 0
+version() {
+  echo "$(basename $0) version 0.4.0"
+}
+
+usage() {
+    version
+cat << EOF >&2
+
+Usage:
+  $(basename $0) [command]
+
+Example:
+  $(basename $0) -v 7.2.1 -m mod_php -s tcp
+
+Main Commands:
+  Install specific version php
+
+    $(basename $0) <-v x.x.x> <-m [mod_php|php-fpm]> <-s [unix|tcp]>
+
+    Parameters:
+      -v    php version
+      -m    [mod_php|php-fpm]    php execution environment
+      -s    [unix|tcp]           UNIX socket or TCP/IP communincation
+
+  Remove specific version php
+
+    $(basename $0) <-v x.x.x> -r
+
+    Parameters:
+      -v    php version
+      -r    remove flag
+
+  Switch configuration parameter
+
+    $(basename $0) <-v x.x.x> -c [<opcache|apcu|xdebug] [<on|off]
+
+    Parameters:
+      -v    php version
+      -c    [<opcache|apcu|xdebug]    configuration target
+      [<on|off]                       switch flag
+
+Sub Commands:
+  -l    List all available versions (alias phpenv install --list)
+  -i    List all PHP versions available to phpenv (alias phpenv versions)
+  -h    Display help text
+EOF
 }
 
 if [ "$#" -eq 0 ]; then
-  echo "[Info]: Not Found Sub Commnad"
+  usage
   exit 1
 fi
 
@@ -31,9 +71,11 @@ while getopts "v:m:s:rlih" OPT ; do
     i)  $HOME/.phpenv/bin/phpenv versions;
         exit 0
         ;;
-    h)  usage_exit
+    h)  usage
+        exit 0
         ;;
-    \?) usage_exit
+    \?) usage
+        exit 1
         ;;
   esac
 done
@@ -42,6 +84,7 @@ shift $(( $OPTIND - 1 ))
 
 if [ -z "$PHP_VERSION" ]; then
   echo "Not Found PHP version"
+  echo "usage: $(basename $0) -h"
   exit 1
 fi
 
