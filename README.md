@@ -389,6 +389,10 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.3.2 - 2018.09.03
+	* fix default version with programming languages
+	* bump up ruby version 2.5.1
+	* bump up Node version 8.11.4
 * version 0.3.1 - 2018.07.09
 	* improve phpenv.sh version 0.4.1
 	* add command switch_config to phpenv.sh
