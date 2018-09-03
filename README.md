@@ -124,8 +124,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	public_ip             = ''
 	forwarded_port        = false
 
-	synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 	vbguest_auto_update   = true
+	synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 
 	ansible_install_mode  = :default    # :default|:pip
 	ansible_version       = 'latest'    # only :pip required
@@ -138,8 +138,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: `''`)
 * `forwarded_port` enable forwarded port (default: `false` / value: `true` | `false`)
-* `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
 * `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
+* `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
 * `ansible_install_mode` (required) the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
 * `ansible_version` version of Ansible to install (default: `latest`)
 
@@ -161,10 +161,10 @@ In YAML format, you can set server, database and Programming environment. And ca
 	# If the version is set to 0, the programming language does not install
 
 	python_version     : 3.6.4       # 3.6.4
-	ruby_version       : 2.4.3       # 2.4.3
+	ruby_version       : 2.5.1       # 2.5.1
 	php_version        : 7.2.1       # 7.2.1
 	perl_version       : 5.26.1      # 5.26.1
-	node_version       : 8.9.4       # 8.9.4
+	node_version       : 8.11.4      # 8.11.4
 	go_version         : 1.9.2       # 1.9.2
 	java_version       : 1.8         # 1.8
 	scala_version      : 2.11.12     # 2.11.12 (require java)
@@ -184,11 +184,11 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Programming languages Settings ##
 
-* `ruby_version` version of Ruby (default: `2.4.3`)
 * `python_version` version of Python (default: `3.6.4`)
+* `ruby_version` version of Ruby (default: `2.5.1`)
 * `php_version` version of PHP (default: `7.2.1`)
 * `perl_version` version of Perl (default: `5.26.1`)
-* `node_version` version of Node.js (default: `8.9.4`)
+* `node_version` version of Node.js (default: `8.11.4`)
 * `go_version` version of Go (default: `1.9.2`)
 * `java_version` version of Java (default: `1.8`)
 * `scala_version` version of Scala (default: `2.11.12`) require Java
