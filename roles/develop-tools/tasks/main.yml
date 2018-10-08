@@ -6,3 +6,5 @@
 - name: include task (Debian)
   include: debian.yml
   when: ansible_os_family == 'Debian'
+
+- include: peco.yml
