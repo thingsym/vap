@@ -9,13 +9,15 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
   end
 
   describe command('which scalaenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.scalaenv\/bin\/scalaenv/) }
   end
 
   describe command('which scala') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.scalaenv\/shims\/scala/) }
   end
 
   [property["scala_version"]].each do |scala_version|

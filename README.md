@@ -389,6 +389,10 @@ Small patches and bug reports can be submitted a issue tracker in Github. Forkin
 
 ## Changelog
 
+* version 0.3.3 - 2018.10.08
+	* add peco
+	* add jq
+	* fix tests
 * version 0.3.2 - 2018.09.03
 	* fix default version with programming languages
 	* bump up ruby version 2.5.1

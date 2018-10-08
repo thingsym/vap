@@ -10,4 +10,5 @@
     dest: /home/vagrant/.ssh/config
     owner: vagrant
     group: vagrant
+    mode: 0600
   when: is_custom_ssh_config.stat.exists

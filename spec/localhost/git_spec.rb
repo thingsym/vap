@@ -6,6 +6,6 @@ describe package('git') do
 end
 
 describe command('which git') do
-  let(:sudo_options) { '-u vagrant -i'}
+  let(:sudo_options) { '-u vagrant -i' }
   its(:exit_status) { should eq 0 }
 end

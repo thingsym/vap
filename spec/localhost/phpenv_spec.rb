@@ -9,17 +9,19 @@ if property["php_version"] != 0 then
   end
 
   describe command('which phpenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.phpenv\/bin\/phpenv/) }
   end
 
   describe command('which php') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.phpenv\/shims\/php/) }
   end
 
   describe command('which php-cgi') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 
@@ -62,8 +64,9 @@ if property["php_version"] != 0 then
   end
 
   describe command('which composer') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.phpenv\/shims\/composer/) }
   end
 
   describe command('composer --version') do
