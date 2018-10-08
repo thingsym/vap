@@ -9,13 +9,15 @@ if property["go_version"] != 0 then
   end
 
   describe command('which goenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.goenv\/bin\/goenv/) }
   end
 
   describe command('which go') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.goenv\/shims\/go/) }
   end
 
   [property["go_version"]].each do |go_version|

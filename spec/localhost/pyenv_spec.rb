@@ -9,13 +9,15 @@ if property["python_version"] != 0 then
   end
 
   describe command('which pyenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.pyenv\/bin\/pyenv/) }
   end
 
   describe command('which python') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.pyenv\/shims\/python/) }
   end
 
   [property["python_version"]].each do |python_version|

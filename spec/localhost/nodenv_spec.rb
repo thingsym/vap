@@ -9,13 +9,15 @@ if property["node_version"] != 0 then
   end
 
   describe command('which nodenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.nodenv\/bin\/nodenv/) }
   end
 
   describe command('which node') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.nodenv\/shims\/node/) }
   end
 
   [property["node_version"]].each do |node_version|
@@ -46,6 +48,17 @@ if property["node_version"] != 0 then
 
   describe file('/home/vagrant/.nodenv/plugins/nodenv-default-packages') do
     it { should be_directory }
+  end
+
+  describe command('which npm') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.nodenv\/shims\/npm/) }
+  end
+
+  describe command('npm -v') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
   end
 
   describe command('yarn --version') do

@@ -9,13 +9,15 @@ if property["perl_version"] != 0 then
   end
 
   describe command('which plenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/bin\/plenv/) }
   end
 
   describe command('which perl') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/perl/) }
   end
 
   [property["perl_version"]].each do |perl_version|
@@ -44,22 +46,30 @@ if property["perl_version"] != 0 then
     it { should be_directory }
   end
 
-  describe file('/home/vagrant/.plenv/shims/carton') do
-    it { should be_file }
+  describe command('which cpanm') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/cpanm/) }
   end
 
-  describe command('which cpanm') do
-    let(:sudo_options) { '-u vagrant -i'}
+  describe command('cpanm -v') do
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 
   describe command('which carton') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/carton/) }
+  end
+
+  describe command('carton -v') do
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 
   describe command('which start_server') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 

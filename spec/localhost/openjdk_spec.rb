@@ -4,7 +4,7 @@ require 'shellwords'
 if property["java_version"] != 0 then
 
   describe command('which java') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
 

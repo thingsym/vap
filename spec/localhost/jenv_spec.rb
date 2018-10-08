@@ -8,21 +8,22 @@ if property["java_version"] != 0 then
     it { should be_grouped_into 'vagrant' }
   end
 
+  describe command('which jenv') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.jenv\/bin\/jenv/) }
+  end
+
+  describe command('which java') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
   [property["java_version"]].each do |java_version|
     describe command("jenv versions | grep #{java_version}") do
       let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{java_version}/) }
     end
-  end
-
-  describe command('which jenv') do
-    let(:sudo_options) { '-u vagrant -i'}
-    its(:exit_status) { should eq 0 }
-  end
-
-  describe command('which java') do
-    let(:sudo_options) { '-u vagrant -i'}
-    its(:exit_status) { should eq 0 }
   end
 
   describe command('jenv global') do

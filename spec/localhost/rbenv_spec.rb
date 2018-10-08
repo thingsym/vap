@@ -9,13 +9,15 @@ if property["ruby_version"] != 0 then
   end
 
   describe command('which rbenv') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/bin\/rbenv/) }
   end
 
   describe command('which ruby') do
-    let(:sudo_options) { '-u vagrant -i'}
+    let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/shims\/ruby/) }
   end
 
   [property["ruby_version"]].each do |ruby_version|
@@ -48,9 +50,21 @@ if property["ruby_version"] != 0 then
     it { should be_directory }
   end
 
+  describe command('which gem') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/shims\/gem/) }
+  end
+
+  describe command('gem --version') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
   describe command('which bundler') do
     let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/shims\/bundler/) }
   end
 
   describe command('bundler --version') do
