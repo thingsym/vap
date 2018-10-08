@@ -52,9 +52,9 @@ if property["perl_version"] != 0 then
     its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/cpanm/) }
   end
 
-  describe command('cpanm -v') do
+  describe command('cpanm -V') do
     let(:sudo_options) { '-u vagrant -i' }
-    its(:exit_status) { should eq 0 }
+    # its(:exit_status) { should eq 0 }
   end
 
   describe command('which carton') do
@@ -69,6 +69,12 @@ if property["perl_version"] != 0 then
   end
 
   describe command('which start_server') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/start_server/) }
+  end
+
+  describe command('start_server -v') do
     let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }
   end
