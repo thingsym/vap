@@ -15,3 +15,4 @@
     - software-properties-common
     - python-pip
     - debconf-utils
+    - jq
