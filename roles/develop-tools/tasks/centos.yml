@@ -13,3 +13,4 @@
     - python-pip
     - libcurl
     - libcurl-devel
+    - jq
