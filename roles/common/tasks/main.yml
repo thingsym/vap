@@ -42,5 +42,6 @@
   when: ansible_os_family == 'Debian'
 
 - include: swap.yml
+- include: kernel.yml
 - include: ssh-config.yml
 - include: reset.yml
