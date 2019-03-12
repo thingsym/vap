@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4] - 2019.03.12
+
+- bump up programming language versions
+- modify kernel parameters
+- remove hhvm
+- add CHANGELOG.md
+
 ## [0.3.3] - 2018.10.08
 
 - add peco
