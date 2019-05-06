@@ -121,13 +121,37 @@
     state: present
   notify: apache2 restarted
 
-- name: disables Apache2 module mpm_event
-  command: sudo a2dismod mpm_event
-  notify: apache2 restarted
+- block:
+  - name: disables Apache2 module mpm_event
+    apache2_module:
+      name: mpm_event
+      state: absent
+      ignore_configcheck: yes
+    notify: apache2 restarted
 
-- name: enables Apache2 module mpm_prefork
-  command: sudo a2enmod mpm_prefork
-  notify: apache2 restarted
+  - name: enables Apache2 module mpm_prefork
+    apache2_module:
+      name: mpm_prefork
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
+  when: apache_mpm == 'prefork'
+
+- block:
+  - name: disables Apache2 module mpm_prefork
+    apache2_module:
+      name: mpm_prefork
+      state: absent
+      ignore_configcheck: yes
+    notify: apache2 restarted
+
+  - name: enables Apache2 module mpm_event
+    apache2_module:
+      name: mpm_event
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
+  when: apache_mpm == 'event'
 
 - name: apache2 enabled
   service:
