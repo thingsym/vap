@@ -126,6 +126,7 @@
   apache2_module:
     name: proxy_fcgi
     state: present
+    ignore_configcheck: yes
   notify: apache2 restarted
 
 - block:
