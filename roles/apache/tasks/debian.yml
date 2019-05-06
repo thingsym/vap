@@ -113,6 +113,13 @@
       name: ssl
       state: present
     notify: apache2 restarted
+
+  - name: enables Apache2 module http2
+    apache2_module:
+      name: http2
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
   when: ssl == true
 
 - name: enables Apache2 module proxy_fcgi

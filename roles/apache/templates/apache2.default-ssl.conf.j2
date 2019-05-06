@@ -1,6 +1,7 @@
 <IfModule mod_ssl.c>
 	<VirtualHost _default_:443>
 		ServerName {{ HOSTNAME }}
+		Protocols h2 h2c http/1.1
 		DocumentRoot {{ DOCUMENT_ROOT }}
 
 		ServerAdmin webmaster@localhost

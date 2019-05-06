@@ -23,6 +23,10 @@ if property["server"] == 'apache' then
     describe command("apachectl -M | grep 'ssl_module'") do
       its(:stdout) { should match(/ssl_module/) }
     end
+
+    describe command("apachectl -M | grep 'http2_module'") do
+      its(:stdout) { should match(/http2_module/) }
+    end
   end
 
   describe service('httpd'), :if => os[:family] == 'redhat' do
@@ -55,6 +59,10 @@ if property["server"] == 'apache' then
   end
 
   describe file('/etc/httpd/conf.d/www.conf'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+    it { should be_file }
+  end
+
+  describe file('/etc/httpd/conf.modules.d/00-http2.conf'), :if => os[:family] == 'redhat' && os[:release] == '7' do
     it { should be_file }
   end
 
