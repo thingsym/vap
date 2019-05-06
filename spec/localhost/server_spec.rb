@@ -87,10 +87,6 @@ if property["server"] == 'apache' then
     it { should be_file }
   end
 
-  describe file('/etc/apache2/apache2.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-    it { should be_file }
-  end
-
   describe file('/etc/apache2/sites-available/000-default.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_file }
   end
