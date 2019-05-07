@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.5] - 2019.05.07
+
+- improve to add forwarded_port using array
+- bump up git version 2 or later
+- fix http2 config
+- enable switch between prefork and event with apache
+- bump up Apache version 2.4
+- improve version specification with openssl
+
 ## [0.3.4] - 2019.03.12
 
 - bump up programming language versions
