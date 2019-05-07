@@ -122,7 +122,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	vm_document_root      = '/var/www/html'
 
 	public_ip             = ''
-	forwarded_port        = false
+
+	forwarded_port        = []
 
 	vbguest_auto_update   = true
 	synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
@@ -137,8 +138,8 @@ The pip is to install Ansible from the Python package manager. In this case, you
 * `vm_document_root` (required) document root path (default: `/var/www/html`)
 	* auto create `html` directory and synchronized
 * `public_ip` IP address of bridged connection (default: `''`)
-* `forwarded_port` enable forwarded port (default: `false` / value: `true` | `false`)
-* `vbguest_auto_update` update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
+* `forwarded_port` list of ports that you want to transfer (default: `[]`)
+* `vbguest_auto_update` whether to update VirtualBox Guest Additions (default: `true` / value: `true` | `false`)
 * `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
 * `ansible_install_mode` (required) the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
 * `ansible_version` version of Ansible to install (default: `latest`)

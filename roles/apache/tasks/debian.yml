@@ -1,4 +1,16 @@
 ---
+- block:
+  - name: apache2 repository installed (Debian)
+    apt_repository:
+      repo: ppa:ondrej/apache2
+
+  - name: apt-get update
+    apt:
+      update_cache: yes
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'xenial'
+
 - name: apache2 installed
   package:
     name: "{{ item }}"
@@ -101,21 +113,53 @@
       name: ssl
       state: present
     notify: apache2 restarted
+
+  - name: enables Apache2 module http2
+    apache2_module:
+      name: http2
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
   when: ssl == true
 
 - name: enables Apache2 module proxy_fcgi
   apache2_module:
     name: proxy_fcgi
     state: present
+    ignore_configcheck: yes
   notify: apache2 restarted
 
-- name: disables Apache2 module mpm_event
-  command: sudo a2dismod mpm_event
-  notify: apache2 restarted
+- block:
+  - name: disables Apache2 module mpm_event
+    apache2_module:
+      name: mpm_event
+      state: absent
+      ignore_configcheck: yes
+    notify: apache2 restarted
 
-- name: enables Apache2 module mpm_prefork
-  command: sudo a2enmod mpm_prefork
-  notify: apache2 restarted
+  - name: enables Apache2 module mpm_prefork
+    apache2_module:
+      name: mpm_prefork
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
+  when: apache_mpm == 'prefork'
+
+- block:
+  - name: disables Apache2 module mpm_prefork
+    apache2_module:
+      name: mpm_prefork
+      state: absent
+      ignore_configcheck: yes
+    notify: apache2 restarted
+
+  - name: enables Apache2 module mpm_event
+    apache2_module:
+      name: mpm_event
+      state: present
+      ignore_configcheck: yes
+    notify: apache2 restarted
+  when: apache_mpm == 'event'
 
 - name: apache2 enabled
   service:

@@ -23,11 +23,31 @@ if property["server"] == 'apache' then
     describe command("apachectl -M | grep 'ssl_module'") do
       its(:stdout) { should match(/ssl_module/) }
     end
+
+    describe command("apachectl -M | grep 'http2_module'") do
+      its(:stdout) { should match(/http2_module/) }
+    end
   end
 
   describe service('httpd'), :if => os[:family] == 'redhat' do
     it { should be_enabled }
     it { should be_running }
+  end
+
+  describe command("apachectl -M | grep 'mpm_prefork_module'"), :if => property["apache_mpm"] == 'prefork' do
+    its(:stdout) { should match(/mpm_prefork_module/) }
+  end
+
+  describe command("apachectl -M | grep 'mpm_event_module'"), :if => property["apache_mpm"] == 'event' do
+    its(:stdout) { should match(/mpm_event_module/) }
+  end
+
+  describe command("apachectl -V | grep -i mpm"), :if => property["apache_mpm"] == 'prefork' do
+    its(:stdout) { should match /prefork/ }
+  end
+
+  describe command("apachectl -V | grep -i mpm"), :if => property["apache_mpm"] == 'event' do
+    its(:stdout) { should match /event/ }
   end
 
   describe command("ps -C httpd -o user"), :if => os[:family] == 'redhat' do
@@ -39,6 +59,10 @@ if property["server"] == 'apache' then
   end
 
   describe file('/etc/httpd/conf.d/www.conf'), :if => os[:family] == 'redhat' && os[:release] == '7' do
+    it { should be_file }
+  end
+
+  describe file('/etc/httpd/conf.modules.d/00-http2.conf'), :if => os[:family] == 'redhat' && os[:release] == '7' do
     it { should be_file }
   end
 
@@ -57,10 +81,6 @@ if property["server"] == 'apache' then
 
   describe command("ps -C apache2 -o user"), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     its(:stdout) { should match /vagrant/ }
-  end
-
-  describe file('/etc/apache2/apache2.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
-    it { should be_file }
   end
 
   describe file('/etc/apache2/apache2.conf'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
