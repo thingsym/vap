@@ -1,5 +1,5 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.3.5"
+- name: "VAP (Vagrant Ansible Programming languages) v0.3.6"
   hosts: localhost
   remote_user: vagrant
   become: yes
