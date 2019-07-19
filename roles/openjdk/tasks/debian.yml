@@ -4,24 +4,24 @@
     repo: "ppa:openjdk-r/ppa"
     state: present
   when:
-    - java_version == 1.8 
+    - java_version == 1.8
     - ansible_distribution == 'Ubuntu'
 
-- name: JDK 9 installed
+- name: OpenJDK 9 installed
   package:
     name: openjdk-9-jdk
     state: latest
   when: java_version == 1.9
 
-- name: JDK 8 installed (Ubuntu)
+- name: OpenJDK 8 installed (Ubuntu)
   package:
     name: openjdk-8-jdk
     state: latest
   when:
-    - java_version == 1.8 
+    - java_version == 1.8
     - ansible_distribution == 'Ubuntu'
 
-- name: JDK 8 installed (Debian jessie)
+- name: OpenJDK 8 installed (Debian jessie)
   apt:
     name: openjdk-8-jdk
     state: latest
@@ -31,7 +31,7 @@
     - ansible_distribution == 'Debian'
     - ansible_distribution_release == 'jessie'
 
-- name: JDK 8 installed (Debian stretch)
+- name: OpenJDK 8 installed (Debian stretch)
   apt:
     name: openjdk-8-jdk
     state: latest
@@ -40,7 +40,7 @@
     - ansible_distribution == 'Debian'
     - ansible_distribution_release == 'stretch'
 
-- name: JDK 7 installed
+- name: OpenJDK 7 installed
   package:
     name: openjdk-7-jdk
     state: latest
