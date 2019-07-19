@@ -2,4 +2,5 @@
 .vagrant
 *.box
 *.retry
+*.cache
 /html

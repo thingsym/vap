@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.6] - 2019.07.19
+
+- fix task description
+- add choice of openssl installation, source or package
+- add .editorconfig
+- fix kernel parameter
+- fix IUS repository url
+
 ## [0.3.5] - 2019.05.07
 
 - improve to add forwarded_port using array

@@ -3,11 +3,11 @@ require 'shellwords'
 
 if property["server"] == 'apache' then
 
-  describe package('httpd'), :if => os[:family] == 'redhat' do
+  describe package('httpd24u'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
-  describe package('httpd-devel'), :if => os[:family] == 'redhat' do
+  describe package('httpd24u-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }
   end
 
@@ -20,6 +20,10 @@ if property["server"] == 'apache' then
   end
 
   if property["ssl"] then
+    describe package('httpd24u-mod_ssl'), :if => os[:family] == 'redhat' do
+      it { should be_installed }
+    end
+
     describe command("apachectl -M | grep 'ssl_module'") do
       its(:stdout) { should match(/ssl_module/) }
     end
