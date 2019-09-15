@@ -8,3 +8,7 @@
   when: ansible_os_family == 'Debian'
 
 - include: peco.yml
+
+- name: zstd installed
+  package:
+    name: zstd
