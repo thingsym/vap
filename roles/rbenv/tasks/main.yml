@@ -41,7 +41,6 @@
   become: yes
   become_user: vagrant
 
-
 - name: stat rbenv_default_gems
   stat:
     path: /vagrant/config/default-ruby-gems.j2
