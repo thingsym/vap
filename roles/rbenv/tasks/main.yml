@@ -25,6 +25,14 @@
   become: yes
   become_user: vagrant
 
+- name: git checkout rbenv-update
+  git:
+    repo: https://github.com/rkh/rbenv-update.git
+    dest: "{{ rbenv_dir }}/plugins/rbenv-update"
+    force: yes
+  become: yes
+  become_user: vagrant
+
 - name: git checkout rbenv-default-gems
   git:
     repo: https://github.com/rbenv/rbenv-default-gems.git
@@ -32,7 +40,6 @@
     force: yes
   become: yes
   become_user: vagrant
-
 
 - name: stat rbenv_default_gems
   stat:

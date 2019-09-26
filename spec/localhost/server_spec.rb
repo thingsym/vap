@@ -172,9 +172,28 @@ elsif property["server"] == 'h2o' then
     it { should be_directory }
   end
 
+elsif property["server"] == 'litespeed' then
+
+  describe yumrepo('litespeed'), :if => os[:family] == 'redhat' do
+    it { should exist }
+  end
+
+  describe yumrepo('litespeed-update'), :if => os[:family] == 'redhat' do
+    it { should exist }
+  end
+
+  describe package('openlitespeed') do
+    it { should be_installed }
+  end
+
+  describe service('lsws') do
+    it { should be_enabled }
+    # it { should be_running }
+  end
+
 end
 
-if property["server"] != 'none' then
+if property["server"] != 'none' && property["server"] != 'litespeed' then
   describe port(80) do
     it { should be_listening }
   end

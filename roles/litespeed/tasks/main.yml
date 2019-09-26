@@ -1,14 +1,8 @@
 ---
-- name: include task
+- name: include task (CentOS/RHEL)
   include: centos.yml
   when: ansible_os_family == 'RedHat'
 
 - name: include task (Debian)
   include: debian.yml
   when: ansible_os_family == 'Debian'
-
-- include: peco.yml
-
-- name: zstd installed
-  package:
-    name: zstd
