@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.7] - 2019.09.26
+
+- fix fix php-build.default_configure_options
+- add litespeed server
+- add Zstandard compression algorithm
+
 ## [0.3.6] - 2019.07.19
 
 - fix task description

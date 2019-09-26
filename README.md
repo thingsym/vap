@@ -152,7 +152,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	## Server & Database Settings ##
 
-	server             : none   # none|apache|nginx|h2o
+	server             : none   # none|apache|nginx|h2o|litespeed
 	fastcgi            : none   # none|php-fpm
 	database           : none   # none|mysql|mariadb|percona
 
@@ -163,7 +163,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	python_version     : 3.6.4       # 3.6.4
 	ruby_version       : 2.6.1       # 2.6.1
-	php_version        : 7.3.1       # 7.3.1
+	php_version        : 7.3.8       # 7.3.8
 	perl_version       : 5.26.1      # 5.26.1
 	node_version       : 10.15.1     # 10.15.1
 	go_version         : 1.11.5      # 1.11.5
@@ -179,7 +179,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Server & Database Settings ##
 
-* `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx` | `h2o` )
+* `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx` | `h2o` | `litespeed` )
 * `fastcgi` name of fastCGI (default: `none` / value: `none` | `php-fpm`)
 * `database` (required) name of databese (default: `none` / value: `none` | `mysql` | `mariadb` | `percona`)
 
@@ -187,7 +187,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 * `python_version` version of Python (default: `3.6.4`)
 * `ruby_version` version of Ruby (default: `2.6.1`)
-* `php_version` version of PHP (default: `7.3.1`)
+* `php_version` version of PHP (default: `7.3.8`)
 * `perl_version` version of Perl (default: `5.26.1`)
 * `node_version` version of Node.js (default: `10.15.1`)
 * `go_version` version of Go (default: `1.11.5`)
@@ -257,6 +257,7 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 * [Apache](http://httpd.apache.org)
 * [nginx](http://nginx.org)
 * [H2O](https://h2o.examp1e.net/)
+* [LiteSpeed](https://www.litespeedtech.com)
 
 ### FastCGI (Selectable, Only nginx)
 
@@ -375,6 +376,13 @@ As follows editable configuration files.
 * percona.my.cnf.j2
 * php-build.default_configure_options.j2
 * ssh-config.j2
+
+## Alternative vagrant ssh connection
+
+```
+vagrant ssh-config > ssh_config.cache
+ssh -F ssh_config.cache default
+```
 
 ## Contribution
 
