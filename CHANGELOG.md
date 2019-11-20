@@ -1,8 +1,15 @@
 # Changelog
 
+## [0.3.8] - 2019.11.20
+
+- bump up node version
+- fix php config with phpenv.sh
+- fix IUS repository url
+
 ## [0.3.7] - 2019.09.26
 
-- fix fix php-build.default_configure_options
+- bump up php version
+- fix php-build.default_configure_options
 - add litespeed server
 - add Zstandard compression algorithm
 
