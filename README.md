@@ -165,7 +165,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 	ruby_version       : 2.6.1       # 2.6.1
 	php_version        : 7.3.8       # 7.3.8
 	perl_version       : 5.26.1      # 5.26.1
-	node_version       : 10.15.1     # 10.15.1
+	node_version       : 12.13.0     # 12.13.0
 	go_version         : 1.11.5      # 1.11.5
 	java_version       : 1.8         # 1.8
 	scala_version      : 2.11.12     # 2.11.12 (require java)
@@ -189,7 +189,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 * `ruby_version` version of Ruby (default: `2.6.1`)
 * `php_version` version of PHP (default: `7.3.8`)
 * `perl_version` version of Perl (default: `5.26.1`)
-* `node_version` version of Node.js (default: `10.15.1`)
+* `node_version` version of Node.js (default: `12.13.0`)
 * `go_version` version of Go (default: `1.11.5`)
 * `java_version` version of Java (default: `1.8`)
 * `scala_version` version of Scala (default: `2.11.12`) require Java
