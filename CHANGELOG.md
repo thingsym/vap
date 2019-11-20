@@ -2,7 +2,8 @@
 
 ## [0.3.7] - 2019.09.26
 
-- fix fix php-build.default_configure_options
+- bump up php version
+- fix php-build.default_configure_options
 - add litespeed server
 - add Zstandard compression algorithm
 
