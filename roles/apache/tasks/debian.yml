@@ -13,11 +13,10 @@
 
 - name: apache2 installed
   package:
-    name: "{{ item }}"
+    name:
+      - apache2
+      - apache2-dev
     state: latest
-  with_items:
-    - apache2
-    - apache2-dev
 
 - name: stat custom apache2.conf.j2
   stat:

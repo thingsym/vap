@@ -6,11 +6,10 @@
 
 - name: libraries installed
   package:
-    name: "{{ item }}"
+    name:
+      - yum-utils
+      - python-pip
+      - libcurl
+      - libcurl-devel
+      - jq
     state: latest
-  with_items:
-    - yum-utils
-    - python-pip
-    - libcurl
-    - libcurl-devel
-    - jq
