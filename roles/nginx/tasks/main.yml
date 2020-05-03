@@ -3,19 +3,20 @@
   yum:
     name: http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm
   when:
-    - ansible_os_family == 'RedHat' 
+    - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 6
 
 - name: nginx repository installed (CentOS/RHEL 7)
   yum:
     name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
   when:
-    - ansible_os_family == 'RedHat' 
+    - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int == 7
 
 - name: nginx installed
   package:
     name: nginx
+    state: latest
 
 - name: stat custom nginx.conf.j2
   stat:

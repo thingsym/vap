@@ -1,49 +1,48 @@
 ---
 - name: build environment (CentOS/RHEL)
   package:
-    name: "{{ item }}"
-  with_items:
-    - libxml2-devel
-    - bison
-    - bison-devel
-    - openssl-devel
-    - libjpeg-devel
-    - libpng-devel
-    - libmcrypt-devel
-    - readline-devel
-    - libtidy-devel
-    - libxslt-devel
-    - re2c
+    name:
+      - libxml2-devel
+      - bison
+      - bison-devel
+      - openssl-devel
+      - libjpeg-devel
+      - libpng-devel
+      - libmcrypt-devel
+      - readline-devel
+      - libtidy-devel
+      - libxslt-devel
+      - re2c
+    state: latest
   when: ansible_os_family == 'RedHat'
 
 - name: build environment (Debian)
   package:
-    name: "{{ item }}"
-  with_items:
-    - libxml2-dev
-    - bison
-    - libbison-dev
-    - libssl-dev
-    - libcurl4-openssl-dev
-    - libjpeg-dev
-    - libpng-dev
-    - libmcrypt-dev
-    - libreadline-dev
-    - libtidy-dev
-    - libxslt-dev
-    - re2c
-    - libmagic-dev
-    - libtool
-    - libtool-doc
-    - autoconf
+    name:
+      - libxml2-dev
+      - bison
+      - libbison-dev
+      - libssl-dev
+      - libcurl4-openssl-dev
+      - libjpeg-dev
+      - libpng-dev
+      - libmcrypt-dev
+      - libreadline-dev
+      - libtidy-dev
+      - libxslt-dev
+      - re2c
+      - libmagic-dev
+      - libtool
+      - libtool-doc
+      - autoconf
+    state: latest
   when: ansible_os_family == 'Debian'
 
 - name: build environment (Debian)
   package:
-    name: "{{ item }}"
+    name:
+      - libtool-bin
     state: latest
-  with_items:
-    - libtool-bin
   when:
-    - ansible_os_family == 'Debian' 
+    - ansible_os_family == 'Debian'
     - ansible_distribution_release != 'trusty'
