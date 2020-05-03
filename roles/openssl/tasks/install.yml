@@ -41,7 +41,7 @@
       state: latest
     when: ansible_os_family == 'Debian'
 
-    - name: get openssl-{{ openssl_full_version }} / new
+  - name: get openssl-{{ openssl_full_version }} / new
     get_url:
       url: https://www.openssl.org/source/openssl-{{ openssl_full_version }}.tar.gz
       dest: /tmp/openssl-{{ openssl_full_version }}.tar.gz
