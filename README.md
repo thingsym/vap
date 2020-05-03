@@ -80,6 +80,14 @@ If you don't have a Box at first, begins from the download of Box. After provisi
 
 Access to the website **http://vap.local/**, if the server is running.
 
+### 7. Access to a Vagrant machine via SSH
+
+	vagrant ssh
+
+Or using ssh config.
+
+	vagrant ssh-config > ssh_config.cache
+	ssh -F ssh_config.cache default
 
 ## Default configuration Variables
 
@@ -163,7 +171,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	python_version     : 3.6.4       # 3.6.4
 	ruby_version       : 2.6.1       # 2.6.1
-	php_version        : 7.3.8       # 7.3.8
+	php_version        : 7.3.17       # 7.3.17
 	perl_version       : 5.26.1      # 5.26.1
 	node_version       : 12.13.0     # 12.13.0
 	go_version         : 1.11.5      # 1.11.5
@@ -187,7 +195,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 * `python_version` version of Python (default: `3.6.4`)
 * `ruby_version` version of Ruby (default: `2.6.1`)
-* `php_version` version of PHP (default: `7.3.8`)
+* `php_version` version of PHP (default: `7.3.17`)
 * `perl_version` version of Perl (default: `5.26.1`)
 * `node_version` version of Node.js (default: `12.13.0`)
 * `go_version` version of Go (default: `1.11.5`)
