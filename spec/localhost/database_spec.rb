@@ -72,7 +72,6 @@ elsif property["database"] == 'mariadb' then
 
   describe package('mariadb-server-10.4'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
-    it { should be_installed.with_version '10.4' }
   end
 
   describe command('apt-cache policy | grep mariadb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
