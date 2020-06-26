@@ -48,7 +48,7 @@
     when: not is_h2o_dir.stat.exists
 
   when:
-    - ansible_distribution == 'Ubuntu' 
+    - ansible_distribution == 'Ubuntu'
     - ansible_distribution_release == 'trusty'
 
 - name: stat custom h2o.j2
