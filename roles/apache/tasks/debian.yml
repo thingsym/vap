@@ -9,6 +9,30 @@
       update_cache: yes
   when:
     - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'focal'
+
+- block:
+  - name: apache2 repository installed (Debian)
+    apt_repository:
+      repo: ppa:ondrej/apache2
+
+  - name: apt-get update
+    apt:
+      update_cache: yes
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_release == 'bionic'
+
+- block:
+  - name: apache2 repository installed (Debian)
+    apt_repository:
+      repo: ppa:ondrej/apache2
+
+  - name: apt-get update
+    apt:
+      update_cache: yes
+  when:
+    - ansible_distribution == 'Ubuntu'
     - ansible_distribution_release == 'xenial'
 
 - name: apache2 installed
