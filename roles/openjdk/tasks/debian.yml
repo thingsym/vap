@@ -21,15 +21,14 @@
     - java_version == 1.8
     - ansible_distribution == 'Ubuntu'
 
-- name: OpenJDK 8 installed (Debian jessie)
+- name: OpenJDK 8 installed (Debian buster)
   apt:
     name: openjdk-8-jdk
     state: latest
-    default_release: jessie-backports
   when:
     - java_version == 1.8
     - ansible_distribution == 'Debian'
-    - ansible_distribution_release == 'jessie'
+    - ansible_distribution_release == 'buster'
 
 - name: OpenJDK 8 installed (Debian stretch)
   apt:
@@ -39,6 +38,16 @@
     - java_version == 1.8
     - ansible_distribution == 'Debian'
     - ansible_distribution_release == 'stretch'
+
+- name: OpenJDK 8 installed (Debian jessie)
+  apt:
+    name: openjdk-8-jdk
+    state: latest
+    default_release: jessie-backports
+  when:
+    - java_version == 1.8
+    - ansible_distribution == 'Debian'
+    - ansible_distribution_release == 'jessie'
 
 - name: OpenJDK 7 installed
   package:
