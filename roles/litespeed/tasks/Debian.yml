@@ -1,0 +1,29 @@
+
+- name: litespeed repository installed (Debian)
+  apt_repository:
+    filename: lst_debian_repo
+    repo: 'deb http://rpms.litespeedtech.com/debian/  {{ ansible_distribution_release }}  main'
+
+- name: GPG key added (Debian)
+  apt_key:
+    url: http://rpms.litespeedtech.com/debian/lst_debian_repo.gpg
+    state: present
+
+- name: GPG key added (Debian)
+  apt_key:
+    url: http://rpms.litespeedtech.com/debian/lst_repo.gpg
+    state: present
+
+- name: apt-get update
+  command: apt-get update
+
+- name: litespeed installed
+  package:
+    name: openlitespeed
+    state: latest
+
+- name: lsws enabled
+  service:
+    name: lsws
+    enabled: yes
+  notify: lsws restarted
