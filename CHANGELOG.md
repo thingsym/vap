@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1] - 2020.08.09
+
+* fix test case
+* bump up ruby 2.7.1
+* fix percona-release deb url
+* add reset apache2
+* load include task with ansible_os_family
+
 ## [0.4.0] - 2020.05.03
 
 - bump up php 7.3.17
