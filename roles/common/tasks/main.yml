@@ -1,46 +1,8 @@
 ---
-- name: include task (CentOS/RHEL 6)
-  include: centos6.yml
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int == 6
+- name: include task
+  include: '{{ ansible_os_family }}.yml'
 
-- name: include task (CentOS/RHEL 7)
-  include: centos7.yml
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int == 7
-
-- name: include task (Debian)
-  include: debian.yml
-  when: ansible_os_family == 'Debian'
-
-- name: edit PATH on .bashrc_vap
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
-    line: "export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:$PATH"
-    create: yes
-  become: yes
-  become_user: vagrant
-
-- name: edit PATH on .bashrc
-  lineinfile:
-    dest: "{{ home_dir }}/.bashrc"
-    line: "if [ -f ~/.bashrc_vap ]; then\n        . ~/.bashrc_vap\nfi"
-    create: yes
-  become: yes
-  become_user: vagrant
-  when: ansible_os_family == 'RedHat'
-
-- name: edit PATH on .profile
-  lineinfile:
-    dest: "{{ home_dir }}/.profile"
-    line: "if [ -f ~/.bashrc_vap ]; then\n        . ~/.bashrc_vap\nfi"
-    create: yes
-  become: yes
-  become_user: vagrant
-  when: ansible_os_family == 'Debian'
-
+- include: dotfiles.yml
 - include: swap.yml
 - include: kernel.yml
 - include: ssh-config.yml

@@ -43,6 +43,9 @@
     apt:
       deb: https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
 
+  - name: apt-key update
+    command: apt-key adv --keyserver keys.gnupg.net --recv-keys 8C718D3B5072E1F5
+
   - name: apt-get update
     command: apt-get update
 
@@ -52,7 +55,6 @@
         - mysql-community-server
         - mysql-community-client
         - mysql-common
-        - mysql-utilities
         - python-mysqldb
       state: latest
   when: ansible_os_family == 'Debian'

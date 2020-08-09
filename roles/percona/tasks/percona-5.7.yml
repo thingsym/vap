@@ -18,7 +18,7 @@
 - block:
   - name: percona-release repository installed (Debian)
     apt:
-      deb: "https://repo.percona.com/apt/percona-release_0.1-4.{{ ansible_distribution_release }}_all.deb"
+      deb: "https://repo.percona.com/apt/percona-release_latest.{{ ansible_distribution_release }}_all.deb"
 
   - name: apt-get update
     apt:
@@ -30,7 +30,7 @@
         - percona-server-server-5.7
         - percona-server-client-5.7
         - percona-server-common-5.7
-        - libperconaserverclient18.1-dev
+        - libperconaserverclient20-dev
         - python-mysqldb
       state: latest
   when: ansible_os_family == 'Debian'

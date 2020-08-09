@@ -5,8 +5,10 @@
 
 vm_box                = 'centos/7'
 # vm_box                = 'centos/6'
+# vm_box                = 'debian/buster64'
 # vm_box                = 'debian/stretch64'
 # vm_box                = 'debian/jessie64'
+# vm_box                = 'ubuntu/bionic64'
 # vm_box                = 'ubuntu/xenial64'
 # vm_box                = 'ubuntu/trusty64'
 

@@ -170,7 +170,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 	# If the version is set to 0, the programming language does not install
 
 	python_version     : 3.6.4       # 3.6.4
-	ruby_version       : 2.6.1       # 2.6.1
+	ruby_version       : 2.7.1       # 2.7.1
 	php_version        : 7.3.17       # 7.3.17
 	perl_version       : 5.26.1      # 5.26.1
 	node_version       : 12.13.0     # 12.13.0
@@ -194,7 +194,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 #### Programming languages Settings ##
 
 * `python_version` version of Python (default: `3.6.4`)
-* `ruby_version` version of Ruby (default: `2.6.1`)
+* `ruby_version` version of Ruby (default: `2.7.1`)
 * `php_version` version of PHP (default: `7.3.17`)
 * `perl_version` version of Perl (default: `5.26.1`)
 * `node_version` version of Node.js (default: `12.13.0`)
@@ -416,4 +416,4 @@ VAP is distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 [thingsym](https://github.com/thingsym)
 
-Copyright (c) 2016-2018 thingsym
+Copyright (c) 2016-2020 thingsym

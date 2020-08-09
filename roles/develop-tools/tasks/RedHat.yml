@@ -12,4 +12,5 @@
       - libcurl
       - libcurl-devel
       - jq
+      - tree
     state: latest

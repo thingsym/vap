@@ -16,7 +16,7 @@
       url: https://dl.yarnpkg.com/debian/pubkey.gpg
       state: present
 
-  - name: tatsushid repository installed (Debian)
+  - name: yarn repository installed (Debian)
     apt_repository:
       repo: "deb https://dl.yarnpkg.com/debian/ stable main"
       filename: yarn

@@ -48,6 +48,18 @@
     - ansible_distribution_major_version|int == 7
 
 - block:
+  - name: MariaDB apt_key installed (Ubuntu/focal)
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xF1656F24C74CD1D8"
+    when: ansible_distribution_release == 'focal'
+
+  - name: MariaDB apt_key installed (Ubuntu/bionic)
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: "0xF1656F24C74CD1D8"
+    when: ansible_distribution_release == 'bionic'
+
   - name: MariaDB apt_key installed (Ubuntu/trusty)
     apt_key:
       keyserver: keyserver.ubuntu.com
