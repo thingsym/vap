@@ -158,7 +158,7 @@ elsif property["server"] == 'h2o' then
     its(:stdout) { should match /vagrant/ }
   end
 
-  if property["fastcgi"] == 'none' then
+  if property["fastcgi"] == 'php-fpm' then
     describe command("ps -C php-cgi -o user") do
       its(:stdout) { should match /vagrant/ }
     end
