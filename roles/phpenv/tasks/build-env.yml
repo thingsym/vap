@@ -13,8 +13,35 @@
       - libtidy-devel
       - libxslt-devel
       - re2c
+      - sqlite
+      - sqlite-devel
+      - oniguruma
+      - oniguruma-devel
     state: latest
   when: ansible_os_family == 'RedHat'
+
+- block:
+  - name: remove old libzip
+    yum:
+      name:
+        - libzip
+        - libzip-devel
+      state: removed
+
+  - name: remi repository installed (CentOS/RHEL 7)
+    yum:
+      name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+  - name: install libzip via remi for php7.4
+    yum:
+      name:
+        - libzip-last
+        - libzip-last-devel
+      enablerepo: "remi"
+      state: latest
+  when:
+    - ansible_os_family == 'RedHat'
+    - php_version is match("^7")
 
 - name: build environment (Debian)
   package:
