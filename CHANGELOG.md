@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.2] - 2020.08.10
+
+* remove lowcase yml file
+* support php 7.4
+
 ## [0.4.1] - 2020.08.09
 
 * fix test case
