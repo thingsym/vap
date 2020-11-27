@@ -10,8 +10,7 @@
   package:
     name: httpd24u-mod_ssl
     state: latest
-  when:
-    - ssl == true
+  when: ssl == true
 
 - name: mod_proxy_fcgi installed
   package:

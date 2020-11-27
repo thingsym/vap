@@ -31,14 +31,14 @@
     name: mariadb
     state: restarted
     enabled: yes
-  when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version|int != 6) or (ansible_distribution == 'Ubuntu' and ansible_distribution_release != 'trusty')
+  when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version|int > 6) or (ansible_distribution == 'Ubuntu' and ansible_distribution_release != 'trusty')
 
 - name: mysql started and enabled
   service:
     name: mysql
     state: restarted
     enabled: yes
-  when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version|int == 6) or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+  when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version|int <= 6) or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
 
 - name: set MariaDB root password (v10.3 or earlier)
   mysql_user:
@@ -51,8 +51,7 @@
     - 127.0.0.1
     - ::1
   ignore_errors: yes
-  when:
-    - mariadb_version < 10.4
+  when: mariadb_version < 10.4
 
 - block:
   - name: set MariaDB root password (v10.4 or later)
@@ -78,8 +77,7 @@
       - 127.0.0.1
       - ::1
     ignore_errors: yes
-  when:
-    - mariadb_version >= 10.4
+  when: mariadb_version >= 10.4
 
 - name: Delete blank MariaDB users
   mysql_user:

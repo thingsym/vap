@@ -40,7 +40,7 @@
         - MariaDB-common
         - MySQL-python
       state: latest
-    when: (ansible_distribution_major_version|int == 6 or ansible_distribution_major_version|int == 7)
+    when: ansible_distribution_major_version|int <= 7
 
   - block:
     - name: boost-program-options installed
@@ -65,11 +65,9 @@
           - python2-PyMySQL
           - python3-PyMySQL
         state: latest
-    when:
-      - ansible_distribution_major_version|int == 8
+    when: ansible_distribution_major_version|int >= 8
 
-  when:
-    - ansible_distribution == 'CentOS'
+  when: ansible_distribution == 'CentOS'
 
 - block:
   - name: MariaDB apt_key installed (Ubuntu/focal)
