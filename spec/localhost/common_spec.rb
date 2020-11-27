@@ -20,7 +20,7 @@ describe command('apt-cache policy | grep ansible'), :if => os[:family] == 'debi
   its(:stdout) { should match /#{Regexp.escape('ansible')}/ }
 end
 
-describe package('libselinux-python'), :if => os[:family] == 'redhat' do
+describe package('libselinux-python'), :if => os[:family] == 'redhat' && os[:release] <= '7' do
   it { should be_installed }
 end
 
@@ -73,7 +73,11 @@ describe yumrepo('epel'), :if => os[:family] == 'redhat' do
   it { should exist }
 end
 
-describe yumrepo('ius'), :if => os[:family] == 'redhat' do
+describe yumrepo('ius'), :if => os[:family] == 'redhat' && os[:release] <= '7' do
+  it { should exist }
+end
+
+describe yumrepo('PowerTools'), :if => os[:family] == 'redhat' && os[:release] >= '8' do
   it { should exist }
 end
 

@@ -175,7 +175,11 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     its(:stdout) { should match /mysqld is alive/ }
   end
 
-  describe package('MySQL-python'), :if => os[:family] == 'redhat' do
+  describe package('MySQL-python'), :if => os[:family] == 'redhat' && (os[:release] <= '7') do
+    it { should be_installed }
+  end
+
+  describe package('python3-PyMySQL'), :if => os[:family] == 'redhat' && os[:release] >= '8' do
     it { should be_installed }
   end
 
