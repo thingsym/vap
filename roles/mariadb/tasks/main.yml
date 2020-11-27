@@ -84,7 +84,7 @@
 - name: Delete blank MariaDB users
   mysql_user:
     name: ""
-    host: localhost
+    host_all: true
     state: absent
     login_user: root
     login_password: "{{ db_root_password }}"
