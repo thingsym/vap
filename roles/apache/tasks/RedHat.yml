@@ -1,11 +1,4 @@
 ---
-- name: httpd installed
-  package:
-    name:
-      - httpd24u
-      - httpd24u-devel
-    state: latest
-
 - name: include task (CentOS/RHEL 6)
   include: centos6.yml
   when: ansible_distribution_major_version|int == 6
@@ -14,11 +7,6 @@
   include: centos7.yml
   when: ansible_distribution_major_version|int == 7
 
-- name: mod_ssl installed
-  package:
-    name: httpd24u-mod_ssl
-    state: latest
-  when: ssl == true
 
 - name: stat ssl.conf
   stat:
