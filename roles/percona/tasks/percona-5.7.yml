@@ -11,8 +11,22 @@
         - Percona-Server-client-57
         - Percona-Server-shared-57
         - Percona-Server-devel-57
+      state: latest
+
+  - name: python-PyMySQL installed (CentOS/RHEL 7 or 6)
+    package:
+      name:
         - MySQL-python
       state: latest
+    when: ansible_distribution_major_version|int == 6 or ansible_distribution_major_version|int == 7
+
+  - name: python-PyMySQL installed (CentOS/RHEL 8)
+    package:
+      name:
+        - python3-PyMySQL
+      state: latest
+    when: ansible_distribution_major_version|int == 8
+
   when: ansible_os_family == 'RedHat'
 
 - block:

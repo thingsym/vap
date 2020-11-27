@@ -7,23 +7,9 @@
       baseurl: http://yum.mariadb.org/10.2/centos6-amd64
       gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
+    when:
+      - ansible_distribution_major_version|int == 6
 
-  - name: MariaDB installed (CentOS/RHEL 6)
-    package:
-      name:
-        - MariaDB-server
-        - MariaDB-client
-        - MariaDB-shared
-        - MariaDB-devel
-        - MariaDB-common
-        - MariaDB-compat
-        - MySQL-python
-      state: latest
-  when:
-    - ansible_distribution == 'CentOS'
-    - ansible_distribution_major_version|int == 6
-
-- block:
   - name: MariaDB 10.2 repository installed (CentOS/RHEL 7)
     yum_repository:
       name: mariadb
@@ -31,21 +17,59 @@
       baseurl: http://yum.mariadb.org/10.2/centos7-amd64
       gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
+    when:
+      - ansible_distribution_major_version|int == 7
 
-  - name: MariaDB 10.2 installed (CentOS/RHEL 7)
+  - name: MariaDB 10.2 repository installed (CentOS/RHEL 8)
+    yum_repository:
+      name: mariadb
+      description: MariaDB 10.2 centos repository
+      baseurl: http://yum.mariadb.org/10.2/centos8-amd64
+      gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+      gpgcheck: yes
+    when:
+      - ansible_distribution_major_version|int == 8
+
+  - name: MariaDB installed (CentOS/RHEL 6 or 7)
     package:
       name:
         - MariaDB-server
         - MariaDB-client
         - MariaDB-shared
-        - mariadb-devel
-        - mariadb-libs
-        - mariadb-embedded
+        - MariaDB-devel
+        - MariaDB-common
         - MySQL-python
       state: latest
+    when: (ansible_distribution_major_version|int == 6 or ansible_distribution_major_version|int == 7)
+
+  - block:
+    - name: boost-program-options installed
+      dnf:
+        name: boost-program-options
+        state: latest
+
+    - name: MariaDB 10.2 installed (CentOS/RHEL 8)
+      dnf:
+        name:
+          - MariaDB-server
+          - MariaDB-client
+          - MariaDB-shared
+          - MariaDB-devel
+          - MariaDB-common
+        disablerepo: AppStream
+        state: latest
+
+    - name: python-PyMySQL installed (CentOS/RHEL 8)
+      dnf:
+        name:
+          - python2-PyMySQL
+          - python3-PyMySQL
+        state: latest
+    when:
+      - ansible_distribution_major_version|int == 8
+
   when:
     - ansible_distribution == 'CentOS'
-    - ansible_distribution_major_version|int == 7
 
 - block:
   - name: MariaDB apt_key installed (Ubuntu/focal)

@@ -8,9 +8,22 @@
   package:
     name:
       - yum-utils
-      - python-pip
       - libcurl
       - libcurl-devel
       - jq
       - tree
     state: latest
+
+- name: libraries installed (CentOS/RHEL 7 or earlier)
+  package:
+    name:
+      - python2-pip
+    state: latest
+  when: ansible_distribution_major_version|int <= 7
+
+- name: libraries installed (CentOS/RHEL 8 or later)
+  package:
+    name:
+      - python3-pip
+    state: latest
+  when: ansible_distribution_major_version|int >= 8

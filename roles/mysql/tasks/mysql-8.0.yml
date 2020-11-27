@@ -10,6 +10,11 @@
       name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
     when: ansible_distribution_major_version|int == 7
 
+  - name: mysql repository installed (CentOS/RHEL 8)
+    yum:
+      name: https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm
+    when: ansible_distribution_major_version|int == 8
+
   - name: yum-config enable mysql80-community
     command: yum-config-manager --enable mysql80-community
 
