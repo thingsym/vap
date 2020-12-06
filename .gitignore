@@ -4,3 +4,5 @@
 *.retry
 *.cache
 /html
+
+ssh_config.cache

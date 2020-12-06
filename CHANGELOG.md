@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.4] - 2020.12.06
+
+* add npm-installer script
+* remove prestissimo for Composer 2.0
+* load include task with ansible_distribution
+* include distribution major version with repository uri
+* fix conditional statement
+* fix repository uri wth percona
+* fix host with database
+* fix repository uri wth litespeed
+* support CentOS 8
+
 ## [0.4.3] - 2020.08.10
 
 * remove lowcase yml file

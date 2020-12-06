@@ -1,13 +1,7 @@
 ---
-- name: litespeed repository installed (CentOS/RHEL 6)
+- name: litespeed repository installed (CentOS/RHEL)
   yum:
-    name: http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el6.noarch.rpm
-  when: ansible_distribution_major_version|int == 6
-
-- name: litespeed repository installed (CentOS/RHEL 7)
-  yum:
-    name: http://rpms.litespeedtech.com/centos/litespeed-repo-1.1-1.el7.noarch.rpm
-  when: ansible_distribution_major_version|int == 7
+    name: "http://rpms.litespeedtech.com/centos/litespeed-repo-1.2-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
 
 - name: litespeed installed
   package:
