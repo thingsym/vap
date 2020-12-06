@@ -3,14 +3,15 @@
 
 ## Vagrant Settings ##
 
+# vm_box                = 'centos/8'
 vm_box                = 'centos/7'
 # vm_box                = 'centos/6'
-# vm_box                = 'debian/buster64'
-# vm_box                = 'debian/stretch64'
-# vm_box                = 'debian/jessie64'
-# vm_box                = 'ubuntu/bionic64'
-# vm_box                = 'ubuntu/xenial64'
-# vm_box                = 'ubuntu/trusty64'
+# vm_box                = 'debian/buster64'  # Debian 10.0
+# vm_box                = 'debian/stretch64' # Debian 9.0
+# vm_box                = 'debian/jessie64'  # Debian 8.0
+# vm_box                = 'ubuntu/bionic64' # Ubuntu 18.04
+# vm_box                = 'ubuntu/xenial64' # Ubuntu 16.04
+# vm_box                = 'ubuntu/trusty64' # Ubuntu 14.04
 
 vm_box_version        = '>= 0'
 vm_ip                 = '192.168.59.63'
@@ -19,7 +20,10 @@ vm_document_root      = '/var/www/html'
 
 public_ip             = ''
 
-forwarded_port        = []
+forwarded_port        = [
+  3306,
+  7080
+]
 
 vbguest_auto_update   = true
 synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
@@ -137,7 +141,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.version = ansible_version
     ansible.inventory_path = 'hosts/local'
     ansible.playbook = 'site.yml'
-    ansible.verbose = 'v'
+    ansible.verbose = 'vvv'
     ansible.extra_vars = {
       HOSTNAME: vm_hostname,
       DOCUMENT_ROOT: vm_document_root
