@@ -1,4 +1,4 @@
-openssl_install: none    # source|package|none
+openssl_install: package    # source|package|none
 
 openssl_release: old
 openssl_version: 1.1.1
