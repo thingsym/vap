@@ -21,13 +21,6 @@
   when: ansible_os_family == 'RedHat'
 
 - block:
-  - name: remove old libzip
-    yum:
-      name:
-        - libzip
-        - libzip-devel
-      state: removed
-
   - name: remi repository installed (CentOS/RHEL)
     yum:
       name: https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
@@ -36,9 +29,9 @@
   - name: install libzip via remi for php7.4
     yum:
       name:
-        - libzip-last
-        - libzip-last-devel
-      enablerepo: "remi"
+        - libzip
+        - libzip-devel
+      enablerepo: remi
       state: latest
   when:
     - ansible_os_family == 'RedHat'
