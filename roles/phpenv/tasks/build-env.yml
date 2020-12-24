@@ -28,9 +28,9 @@
         - libzip-devel
       state: removed
 
-  - name: remi repository installed (CentOS/RHEL 7)
+  - name: remi repository installed (CentOS/RHEL)
     yum:
-      name: https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+      name: https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
       disable_gpg_check: yes
 
   - name: install libzip via remi for php7.4
