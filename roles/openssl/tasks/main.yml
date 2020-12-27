@@ -1,9 +1,4 @@
 ---
-- name: stat /tmp/openssl-{{ openssl_version }}
-  stat:
-    path: /tmp/openssl-{{ openssl_version }}
-  register: is_tmp_openssl_dir
-
 - name: include task
   include: install-source.yml
   when: openssl_install == 'source'
