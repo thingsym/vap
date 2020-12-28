@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.5] - 2020.12.28
+
+* add deprecated ended date with box
+* bump up programming language versions
+* fix installing libzip for php 7.4
+* fix openssl task
+* fix rpm uri with ansible_distribution_major_version
+* fix conditional statement
+* add disable gpg_check, fix Failed to validate GPG signature
+* improve loading include task with ansible_distribution and ansible_distribution_major_version
+
 ## [0.4.4] - 2020.12.06
 
 * add npm-installer script

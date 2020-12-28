@@ -5,13 +5,13 @@
 
 # vm_box                = 'centos/8'
 vm_box                = 'centos/7'
-# vm_box                = 'centos/6'
+# vm_box                = 'centos/6' # Deprecated ended 2020-11-30
 # vm_box                = 'debian/buster64'  # Debian 10.0
 # vm_box                = 'debian/stretch64' # Debian 9.0
-# vm_box                = 'debian/jessie64'  # Debian 8.0
+# vm_box                = 'debian/jessie64'  # Debian 8.0 # Deprecated ended 2020-06-30
 # vm_box                = 'ubuntu/bionic64' # Ubuntu 18.04
 # vm_box                = 'ubuntu/xenial64' # Ubuntu 16.04
-# vm_box                = 'ubuntu/trusty64' # Ubuntu 14.04
+# vm_box                = 'ubuntu/trusty64' # Ubuntu 14.04 # Deprecated ended 2019-04-25
 
 vm_box_version        = '>= 0'
 vm_ip                 = '192.168.59.63'

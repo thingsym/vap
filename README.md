@@ -251,13 +251,13 @@ VAP will be built in the directory structure of the following minimum unit.
 
 * CentOS 8
 * CentOS 7
-* CentOS 6
+* CentOS 6 (Deprecated ended 2020-11-30)
 * Debian 10 Buster
 * Debian 9 Stretch
-* Debian 8 Jessie
+* Debian 8 Jessie (Deprecated ended 2020-06-30)
 * Ubuntu 18.04 Bionic Beaver
 * Ubuntu 16.04 Xenial
-* Ubuntu 14.04 Trusty
+* Ubuntu 14.04 Trusty (Deprecated ended 2019-04-25)
 
 To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
