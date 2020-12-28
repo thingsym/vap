@@ -29,7 +29,6 @@
         - mysql-community-common
         - mysql-community-devel
         - mysql-community-libs
-        - mysql-utilities
         - MySQL-python
       state: latest
   when: ansible_os_family == 'RedHat'
