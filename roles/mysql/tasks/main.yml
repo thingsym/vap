@@ -70,7 +70,7 @@
     shell: mysql -uroot -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "SET PASSWORD=PASSWORD('{{ db_root_password }}');"
   when:
     - ansible_os_family == 'RedHat'
-    - mysql_version == 5.7
+    - mysql_version is version('5.7', '==')
 
 - name: set mysql 8.0 root password (Debian)
   mysql_user:

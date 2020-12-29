@@ -3,7 +3,7 @@
   package:
     name: openjdk-9-jdk
     state: latest
-  when: java_version == 1.9
+  when: java_version is version('1.9', '==')
 
 - block:
   - name: ppa:openjdk-r/ppa repository installed
@@ -16,28 +16,28 @@
       name: openjdk-8-jdk
       state: latest
   when:
-    - java_version == 1.8
+    - java_version is version('1.8', '==')
     - ansible_distribution == 'Ubuntu'
 
 - block:
-  - name: OpenJDK 8 installed (Debian buster or stretch)
+  - name: OpenJDK 8 installed (Debian 9 or later)
     apt:
       name: openjdk-8-jdk
       state: latest
-    when: ansible_distribution_release == 'buster' or ansible_distribution_release == 'stretch'
+    when: ansible_distribution_major_version is version('9', '<=')
 
   - name: OpenJDK 8 installed (Debian jessie)
     apt:
       name: openjdk-8-jdk
       state: latest
       default_release: jessie-backports
-    when: ansible_distribution_release == 'jessie'
+    when: ansible_distribution_major_version is version('8', '==')
   when:
-    - java_version == 1.8
+    - java_version is version('1.8', '==')
     - ansible_distribution == 'Debian'
 
 - name: OpenJDK 7 installed
   package:
     name: openjdk-7-jdk
     state: latest
-  when: java_version == 1.7
+  when: java_version is version('1.7', '==')

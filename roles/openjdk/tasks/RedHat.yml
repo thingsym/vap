@@ -3,16 +3,16 @@
   package:
     name: java-1.8.0-openjdk
     state: latest
-  when: java_version == 1.8
+  when: java_version is version('1.8', '==')
 
 - name: OpenJDK 7 installed
   package:
     name: java-1.7.0-openjdk
     state: latest
-  when: java_version == 1.7
+  when: java_version is version('1.7', '==')
 
 - name: OpenJDK 6 installed
   package:
     name: java-1.6.0-openjdk
     state: latest
-  when: java_version == 1.6
+  when: java_version is version('1.6', '==')

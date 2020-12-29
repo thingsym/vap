@@ -9,7 +9,7 @@
       update_cache: yes
   when:
     - ansible_distribution == 'Ubuntu'
-    - ansible_distribution_release == 'focal'
+    - ansible_distribution_major_version is version('20', '==')
 
 - block:
   - name: apache2 repository installed (Debian)
@@ -21,7 +21,7 @@
       update_cache: yes
   when:
     - ansible_distribution == 'Ubuntu'
-    - ansible_distribution_release == 'bionic'
+    - ansible_distribution_major_version is version('18', '==')
 
 - block:
   - name: apache2 repository installed (Debian)
@@ -33,7 +33,7 @@
       update_cache: yes
   when:
     - ansible_distribution == 'Ubuntu'
-    - ansible_distribution_release == 'xenial'
+    - ansible_distribution_major_version is version('16', '==')
 
 - name: apache2 installed
   package:
