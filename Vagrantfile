@@ -29,6 +29,7 @@ forwarded_port        = [
 vbguest_auto_update   = true
 synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 
+ansible_install       = true
 ansible_install_mode  = :default    # :default|:pip
 ansible_version       = 'latest'    # only :pip required
 
@@ -138,6 +139,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => provision
 
   config.vm.provision "ansible_local" do |ansible|
+    ansible.install = ansible_install
     ansible.install_mode = ansible_install_mode
     ansible.version = ansible_version
     ansible.inventory_path = 'hosts/local'
