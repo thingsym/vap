@@ -50,6 +50,9 @@
     apt:
       deb: https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
 
+  - name: apt-key update
+    command: apt-key adv --keyserver keys.gnupg.net --recv-keys 8C718D3B5072E1F5
+
   - name: apt-get update
     command: apt-get update
 
@@ -59,6 +62,27 @@
         - mysql-community-server
         - mysql-community-client
         - mysql-common
-        - python-mysqldb
       state: latest
   when: ansible_os_family == 'Debian'
+
+- name: python-mysqldb installed
+  package:
+    name: python-mysqldb
+    state: latest
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_major_version is version('18', '<=')
+
+- name: python3-mysqldb installed
+  package:
+    name: python3-mysqldb
+    state: latest
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_major_version is version('20', '>=')
+
+- name: python-mysqldb installed
+  package:
+    name: python-mysqldb
+    state: latest
+  when: ansible_distribution == 'Debian'

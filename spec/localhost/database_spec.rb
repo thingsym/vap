@@ -183,7 +183,19 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' || prope
     it { should be_installed }
   end
 
-  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('python3-mysqldb'), :if => os[:family] == 'ubuntu' && os[:release] == '20.04' do
+    it { should be_installed }
+  end
+
+  describe package('python-mysqldb'), :if => os[:family] == 'ubuntu' && os[:release] == '18.04' do
+    it { should be_installed }
+  end
+
+  describe package('python-mysqldb'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    it { should be_installed }
+  end
+
+  describe package('python-mysqldb'), :if => os[:family] == 'debian' do
     it { should be_installed }
   end
 
