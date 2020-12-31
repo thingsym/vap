@@ -37,7 +37,7 @@
         disablerepo: AppStream
         state: latest
 
-    - name: python-PyMySQL installed (CentOS/RHEL 8)
+    - name: python3-PyMySQL installed (CentOS/RHEL 8)
       dnf:
         name:
           - python2-PyMySQL

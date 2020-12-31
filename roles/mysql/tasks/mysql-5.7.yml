@@ -42,7 +42,7 @@
       state: latest
     when: ansible_distribution_major_version is version('7', '<=')
 
-  - name: python-PyMySQL installed (CentOS/RHEL 8)
+  - name: python3-PyMySQL installed (CentOS/RHEL 8)
     package:
       name:
         - python3-PyMySQL
