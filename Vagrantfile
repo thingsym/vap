@@ -3,7 +3,7 @@
 
 ## Vagrant Settings ##
 
-# vm_box                = 'centos/8'
+# vm_box                = 'centos/8' # Deprecated ended 2021-12-31
 vm_box                = 'centos/7'
 # vm_box                = 'centos/6' # Deprecated ended 2020-11-30
 # vm_box                = 'debian/buster64'  # Debian 10.0
