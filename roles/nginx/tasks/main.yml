@@ -47,14 +47,6 @@
   notify: nginx restarted
   when: not is_custom_nginx_conf.stat.exists
 
-# - name: change user form vagrant to www-data
-#   replace:
-#     dest: /etc/nginx/nginx.conf
-#     regexp: "user              vagrant;"
-#     replace: "user              www-data;"
-#   notify: nginx restarted
-#   when: ansible_os_family == 'Debian'
-
 - name: stat custom nginx.www.conf.j2
   stat:
     path: /vagrant/config/nginx.www.conf.j2
