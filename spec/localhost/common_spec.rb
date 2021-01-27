@@ -16,10 +16,6 @@ describe command('ansible --version') do
   its(:exit_status) { should eq 0 }
 end
 
-describe command('apt-cache policy | grep ansible'), :if => os[:family] == 'debian' do
-  its(:stdout) { should match /#{Regexp.escape('ansible')}/ }
-end
-
 describe package('libselinux-python'), :if => os[:family] == 'redhat' && os[:release] <= '7' do
   it { should be_installed }
 end

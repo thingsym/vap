@@ -80,6 +80,10 @@ if property["php_version"] != 0 then
       it { should be_directory }
     end
 
+    describe file("/var/lib/apache2/module/enabled_by_admin"), :if => os[:family] == 'debian' do
+      it { should be_directory }
+    end
+
     if property["fastcgi"] == 'none' then
       describe file('/etc/httpd/conf.d/php.conf'), :if => os[:family] == 'redhat' do
         it { should be_file }
@@ -154,15 +158,15 @@ if property["php_version"] != 0 then
       its(:value) { should eq '32M' }
     end
 
-    context php_config('default_charset') do
+    context  php_config('default_charset') do
       its(:value) { should eq 'UTF-8' }
     end
 
-    context php_config('mbstring.language') do
+    context  php_config('mbstring.language') do
       its(:value) { should eq 'neutral' }
     end
 
-    context php_config('mbstring.internal_encoding') do
+    context  php_config('mbstring.internal_encoding') do
       its(:value) { should eq 'UTF-8' }
     end
 
@@ -186,6 +190,14 @@ if property["php_version"] != 0 then
       its(:value) { should eq 0 }
     end
 
+    context php_config('sendmail_path') do
+      its(:value) { should eq '/usr/local/bin/mhsendmail' }
+    end
+
+  end
+
+  describe package('patch'), :if => os[:family] == 'redhat' do
+    it { should be_installed }
   end
 
   describe package('libxml2-devel'), :if => os[:family] == 'redhat' do
@@ -280,9 +292,9 @@ if property["php_version"] != 0 then
     it { should be_installed }
   end
 
- # describe package('libxslt-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
- #    it { should be_installed }
- #  end
+  # describe package('libxslt-dev'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  #    it { should be_installed }
+  #  end
 
   describe package('re2c'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
@@ -304,12 +316,7 @@ if property["php_version"] != 0 then
     it { should be_installed }
   end
 
-  describe package('libtool-bin'), :if => os[:family] == 'debian' do
+  describe package('libtool-bin'), :if => os[:family] == 'ubuntu' && os[:release] >= '16.04' do
     it { should be_installed }
   end
-
-  describe package('libtool-bin'), :if => os[:family] == 'ubuntu' && os[:release] == '12.04' do
-    it { should be_installed }
-  end
-
 end
