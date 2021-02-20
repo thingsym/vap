@@ -294,7 +294,6 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 	* [php-build](https://github.com/php-build/php-build)
 	* [phpenv-composer](https://github.com/ngyuki/phpenv-composer)
 	* [phpenv-apache-version](https://github.com/thingsym/phpenv-apache-version)
-	* [packagist.jp repository](https://packagist.jp/)
 * [Perl](https://www.perl.org/)
 	* via [plenv](https://github.com/tokuhirom/plenv)
 	* [Perl-Build](https://github.com/tokuhirom/Perl-Build)
