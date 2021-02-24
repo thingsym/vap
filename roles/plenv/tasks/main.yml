@@ -51,6 +51,14 @@
   become: yes
   become_user: vagrant
 
+- name: cpm module installed
+  shell: curl -fsSL --compressed https://git.io/cpm > "{{ plenv_dir }}/bin/cpm"
+
+- name: chmod 755
+  file:
+    path: "{{ plenv_dir }}/bin/cpm"
+    mode: 0755
+
 - name: Carton module installed
   command: "{{ plenv_dir }}/shims/cpanm Carton"
   become: yes
