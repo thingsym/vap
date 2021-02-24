@@ -1,5 +1,5 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.4.5"
+- name: "VAP (Vagrant Ansible Programming languages) v0.4.6"
   hosts: localhost
   remote_user: vagrant
   become: yes
@@ -18,14 +18,15 @@
     - { role: nginx,           tags: [nginx],       when: "server == 'nginx'" }
     - { role: h2o,             tags: [h2o],         when: "server == 'h2o'" }
     - { role: litespeed,       tags: [litespeed],   when: "server == 'litespeed'" }
-    - { role: plenv,           tags: [plenv],       when: "perl_version != 0" }
-    - { role: rbenv,           tags: [rbenv],       when: "ruby_version != 0" }
-    - { role: phpenv,          tags: [phpenv],      when: "php_version != 0" }
-    - { role: pyenv,           tags: [pyenv],       when: "python_version != 0" }
-    - { role: nodenv,          tags: [nodenv],      when: "node_version != 0" }
-    - { role: goenv,           tags: [goenv],       when: "go_version != 0" }
-    - { role: openjdk,         tags: [openjdk],     when: "java_version != 0" }
-    - { role: jenv,            tags: [jenv],        when: "java_version != 0" }
-    - { role: scalaenv,        tags: [scalaenv],    when: "scala_version != 0 and java_version != 0" }
-    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin == true and php_version != 0 and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
+    - { role: plenv,           tags: [plenv],       when: "perl_version is version('0', '!=')" }
+    - { role: rbenv,           tags: [rbenv],       when: "ruby_version is version('0', '!=')" }
+    - { role: phpenv,          tags: [phpenv],      when: "php_version is version('0', '!=')" }
+    - { role: pyenv,           tags: [pyenv],       when: "python_version is version('0', '!=')" }
+    - { role: nodenv,          tags: [nodenv],      when: "node_version is version('0', '!=')" }
+    - { role: goenv,           tags: [goenv],       when: "go_version is version('0', '!=')" }
+    - { role: openjdk,         tags: [openjdk],     when: "java_version is version('0', '!=')" }
+    - { role: jenv,            tags: [jenv],        when: "java_version is version('0', '!=')" }
+    - { role: scalaenv,        tags: [scalaenv],    when: "scala_version is version('0', '!=') and java_version is version('0', '!=')" }
+    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin == true and php_version is version('0', '!=') and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
+    - { role: docker,          tags: [docker],      when: "docker == true" }
     - { role: after-command,   tags: [after-command] }

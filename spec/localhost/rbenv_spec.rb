@@ -14,17 +14,17 @@ if property["ruby_version"] != 0 then
     its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/bin\/rbenv/) }
   end
 
-  describe command('which ruby') do
-    let(:sudo_options) { '-u vagrant -i' }
-    its(:exit_status) { should eq 0 }
-    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/shims\/ruby/) }
-  end
-
   [property["ruby_version"]].each do |ruby_version|
     describe command("rbenv versions | grep #{ruby_version}") do
       let(:sudo_options) { '-u vagrant -i' }
       its(:stdout) { should match(/#{Regexp.escape(ruby_version)}/) }
     end
+  end
+
+  describe command('which ruby') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.rbenv\/shims\/ruby/) }
   end
 
   describe command('ruby -v') do

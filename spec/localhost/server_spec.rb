@@ -50,6 +50,10 @@ if property["server"] == 'apache' then
     it { should be_running }
   end
 
+  describe command("httpd -V | grep 'Server MPM'"), :if => os[:family] == 'redhat' do
+    its(:stdout) { should match(/Prefork/) }
+  end
+
   describe command("apachectl -M | grep 'mpm_prefork_module'"), :if => property["apache_mpm"] == 'prefork' do
     its(:stdout) { should match(/mpm_prefork_module/) }
   end
@@ -68,6 +72,10 @@ if property["server"] == 'apache' then
 
   describe command("ps -C httpd -o user"), :if => os[:family] == 'redhat' do
     its(:stdout) { should match /vagrant/ }
+  end
+
+  describe command("apachectl -M | grep 'rewrite_module'") do
+    its(:stdout) { should match(/rewrite_module/) }
   end
 
   describe file('/etc/httpd/conf/httpd.conf'), :if => os[:family] == 'redhat' do
@@ -151,8 +159,10 @@ elsif property["server"] == 'nginx' then
     it { should be_file }
   end
 
-  # describe command("nginx -V") do
-  #   its(:stdout) { should match /http_v2_module/ }
+  # if property["ssl"] then
+  #   describe command("nginx -V") do
+  #     its(:stdout) { should match /http_v2_module/ }
+  #   end
   # end
 
 elsif property["server"] == 'h2o' then

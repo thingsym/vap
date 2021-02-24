@@ -63,6 +63,16 @@ if property["perl_version"] != 0 then
     its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/carton/) }
   end
 
+  describe command('which cpm') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
+  describe command('cpm --version') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+  end
+
   describe command('carton -v') do
     let(:sudo_options) { '-u vagrant -i' }
     its(:exit_status) { should eq 0 }

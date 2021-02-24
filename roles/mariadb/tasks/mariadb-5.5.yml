@@ -18,7 +18,7 @@
         - MariaDB-common
         - MySQL-python
       state: latest
-    when: ansible_distribution_major_version|int <= 7
+    when: ansible_distribution_major_version is version('7', '<=')
 
   - block:
     - name: boost-program-options installed
@@ -37,13 +37,13 @@
         disablerepo: AppStream
         state: latest
 
-    - name: python-PyMySQL installed (CentOS/RHEL 8)
+    - name: python3-PyMySQL installed (CentOS/RHEL 8)
       dnf:
         name:
           - python2-PyMySQL
           - python3-PyMySQL
         state: latest
-    when: ansible_distribution_major_version|int >= 8
+    when: ansible_distribution_major_version is version('8', '>=')
 
   when: ansible_distribution == 'CentOS'
 
@@ -52,19 +52,19 @@
     apt_key:
       keyserver: keyserver.ubuntu.com
       id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_release == 'focal'
+    when: ansible_distribution_major_version is version('20', '==')
 
   - name: MariaDB apt_key installed (Ubuntu/bionic)
     apt_key:
       keyserver: keyserver.ubuntu.com
       id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_release == 'bionic'
+    when: ansible_distribution_major_version is version('18', '==')
 
   - name: MariaDB apt_key installed (Ubuntu/trusty)
     apt_key:
       keyserver: keyserver.ubuntu.com
       id: "0xcbcb082a1bb943db"
-    when: ansible_distribution_release == 'trusty'
+    when: ansible_distribution_major_version is version('14', '==')
 
   - name: MariaDB 5.5 repository installed
     apt_repository:
@@ -79,6 +79,27 @@
         - mariadb-common
         - libmariadbd-dev
         - libmariadbclient18
-        - python-mysqldb
       state: latest
   when: ansible_distribution == 'Ubuntu'
+
+- name: python-mysqldb installed
+  package:
+    name: python-mysqldb
+    state: latest
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_major_version is version('18', '<=')
+
+- name: python3-mysqldb installed
+  package:
+    name: python3-mysqldb
+    state: latest
+  when:
+    - ansible_distribution == 'Ubuntu'
+    - ansible_distribution_major_version is version('20', '>=')
+
+- name: python-mysqldb installed
+  package:
+    name: python-mysqldb
+    state: latest
+  when: ansible_distribution == 'Debian'

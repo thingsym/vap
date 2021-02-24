@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.6] - 2021.02.24
+
+* add cpm module
+* add docker
+* add FUNDING.yml
+* remove packagist.jp repository
+* fix tasks
+* fix forwarded_port
+* deprecated CentOS 8
+* add ansible.install parameter
+* support Ubuntu 20.04
+* using the version function to check the version
+
 ## [0.4.5] - 2020.12.28
 
 * add deprecated ended date with box
