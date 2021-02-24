@@ -1,0 +1,50 @@
+---
+- name: removed older docker
+  package:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+
+- block:
+  - name: add apt-key
+    apt_key:
+      url: https://download.docker.com/linux/debian/gpg
+      state: present
+
+  - name: docker repository installed
+    apt_repository:
+      repo: 'deb [arch=amd64,i386] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
+      update_cache: yes
+  when: ansible_distribution == 'Debian'
+
+- block:
+  - name: add apt-key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: docker repository installed
+    apt_repository:
+      repo: 'deb [arch=amd64,i386] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+  when: ansible_distribution == 'Ubuntu'
+
+- name: docker installed
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: latest
+
+- name: add the ubuntu to the docker group
+  command: sudo gpasswd -a vagrant docker
+
+- name: docker started and enabled
+  service:
+    name: docker
+    state: restarted
+    enabled: yes
