@@ -249,15 +249,24 @@ VAP will be built in the directory structure of the following minimum unit.
 
 **VAP** supports VirtualBox for providers of Vagrant. Operating system supported CentOS, Debian and Ubuntu Boxes. OS architecture supported x86_64. Details are as follows:
 
-* CentOS 8
-* CentOS 7
+### CentOS
+
+* CentOS 8 (Deprecated ended 2021-12-31)
+* CentOS 7 (Main support)
 * CentOS 6 (Deprecated ended 2020-11-30)
-* Debian 10 Buster
-* Debian 9 Stretch
-* Debian 8 Jessie (Deprecated ended 2020-06-30)
-* Ubuntu 18.04 Bionic Beaver
-* Ubuntu 16.04 Xenial
-* Ubuntu 14.04 Trusty (Deprecated ended 2019-04-25)
+
+### Debian
+
+* Debian 10.0 (Main support)
+* Debian 9.0 (Main support)
+* Debian 8.0 (Deprecated ended 2020-06-30)
+
+### Ubuntu
+
+* Ubuntu 20.04 (In preparation)
+* Ubuntu 18.04 (In preparation)
+* Ubuntu 16.04 (Main support)
+* Ubuntu 14.04 (Deprecated ended 2019-04-25)
 
 To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
