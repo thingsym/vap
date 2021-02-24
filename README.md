@@ -297,7 +297,8 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 * [Perl](https://www.perl.org/)
 	* via [plenv](https://github.com/tokuhirom/plenv)
 	* [Perl-Build](https://github.com/tokuhirom/Perl-Build)
-	* [cpanm](https://github.com/miyagawa/cpanminus)
+	* [cpanm](https://metacpan.org/release/App-cpanminus)
+	* [cpm](https://metacpan.org/release/App-cpm)
 	* [Server::Starter](http://search.cpan.org/~kazuho/Server-Starter/)
 * [Node.js](http://nodejs.org)
 	* via [nodenv](https://github.com/nodenv/nodenv)
@@ -313,6 +314,7 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 ### Develop & Deploy Tools (Activatable)
 
+* [Docker](https://www.docker.com)
 * [OpenSSL](https://www.openssl.org)
 * [phpMyAdmin](https://www.phpmyadmin.net)
 
