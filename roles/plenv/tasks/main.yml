@@ -27,17 +27,17 @@
 
 - name: stat perl_path
   stat:
-    path: "{{ plenv_dir }}/versions/{{ perl_version | default(5.26.1) }}"
+    path: "{{ plenv_dir }}/versions/{{ perl_version | default(5.32.0) }}"
   register: is_perl_path
 
 - name: perl installed via plenv
-  command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.26.1) }}"
+  command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.32.0) }}"
   become: yes
   become_user: vagrant
   when: not is_perl_path.stat.exists
 
 - name: plenv global
-  command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.26.1) }}"
+  command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.32.0) }}"
   become: yes
   become_user: vagrant
 
