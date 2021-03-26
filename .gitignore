@@ -4,5 +4,6 @@
 *.retry
 *.cache
 /html
+/mkcert
 
 ssh_config.cache
