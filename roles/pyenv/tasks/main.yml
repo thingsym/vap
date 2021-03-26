@@ -30,7 +30,7 @@
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(pyenv virtualenv-init -)\""
 
-- include: build-env.yml
+- include_tasks: build-env.yml
 
 - name: Python installed via pyenv
   command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
