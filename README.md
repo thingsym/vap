@@ -35,9 +35,9 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 
 ## Requirements
 
-* [Oracle VM VirtualBox](https://www.virtualbox.org) >= 5.2
-* [Vagrant](https://www.vagrantup.com) >= 2.1
-* [Ansible](https://www.ansible.com) >= 2.4
+* [Oracle VM VirtualBox](https://www.virtualbox.org) >= 6.1
+* [Vagrant](https://www.vagrantup.com) >= 2.2
+* [Ansible](https://www.ansible.com) >= 2.9
 
 #### Vagrant plugin (optional)
 
@@ -169,12 +169,12 @@ In YAML format, you can set server, database and Programming environment. And ca
 	## Programming languages Settings ##
 	# If the version is set to 0, the programming language does not install
 
-	python_version     : 3.6.4       # 3.6.4
-	ruby_version       : 2.7.1       # 2.7.1
-	php_version        : 7.3.17       # 7.3.17
-	perl_version       : 5.26.1      # 5.26.1
-	node_version       : 12.13.0     # 12.13.0
-	go_version         : 1.11.5      # 1.11.5
+	python_version     : 3.9.2       # 3.9.2
+	ruby_version       : 2.7.2       # 2.7.2
+	php_version        : 7.4.14      # 7.4.14
+	perl_version       : 5.32.0      # 5.32.0
+	node_version       : 14.15.3     # 14.15.3
+	go_version         : 1.15.6      # 1.15.6
 	java_version       : 1.8         # 1.8
 	scala_version      : 2.11.12     # 2.11.12 (require java)
 
@@ -193,12 +193,12 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 #### Programming languages Settings ##
 
-* `python_version` version of Python (default: `3.6.4`)
-* `ruby_version` version of Ruby (default: `2.7.1`)
-* `php_version` version of PHP (default: `7.3.17`)
-* `perl_version` version of Perl (default: `5.26.1`)
-* `node_version` version of Node.js (default: `12.13.0`)
-* `go_version` version of Go (default: `1.11.5`)
+* `python_version` version of Python (default: `3.9.2`)
+* `ruby_version` version of Ruby (default: `2.7.2`)
+* `php_version` version of PHP (default: `7.4.14`)
+* `perl_version` version of Perl (default: `5.32.0`)
+* `node_version` version of Node.js (default: `14.15.3`)
+* `go_version` version of Go (default: `1.15.6`)
 * `java_version` version of Java (default: `1.8`)
 * `scala_version` version of Scala (default: `2.11.12`) require Java
 
@@ -308,7 +308,7 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 	* [Perl-Build](https://github.com/tokuhirom/Perl-Build)
 	* [cpanm](https://metacpan.org/release/App-cpanminus)
 	* [cpm](https://metacpan.org/release/App-cpm)
-	* [Server::Starter](http://search.cpan.org/~kazuho/Server-Starter/)
+	* [Server::Starter](https://metacpan.org/release/Server-Starter)
 * [Node.js](http://nodejs.org)
 	* via [nodenv](https://github.com/nodenv/nodenv)
 	* [node-build](https://github.com/nodenv/node-build)
@@ -324,7 +324,6 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 ### Develop & Deploy Tools (Activatable)
 
 * [Docker](https://www.docker.com)
-* [OpenSSL](https://www.openssl.org)
 * [phpMyAdmin](https://www.phpmyadmin.net)
 
 ### Pre-installing
