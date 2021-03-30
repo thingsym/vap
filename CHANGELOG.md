@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.7] - 2021.03.30
+
+* edit README
+* add ignore_configcheck
+* add purged package task
+* add all packages update task
+* remove openssl role, replace to mkcert
+* fix ssl certificate file path for mkcert
+* change include task from include to include_tasks
+* fix sample database config
+* bump up programming languages version
+
 ## [0.4.6] - 2021.02.24
 
 * add cpm module
