@@ -30,6 +30,12 @@ ansible_install       = true
 ansible_install_mode  = :default    # :default|:pip
 ansible_version       = 'latest'    # only :pip required
 
+vagrant_plugins       = [
+	'vagrant-hostsupdater',
+	'vagrant-vbguest',
+	'vagrant-serverspec'
+]
+
 ## That's all, stop setting. ##
 
 provision = <<-EOT
@@ -82,6 +88,10 @@ provision = <<-EOT
     fi
   fi
 EOT
+
+vagrant_plugins.each{|plugin|
+  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+}
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
