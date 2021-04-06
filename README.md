@@ -39,6 +39,10 @@ You can install the develop tools or the deploy tools by usage. See Specificatio
 * [Vagrant](https://www.vagrantup.com) >= 2.2
 * [Ansible](https://www.ansible.com) >= 2.9
 
+#### Optional
+
+* [mkcert](https://github.com/FiloSottile/mkcert)
+
 #### Vagrant plugin (optional)
 
 * [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
@@ -139,6 +143,12 @@ The pip is to install Ansible from the Python package manager. In this case, you
 	ansible_install_mode  = :default    # :default|:pip
 	ansible_version       = 'latest'    # only :pip required
 
+	vagrant_plugins       = [
+		'vagrant-hostsupdater',
+		'vagrant-vbguest',
+		'vagrant-serverspec'
+	]
+
 * `vm_box` (required) name of Vagrant Box (default: `centos/7`)
 * `vm_box_version` (required) version of Vagrant Box (default: `>= 0`)
 * `vm_ip` (required) private IP address (default: `192.168.59.63`)
@@ -151,6 +161,7 @@ The pip is to install Ansible from the Python package manager. In this case, you
 * `synced_folder_type` the type of synced folder (default: `virtualbox` / value: `virtualbox` | `nfs` | `rsync` | `smb`)
 * `ansible_install_mode` (required) the way to install Ansible (default: `:default` / value: `:default` | `:pip`)
 * `ansible_version` version of Ansible to install (default: `latest`)
+* `vagrant_plugins` install vagrant plugins
 
 ### Provisioning configuration file (YAML)
 
@@ -180,6 +191,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	## Develop & Deploy Settings ##
 
+	docker             : false   # true|false
 	ssl                : true    # true|false
 	phpmyadmin         : false   # true|false (require PHP and database)
 
@@ -206,6 +218,7 @@ If the version is set to 0, the programming language does not installation
 
 #### Develop & Deploy Settings ##
 
+* `docker` docker installed (default: `false` / value: `true` | `false`)
 * `ssl` activate ssl (default: `true` / value: `true` | `false`)
 * `phpmyadmin` activate phpMyAdmin (default: `false` / value: `true` | `false`)
 
@@ -225,6 +238,7 @@ This directory synchronize to the guest OS side `/vagrant`. `html` creates autom
 * hosts
 	* local (inventory file)
 * html (synchronize to the Document Root. create automatically at `vagrant up`, if it does not exist.)
+* mkcert (stores SSL certificate files)
 * Rakefile (Rakefile of ServerSpec)
 * README.md
 * roles (stores Ansible playbook of each role)
@@ -401,6 +415,18 @@ As follows editable configuration files.
 ```
 vagrant ssh-config > ssh_config.cache
 ssh -F ssh_config.cache default
+```
+
+## Generate SSL certificate files using mkcert
+
+Install mkcert. See [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
+
+```
+cd /PATH/TO/vap-x.x.x
+mkcert -install
+mkdir mkcert
+cd mkcert
+mkcert -cert-file cert.pem -key-file privkey.pem <vm_hostname>
 ```
 
 ## Contribution
