@@ -57,7 +57,7 @@ server {
 
     ssl on;
     ssl_certificate       /vagrant/mkcert/cert.pem;
-    ssl_certificate_key   /vagrant/mkcert/key.pem;
+    ssl_certificate_key   /vagrant/mkcert/privkey.pem;
 
     ssl_session_cache    shared:SSL:1m;
     ssl_session_timeout  5m;

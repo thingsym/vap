@@ -7,7 +7,7 @@ hosts:
       host: 0.0.0.0
       ssl:
         certificate-file: /vagrant/mkcert/cert.pem
-        key-file: /vagrant/mkcert/key.pem
+        key-file: /vagrant/mkcert/privkey.pem
     paths:
       "/":
         file.dir: {{ DOCUMENT_ROOT }}

@@ -89,4 +89,10 @@ if property["perl_version"] != 0 then
     its(:exit_status) { should eq 0 }
   end
 
+  describe command('which update-cpanfile') do
+    let(:sudo_options) { '-u vagrant -i' }
+    its(:exit_status) { should eq 0 }
+    its(:stdout) { should match(/\/home\/vagrant\/\.plenv\/shims\/update-cpanfile/) }
+  end
+
 end

@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.8] - 2021.04.07
+
+* add App::UpdateCPANfile module
+* edit README
+* fix ansible.verbose
+* add vagrant plugins install command
+* change tar extract to unarchive module
+* change libzip installation via source
+* change certificate key filename
+
 ## [0.4.7] - 2021.03.30
 
 * edit README

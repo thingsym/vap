@@ -7,7 +7,7 @@
 vm_box                = 'centos/7'
 # vm_box                = 'centos/6' # Deprecated ended 2020-11-30
 # vm_box                = 'debian/buster64'  # Debian 10.0
-# vm_box                = 'debian/stretch64' # Debian 9.0
+# vm_box                = 'debian/stretch64' # Debian 9.0 # Note: Ansible version 2.2.x installed, so install via pip instead.
 # vm_box                = 'debian/jessie64'  # Debian 8.0 # Deprecated ended 2020-06-30
 # vm_box                = 'ubuntu/focal64'  # Ubuntu 20.04 # Note: Currently there is no ansible repository, so install via pip instead.
 # vm_box                = 'ubuntu/bionic64' # Ubuntu 18.04
@@ -29,6 +29,12 @@ synced_folder_type    = 'virtualbox' # virtualbox|nfs|rsync|smb
 ansible_install       = true
 ansible_install_mode  = :default    # :default|:pip
 ansible_version       = 'latest'    # only :pip required
+
+vagrant_plugins       = [
+	'vagrant-hostsupdater',
+	'vagrant-vbguest',
+	'vagrant-serverspec'
+]
 
 ## That's all, stop setting. ##
 
@@ -82,6 +88,10 @@ provision = <<-EOT
     fi
   fi
 EOT
+
+vagrant_plugins.each{|plugin|
+  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+}
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
@@ -141,7 +151,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.version = ansible_version
     ansible.inventory_path = 'hosts/local'
     ansible.playbook = 'site.yml'
-    ansible.verbose = 'vvv'
+    ansible.verbose = 'v'
     ansible.extra_vars = {
       HOSTNAME: vm_hostname,
       DOCUMENT_ROOT: vm_document_root
