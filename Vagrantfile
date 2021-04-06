@@ -151,7 +151,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.version = ansible_version
     ansible.inventory_path = 'hosts/local'
     ansible.playbook = 'site.yml'
-    ansible.verbose = 'vvv'
+    ansible.verbose = 'v'
     ansible.extra_vars = {
       HOSTNAME: vm_hostname,
       DOCUMENT_ROOT: vm_document_root
