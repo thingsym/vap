@@ -68,3 +68,8 @@
   command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
   become: yes
   become_user: vagrant
+
+- name: App::UpdateCPANfile module installed
+  command: "{{ plenv_dir }}/shims/cpanm App::UpdateCPANfile"
+  become: yes
+  become_user: vagrant
