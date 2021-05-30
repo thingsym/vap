@@ -22,9 +22,9 @@
       name:
         - libzip-devel
       state: latest
-    when:
-      - ansible_os_family == 'RedHat'
-      - php_version is not match("^7.4")
+  when:
+    - ansible_os_family == 'RedHat'
+    - php_version is not match("^7.4")
 
 - include_tasks: libzip.yml
   when:
