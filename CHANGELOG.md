@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.9] - 2021.05.30
+
+* add custom config files for phpenv.sh
+* support custom config for phpenv.sh
+* fix README
+* fix php.ini
+* fix libzip for php 7.4
+
 ## [0.4.8] - 2021.04.07
 
 * add App::UpdateCPANfile module
