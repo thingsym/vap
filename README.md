@@ -59,19 +59,21 @@ Download the VirtualBox form [www.virtualbox.org](https://www.virtualbox.org) an
 
 Download the Vagrant form [www.vagrantup.com](https://www.vagrantup.com) and install.
 
-### 3. Install Vagrant plugin
-
-Install the Vagrant plugin on the terminal as necessary.
-
-	vagrant plugin install vagrant-hostsupdater
-	vagrant plugin install vagrant-vbguest
-	vagrant plugin install vagrant-serverspec
-
-### 4. Download Ansible playbooks of VAP
+### 3. Download Ansible playbooks of VAP
 
 Download a Vagrantfile and Ansible playbooks from the following link.
 
 [Download Zip format file](https://github.com/thingsym/vap/archive/master.zip)
+
+### 4. Generate SSL certificate files using mkcert
+
+Install mkcert. See [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
+
+	cd vaw-x.x.x
+	mkcert -install
+	mkdir mkcert
+	cd mkcert
+	mkcert -cert-file cert.pem -key-file privkey.pem <vm_hostname>
 
 ### 5. Launch a virtual environment
 
@@ -408,26 +410,10 @@ As follows editable configuration files.
 * nginx.www.conf.j2
 * percona.my.cnf.j2
 * php-build.default_configure_options.j2
+* php-fpm.conf (for phpenv.sh)
+* php-fpm.www.conf (for phpenv.sh)
+* php.ini (for phpenv.sh)
 * ssh-config.j2
-
-## Alternative vagrant ssh connection
-
-```
-vagrant ssh-config > ssh_config.cache
-ssh -F ssh_config.cache default
-```
-
-## Generate SSL certificate files using mkcert
-
-Install mkcert. See [https://github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-
-```
-cd /PATH/TO/vap-x.x.x
-mkcert -install
-mkdir mkcert
-cd mkcert
-mkcert -cert-file cert.pem -key-file privkey.pem <vm_hostname>
-```
 
 ## Contribution
 
