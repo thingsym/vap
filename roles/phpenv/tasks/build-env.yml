@@ -17,7 +17,7 @@
     state: latest
   when: ansible_os_family == 'RedHat'
 
-  - name: libzip-devel installed
+- name: libzip-devel installed
   package:
     name:
       - libzip-devel
