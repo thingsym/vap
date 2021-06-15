@@ -82,6 +82,9 @@ Install mkcert. See [https://github.com/FiloSottile/mkcert](https://github.com/F
 
 If you don't have a Box at first, begins from the download of Box. After provisioning, you can launch a Programming environment.
 
+Note: Passwordless for Vagrant::Hostsupdater. See [Suppressing prompts for elevating privileges
+](https://github.com/agiledivider/vagrant-hostsupdater#suppressing-prompts-for-elevating-privileges)
+
 ### 6. Access to the website
 
 Access to the website **http://vap.local/**, if the server is running.
@@ -193,8 +196,8 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	## Develop & Deploy Settings ##
 
-	docker             : false   # true|false
 	ssl                : true    # true|false
+	docker             : false   # true|false
 	phpmyadmin         : false   # true|false (require PHP and database)
 
 	## That's all, stop setting. Let's vagrant up!! ##
@@ -220,8 +223,8 @@ If the version is set to 0, the programming language does not installation
 
 #### Develop & Deploy Settings ##
 
-* `docker` docker installed (default: `false` / value: `true` | `false`)
 * `ssl` activate ssl (default: `true` / value: `true` | `false`)
+* `docker` docker installed (default: `false` / value: `true` | `false`)
 * `phpmyadmin` activate phpMyAdmin (default: `false` / value: `true` | `false`)
 
 ## Directory Layout

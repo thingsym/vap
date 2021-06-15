@@ -21,8 +21,8 @@ scala_version      : 2.11.12     # 2.11.12 (require java)
 
 ## Develop & Deploy Settings ##
 
-docker             : false   # true|false
 ssl                : true    # true|false
+docker             : false   # true|false
 phpmyadmin         : false   # true|false (require PHP and database)
 
 ## That's all, stop setting. Let's vagrant up!! ##

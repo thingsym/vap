@@ -1,5 +1,5 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.4.9"
+- name: "VAP (Vagrant Ansible Programming languages) v0.5.0"
   hosts: localhost
   remote_user: vagrant
   become: yes
@@ -8,6 +8,7 @@
     - { role: before-command,  tags: [before-command] }
     - { role: common,          tags: [common] }
     - { role: develop-tools,   tags: [develop-tools] }
+    - { role: mkcert,          tags: [mkcert] }
     - { role: git,             tags: [git] }
     - { role: gibo,            tags: [gibo] }
     - { role: mysql,           tags: [mysql],       when: "database == 'mysql'" }
