@@ -392,7 +392,6 @@ function install() {
       sed -i -e "s/^post_max_size = 8M/post_max_size = 64M/" $PHP_INI
       sed -i -e "s/^upload_max_filesize = 2M/upload_max_filesize = 32M/" $PHP_INI
       sed -i -e "s/^;mbstring.language = Japanese/mbstring.language = neutral/" $PHP_INI
-      sed -i -e "s/^;mbstring.internal_encoding =/mbstring.internal_encoding = UTF-8/" $PHP_INI
       sed -i -e "s/^;date.timezone =/date.timezone = UTC/" $PHP_INI
       sed -i -e 's/^;session.save_path = \"\/tmp\"/session.save_path = \"\/tmp\"/' $PHP_INI
       sed -i -e 's/^zend.exception_ignore_args = On/zend.exception_ignore_args = Off/' $PHP_INI
