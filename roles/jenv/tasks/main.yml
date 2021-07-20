@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/gcuisinier/jenv.git
     dest: "{{ jenv_dir }}"
+    version: "master"
     force: yes
   become: yes
   become_user: vagrant
@@ -11,11 +12,13 @@
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
+    mode: 0644
 
 - name: edit jenv init on .bashrc_vap
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(jenv init -)\""
+    mode: 0644
 
 - name: java added via jenv (CentOS/RHEL)
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(1.8) }}.0
@@ -26,13 +29,13 @@
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
   when: ansible_os_family == 'Debian'
   ignore_errors: yes
-  
+
 - name: jenv global
-  shell: "{{ jenv_dir }}/bin/jenv global {{ java_version | default(1.8) }}"
+  command: "{{ jenv_dir }}/bin/jenv global {{ java_version | default(1.8) }}"
   become: yes
   become_user: vagrant
 
 - name: jenv rehash
-  shell: "{{ jenv_dir }}/bin/jenv rehash"
+  command: "{{ jenv_dir }}/bin/jenv rehash"
   become: yes
   become_user: vagrant

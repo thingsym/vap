@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/yyuu/pyenv.git
     dest: "{{ pyenv_dir }}"
+    version: "master"
     force: yes
   become: yes
   become_user: vagrant
@@ -11,16 +12,19 @@
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "export PATH=$HOME/.pyenv/bin:$PATH"
+    mode: 0644
 
 - name: edit pyenv init on .bashrc_vap
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(pyenv init -)\""
+    mode: 0644
 
 - name: git checkout pyenv-virtualenv
   git:
     repo: https://github.com/pyenv/pyenv-virtualenv.git
     dest: "{{ pyenv_dir }}/plugins/pyenv-virtualenv"
+    version: "master"
     force: yes
   become: yes
   become_user: vagrant
@@ -29,6 +33,7 @@
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(pyenv virtualenv-init -)\""
+    mode: 0644
 
 - include_tasks: build-env.yml
 

@@ -27,6 +27,6 @@
     - { role: openjdk,         tags: [openjdk],     when: "java_version is version('0', '!=')" }
     - { role: jenv,            tags: [jenv],        when: "java_version is version('0', '!=')" }
     - { role: scalaenv,        tags: [scalaenv],    when: "scala_version is version('0', '!=') and java_version is version('0', '!=')" }
-    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin == true and php_version is version('0', '!=') and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
-    - { role: docker,          tags: [docker],      when: "docker == true" }
+    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin and php_version is version('0', '!=') and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
+    - { role: docker,          tags: [docker],      when: "docker" }
     - { role: after-command,   tags: [after-command] }
