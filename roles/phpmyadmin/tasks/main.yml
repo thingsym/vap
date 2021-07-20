@@ -1,36 +1,38 @@
 ---
-- name: stat phpMyAdmin_path
+- name: stat phpmyadmin_path
   stat:
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin"
-  register: is_phpMyAdmin_path
+  register: is_phpmyadmin_path
 
 - block:
   - name: phpMyAdmin download
     get_url:
-      url: "{{ phpMyAdmin_zip_url }}"
+      url: "{{ phpmyadmin_zip_url }}"
       dest: "/tmp/phpMyAdmin.zip"
       validate_certs: no
 
   - name: unzip phpMyAdmin.zip
-    command: unzip -o /tmp/phpMyAdmin.zip -d /tmp
+    unarchive:
+      src: /tmp/phpMyAdmin.zip
+      dest: /tmp
 
   - name: mv phpMyAdmin.zip
-    command: mv /tmp/{{ phpMyAdmin_dir }} {{ DOCUMENT_ROOT }}/phpMyAdmin
+    command: mv /tmp/{{ phpmyadmin_dir }} {{ DOCUMENT_ROOT }}/phpMyAdmin
 
   - name: delete phpMyAdmin.zip
     file:
       path: "/tmp/phpMyAdmin.zip"
       state: absent
-  when: not is_phpMyAdmin_path.stat.exists
+  when: not is_phpmyadmin_path.stat.exists
 
-- name: stat phpMyAdmin_config
+- name: stat phpmyadmin_config
   stat:
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
-  register: is_phpMyAdmin_config
+  register: is_phpmyadmin_config
 
 - name: mv config.inc.php
   command: mv {{ DOCUMENT_ROOT }}/phpMyAdmin/config.sample.inc.php {{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php
-  when: not is_phpMyAdmin_config.stat.exists
+  when: not is_phpmyadmin_config.stat.exists
 
 - name: edit config.inc.php
   replace:

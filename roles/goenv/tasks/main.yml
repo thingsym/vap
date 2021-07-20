@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/wfarr/goenv.git
     dest: "{{ goenv_dir }}"
+    version: "master"
     force: yes
   become: yes
   become_user: vagrant
@@ -16,6 +17,7 @@
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_vap"
     line: "eval \"$(goenv init -)\""
+    mode: 0644
 
 - name: Go installed via goenv
   command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"

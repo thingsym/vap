@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1] - 2021.07.20
+
+* bump up phpMyAdmin 5.1.1
+* lint playbooks and improve roles
+* fix .ansible-lint
+* remove mbstring.internal_encoding due to deprecated
+* support PHP8
+
 ## [0.5.0] - 2021.06.15
 
 * fix regexp with replace module
