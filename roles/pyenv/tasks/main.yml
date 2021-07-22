@@ -8,15 +8,15 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH pyenv on .bashrc_vap
+- name: edit PATH pyenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.pyenv/bin:$PATH"
     mode: 0644
 
-- name: edit pyenv init on .bashrc_vap
+- name: edit pyenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(pyenv init -)\""
     mode: 0644
 
@@ -29,9 +29,9 @@
   become: yes
   become_user: vagrant
 
-- name: edit virtualenv-init init on .bashrc_vap
+- name: edit virtualenv-init init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(pyenv virtualenv-init -)\""
     mode: 0644
 

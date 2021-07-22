@@ -8,15 +8,15 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH plenv on .bashrc_vap
+- name: edit PATH plenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.plenv/bin:$PATH"
     mode: 0644
 
-- name: edit plenv init on .bashrc_vap
+- name: edit plenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(plenv init -)\""
     mode: 0644
 

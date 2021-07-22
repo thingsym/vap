@@ -8,14 +8,14 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH goenv on .bashrc_vap
+- name: edit PATH goenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.goenv/bin:$PATH"
 
-- name: edit goenv init on .bashrc_vap
+- name: edit goenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(goenv init -)\""
     mode: 0644
 

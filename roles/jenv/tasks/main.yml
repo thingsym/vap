@@ -8,15 +8,15 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH jenv on .bashrc_vap
+- name: edit PATH jenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
     mode: 0644
 
-- name: edit jenv init on .bashrc_vap
+- name: edit jenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(jenv init -)\""
     mode: 0644
 

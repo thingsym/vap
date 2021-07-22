@@ -8,15 +8,15 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH scalaenv on .bashrc_vap
+- name: edit PATH scalaenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.scalaenv/bin:$PATH"
     mode: 0644
 
-- name: edit scalaenv init on .bashrc_vap
+- name: edit scalaenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(scalaenv init -)\""
     mode: 0644
 
