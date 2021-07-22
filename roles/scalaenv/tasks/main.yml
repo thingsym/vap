@@ -35,3 +35,4 @@
   command: "{{ scalaenv_dir }}/bin/scalaenv rehash"
   become: yes
   become_user: vagrant
+  changed_when: False
