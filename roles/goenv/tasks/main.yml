@@ -19,18 +19,24 @@
     line: "eval \"$(goenv init -)\""
     mode: 0644
 
-- name: Go installed via goenv
-  command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"
-  ignore_errors: yes
-  become: yes
-  become_user: vagrant
+- name: stat goenv
+  stat:
+    path: "{{ goenv_dir }}/bin/goenv"
+  register: is_goenv
 
-- name: goenv global
-  command: "{{ goenv_dir }}/bin/goenv global {{ go_version | default(1.15.6) }}"
-  become: yes
-  become_user: vagrant
+- block:
+  - name: Go installed via goenv
+    command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"
+    become: yes
+    become_user: vagrant
 
-- name: goenv rehash
-  command: "{{ goenv_dir }}/bin/goenv rehash"
-  become: yes
-  become_user: vagrant
+  - name: goenv global
+    command: "{{ goenv_dir }}/bin/goenv global {{ go_version | default(1.15.6) }}"
+    become: yes
+    become_user: vagrant
+
+  - name: goenv rehash
+    command: "{{ goenv_dir }}/bin/goenv rehash"
+    become: yes
+    become_user: vagrant
+  when: is_goenv.stat.exists

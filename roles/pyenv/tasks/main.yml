@@ -37,18 +37,28 @@
 
 - include_tasks: build-env.yml
 
-- name: Python installed via pyenv
-  command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
-  ignore_errors: yes
-  become: yes
-  become_user: vagrant
+- name: stat pyenv
+  stat:
+    path: "{{ pyenv_dir }}/bin/pyenv"
+  register: is_pyenv
 
-- name: pyenv global
-  command: "{{ pyenv_dir }}/bin/pyenv global {{ python_version | default(3.9.2) }}"
-  become: yes
-  become_user: vagrant
+- block:
+  - name: Python installed via pyenv
+    command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
+    become: yes
+    become_user: vagrant
+    register: pyenv_result
+    failed_when:
+      - pyenv_result.rc != 0
+      - pyenv_result.rc != 1
 
-- name: pyenv rehash
-  command: "{{ pyenv_dir }}/bin/pyenv rehash"
-  become: yes
-  become_user: vagrant
+  - name: pyenv global
+    command: "{{ pyenv_dir }}/bin/pyenv global {{ python_version | default(3.9.2) }}"
+    become: yes
+    become_user: vagrant
+
+  - name: pyenv rehash
+    command: "{{ pyenv_dir }}/bin/pyenv rehash"
+    become: yes
+    become_user: vagrant
+  when: is_pyenv.stat.exists

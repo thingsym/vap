@@ -12,8 +12,14 @@
       - docker-engine
     state: absent
 
+- name: stat docker-ce.repo
+  stat:
+    path: '/etc/yum.repos.d/docker-ce.repo'
+  register: is_docker_ce_repo
+
 - name: yum-config add docker-ce repo
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: not is_docker_ce_repo.stat.exists
 
 - name: docker installed
   package:

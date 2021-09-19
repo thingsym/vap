@@ -29,51 +29,70 @@
   become: yes
   become_user: vagrant
 
-- name: stat perl_path
+- name: stat plenv
   stat:
-    path: "{{ plenv_dir }}/versions/{{ perl_version | default(5.32.0) }}"
-  register: is_perl_path
+    path: "{{ plenv_dir }}/bin/plenv"
+  register: is_plenv
 
-- name: perl installed via plenv
-  command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.32.0) }}"
-  become: yes
-  become_user: vagrant
-  when: not is_perl_path.stat.exists
+- block:
+  - name: perl installed via plenv
+    command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.32.0) }}"
+    become: yes
+    become_user: vagrant
+    register: plenv_result
+    failed_when:
+      - plenv_result.rc != 0
+      - plenv_result.rc != 255
 
-- name: plenv global
-  command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.32.0) }}"
-  become: yes
-  become_user: vagrant
+  - name: plenv global
+    command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.32.0) }}"
+    become: yes
+    become_user: vagrant
 
-- name: plenv rehash
-  command: "{{ plenv_dir }}/bin/plenv rehash"
-  become: yes
-  become_user: vagrant
+  - name: plenv rehash
+    command: "{{ plenv_dir }}/bin/plenv rehash"
+    become: yes
+    become_user: vagrant
 
-- name: cpanm module installed
-  command: "{{ plenv_dir }}/bin/plenv install-cpanm"
-  become: yes
-  become_user: vagrant
+  - name: cpanm module installed
+    command: "{{ plenv_dir }}/bin/plenv install-cpanm"
+    become: yes
+    become_user: vagrant
+  when: is_plenv.stat.exists
 
-- name: cpm module installed
-  shell: curl -fsSL --compressed https://git.io/cpm > "{{ plenv_dir }}/bin/cpm"
-
-- name: chmod 755
-  file:
+- name: stat cpanm
+  stat:
     path: "{{ plenv_dir }}/bin/cpm"
-    mode: 0755
+  register: is_cpm
 
-- name: Carton module installed
-  command: "{{ plenv_dir }}/shims/cpanm Carton"
-  become: yes
-  become_user: vagrant
+- block:
+  - name: cpm module installed
+    shell: curl -fsSL --compressed https://git.io/cpm > "{{ plenv_dir }}/bin/cpm"
 
-- name: Server::Starter module installed
-  command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
-  become: yes
-  become_user: vagrant
+  - name: chmod 755
+    file:
+      path: "{{ plenv_dir }}/bin/cpm"
+      mode: 0755
+  when: not is_cpm.stat.exists
 
-- name: App::UpdateCPANfile module installed
-  command: "{{ plenv_dir }}/shims/cpanm App::UpdateCPANfile"
-  become: yes
-  become_user: vagrant
+- name: stat cpanm
+  stat:
+    path: "{{ plenv_dir }}/shims/cpanm"
+  register: is_cpanm
+
+- block:
+  - name: Carton module installed
+    command: "{{ plenv_dir }}/shims/cpanm Carton"
+    become: yes
+    become_user: vagrant
+
+  - name: Server::Starter module installed
+    command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
+    become: yes
+    become_user: vagrant
+
+  - name: App::UpdateCPANfile module installed
+    command: "{{ plenv_dir }}/shims/cpanm App::UpdateCPANfile"
+    become: yes
+    become_user: vagrant
+  when: is_cpanm.stat.exists

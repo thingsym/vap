@@ -20,5 +20,11 @@
     name: dnf-plugins-core
     state: latest
 
+- name: stat PowerTools.repo
+  stat:
+    path: '/etc/yum.repos.d/CentOS-Linux-PowerTools.repo'
+  register: is_powertools_repo
+
 - name: powertools enabled (CentOS/RHEL 8)
   command: dnf config-manager --set-enabled powertools
+  when: is_docker_ce_repo.stat.exists

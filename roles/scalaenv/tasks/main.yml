@@ -20,19 +20,28 @@
     line: "eval \"$(scalaenv init -)\""
     mode: 0644
 
-- name: Scala installed via scalaenv
-  command: "{{ scalaenv_dir }}/bin/scalaenv install scala-{{ scala_version | default(2.11.12) }}"
-  ignore_errors: yes
-  become: yes
-  become_user: vagrant
+- name: stat scalaenv
+  stat:
+    path: "{{ scalaenv_dir }}/bin/scalaenv"
+  register: is_scalaenv
 
-- name: scalaenv global
-  command: "{{ scalaenv_dir }}/bin/scalaenv global scala-{{ scala_version | default(2.11.12) }}"
-  become: yes
-  become_user: vagrant
+- block:
+  - name: Scala installed via scalaenv
+    command: "{{ scalaenv_dir }}/bin/scalaenv install scala-{{ scala_version | default(2.11.12) }}"
+    become: yes
+    become_user: vagrant
+    register: scalaenv_result
+    failed_when:
+      - scalaenv_result.rc != 0
+      - scalaenv_result.rc != 1
 
-- name: scalaenv rehash
-  command: "{{ scalaenv_dir }}/bin/scalaenv rehash"
-  become: yes
-  become_user: vagrant
-  changed_when: False
+  - name: scalaenv global
+    command: "{{ scalaenv_dir }}/bin/scalaenv global scala-{{ scala_version | default(2.11.12) }}"
+    become: yes
+    become_user: vagrant
+
+  - name: scalaenv rehash
+    command: "{{ scalaenv_dir }}/bin/scalaenv rehash"
+    become: yes
+    become_user: vagrant
+  when: is_scalaenv.stat.exists
