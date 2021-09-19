@@ -41,7 +41,11 @@
     state: latest
 
 - name: add the ubuntu to the docker group
-  command: sudo gpasswd -a vagrant docker
+  user:
+    name: vagrant
+    shell: /bin/bash
+    groups: docker
+    append: yes
 
 - name: docker started and enabled
   service:
