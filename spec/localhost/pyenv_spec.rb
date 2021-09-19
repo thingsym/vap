@@ -38,10 +38,10 @@ if property["python_version"] != 0 then
   end
 
   describe file('/home/vagrant/.bashrc_alias') do
+    its(:content) { should match /export PYENV_ROOT="\$HOME\/.pyenv"/ }
     its(:content) { should match /export PATH=\$HOME\/\.pyenv\/bin:\$PATH/ }
-    its(:content) { should match /eval "\$\(pyenv init \-\)"/ }
+    its(:content) { should match /eval "\$\(pyenv init \-\-path\)"/ }
   end
-
 
   describe package('zlib-devel'), :if => os[:family] == 'redhat' do
     it { should be_installed }

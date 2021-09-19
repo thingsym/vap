@@ -41,4 +41,7 @@ if property["docker"] then
     its(:exit_status) { should eq 0 }
   end
 
+  describe user('vagrant'), :if => os[:family] == 'debian' do
+    it { should belong_to_group 'docker' }
+  end
 end
