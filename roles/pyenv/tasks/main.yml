@@ -8,6 +8,12 @@
   become: yes
   become_user: vagrant
 
+- name: edit PYENV_ROOT on .bashrc_alias
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc_alias"
+    line: "export PYENV_ROOT=\"$HOME/.pyenv\""
+    mode: 0644
+
 - name: edit PATH pyenv on .bashrc_alias
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
@@ -17,7 +23,7 @@
 - name: edit pyenv init on .bashrc_alias
   lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
-    line: "eval \"$(pyenv init -)\""
+    line: "eval \"$(pyenv init --path)\""
     mode: 0644
 
 - name: git checkout pyenv-virtualenv
