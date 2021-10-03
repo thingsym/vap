@@ -5,5 +5,11 @@
     dest: /usr/bin
     mode: 0755
 
+- name: stat gibo
+  stat:
+    path: '/usr/bin/gibo'
+  register: is_gibo
+
 - name: gibo initialized
   command: gibo update
+  when: is_gibo.stat.exists

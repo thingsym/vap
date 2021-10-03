@@ -37,7 +37,7 @@ if property["scala_version"] != 0 && property["java_version"] != 0 then
     its(:stdout) { should match property["scala_version"] }
   end
 
-  describe file('/home/vagrant/.bashrc_vap') do
+  describe file('/home/vagrant/.bashrc_alias') do
     its(:content) { should match /export PATH=\$HOME\/\.scalaenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(scalaenv init \-\)"/ }
   end

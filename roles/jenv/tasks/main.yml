@@ -8,34 +8,39 @@
   become: yes
   become_user: vagrant
 
-- name: edit PATH jenv on .bashrc_vap
+- name: edit PATH jenv on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.jenv/bin:$PATH"
     mode: 0644
 
-- name: edit jenv init on .bashrc_vap
+- name: edit jenv init on .bashrc_alias
   lineinfile:
-    dest: "{{ home_dir }}/.bashrc_vap"
+    dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(jenv init -)\""
     mode: 0644
 
 - name: java added via jenv (CentOS/RHEL)
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(1.8) }}.0
   when: ansible_os_family == 'RedHat'
-  ignore_errors: yes
 
 - name: java added via jenv (Debian)
   command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
   when: ansible_os_family == 'Debian'
-  ignore_errors: yes
 
-- name: jenv global
-  command: "{{ jenv_dir }}/bin/jenv global {{ java_version | default(1.8) }}"
-  become: yes
-  become_user: vagrant
+- name: stat jenv
+  stat:
+    path: "{{ jenv_dir }}/bin/jenv"
+  register: is_jenv
 
-- name: jenv rehash
-  command: "{{ jenv_dir }}/bin/jenv rehash"
-  become: yes
-  become_user: vagrant
+- block:
+  - name: jenv global
+    command: "{{ jenv_dir }}/bin/jenv global {{ java_version | default(1.8) }}"
+    become: yes
+    become_user: vagrant
+
+  - name: jenv rehash
+    command: "{{ jenv_dir }}/bin/jenv rehash"
+    become: yes
+    become_user: vagrant
+  when: is_jenv.stat.exists

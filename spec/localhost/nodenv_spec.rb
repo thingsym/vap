@@ -37,7 +37,7 @@ if property["node_version"] != 0 then
     its(:stdout) { should match property["node_version"] }
   end
 
-  describe file('/home/vagrant/.bashrc_vap') do
+  describe file('/home/vagrant/.bashrc_alias') do
     its(:content) { should match /export PATH=\$HOME\/\.nodenv\/bin:\$PATH/ }
     its(:content) { should match /eval "\$\(nodenv init \-\)"/ }
   end
@@ -48,6 +48,11 @@ if property["node_version"] != 0 then
 
   describe file('/home/vagrant/.nodenv/plugins/nodenv-default-packages') do
     it { should be_directory }
+  end
+
+  describe file('/home/vagrant/.nodenv/default-packages') do
+    it { should be_file }
+    it { should be_mode 644 }
   end
 
   describe command('which npm') do
