@@ -75,7 +75,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: check mysql root password chenged
-  shell: mysql -uroot -p'{{ db_root_password }}' --connect-expired-password
+  command: mysql -uroot -p'{{ db_root_password }}' --connect-expired-password
   register: mysql_chenged_root_password_result
   failed_when: false
   changed_when: false
