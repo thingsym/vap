@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.5.2] - 2021.10.03
+
+* add debian/bullseye64 box
+* fix ansible-lint conf
+* fix workflow
+* change from shell module to command module
+* remove tatsushid repository for Debian, using default repository
+* fix mysql role for mysql 8.0
+* bump up mysql-apt
+* fix test case
+* fix bashrc_alias
+* add checking stat
+* change from command to user module
+* add default-packages with nodenv
+* split roles file into common roles
+* fix ruby_version
+* rename bashrc alias
+
 ## [0.5.1] - 2021.07.20
 
 * bump up phpMyAdmin 5.1.1
