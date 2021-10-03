@@ -1,4 +1,3 @@
-
 - name: litespeed repository installed (Debian)
   apt_repository:
     filename: lst_debian_repo
