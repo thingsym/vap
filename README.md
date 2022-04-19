@@ -271,21 +271,21 @@ VAP will be built in the directory structure of the following minimum unit.
 ### CentOS
 
 * CentOS 8 (Deprecated ended 2021-12-31)
-* CentOS 7 (Main support)
+* CentOS 7
 * CentOS 6 (Deprecated ended 2020-11-30)
 
 ### Debian
 
-* Debian 10.0 (Main support)
-* Debian 9.0 (Main support)
+* Debian 10.0
+* Debian 9.0
 * Debian 8.0 (Deprecated ended 2020-06-30)
 
 ### Ubuntu
 
-* Ubuntu 20.04 (In preparation)
-* Ubuntu 18.04 (In preparation)
-* Ubuntu 16.04 (Main support)
-* Ubuntu 14.04 (Deprecated ended 2019-04-25)
+* Ubuntu 20.04
+* Ubuntu 18.04
+* Ubuntu 16.04
+* Ubuntu 14.04
 
 To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
@@ -453,7 +453,7 @@ vagrant ssh
 #### Debian or Ubuntu
 
 ```
-sudo apt-get install linux-image-amd64 linux-headers-amd64
+sudo apt-get -y install linux-image-amd64 linux-headers-amd64
 ```
 
 #### CentOS
