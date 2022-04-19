@@ -271,21 +271,21 @@ VAP will be built in the directory structure of the following minimum unit.
 ### CentOS
 
 * CentOS 8 (Deprecated ended 2021-12-31)
-* CentOS 7 (Main support)
+* CentOS 7
 * CentOS 6 (Deprecated ended 2020-11-30)
 
 ### Debian
 
-* Debian 10.0 (Main support)
-* Debian 9.0 (Main support)
+* Debian 10.0
+* Debian 9.0
 * Debian 8.0 (Deprecated ended 2020-06-30)
 
 ### Ubuntu
 
-* Ubuntu 20.04 (In preparation)
-* Ubuntu 18.04 (In preparation)
-* Ubuntu 16.04 (Main support)
-* Ubuntu 14.04 (Deprecated ended 2019-04-25)
+* Ubuntu 20.04
+* Ubuntu 18.04
+* Ubuntu 16.04
+* Ubuntu 14.04
 
 To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
@@ -417,6 +417,58 @@ As follows editable configuration files.
 * php-fpm.www.conf (for phpenv.sh)
 * php.ini (for phpenv.sh)
 * ssh-config.j2
+
+## Trouble shooting
+
+### Vagrant can't mount to /mnt when vagrant up.
+
+The following `umount /mnt` error message is displayed.
+
+```
+The following SSH command responded with a non-zero exit status.
+Vagrant assumes that this means the command failed!
+
+umount /mnt
+
+Stdout from the command:
+
+
+Stderr from the command:
+
+umount: /mnt: not mounted
+```
+
+It may happens if the kernel version of OS used in vagrant box does not match the requirements.
+
+The solution is to update the kernel and provision again. It may also be resolved by updating the vagrant box.
+
+1. Access to a guest via SSH.
+
+```
+vagrant ssh
+```
+
+2. Update the kernel into guest OS.
+
+#### Debian or Ubuntu
+
+```
+sudo apt-get -y install linux-image-amd64 linux-headers-amd64
+```
+
+#### CentOS
+
+```
+sudo yum -y update kernel kernel-devel kernel-headers kernel-tools kernel-tools-libs
+
+exit
+```
+
+3. Provision again on the host.
+
+```
+vagrant reload
+```
 
 ## Contribution
 
