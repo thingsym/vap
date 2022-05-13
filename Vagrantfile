@@ -131,7 +131,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Use VBoxManage to customize the VM. For example to change memory:
     vb.customize [
       "modifyvm", :id,
-      "--memory", "1536",
+      "--memory", "2048",
       '--natdnshostresolver1', 'on',
       '--natdnsproxy1', 'on',
       "--cableconnected1", "on",
