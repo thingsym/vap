@@ -25,7 +25,8 @@
     path: "{{ scalaenv_dir }}/bin/scalaenv"
   register: is_scalaenv
 
-- block:
+- name: exists is_scalaenv
+  block:
   - name: Scala installed via scalaenv
     command: "{{ scalaenv_dir }}/bin/scalaenv install scala-{{ scala_version | default(2.11.12) }}"
     become: yes

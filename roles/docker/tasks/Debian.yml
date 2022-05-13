@@ -9,7 +9,8 @@
       - runc
     state: absent
 
-- block:
+- name: Debian
+  block:
   - name: add apt-key
     apt_key:
       url: https://download.docker.com/linux/debian/gpg
@@ -21,7 +22,8 @@
       update_cache: yes
   when: ansible_distribution == 'Debian'
 
-- block:
+- name: Ubuntu
+  block:
   - name: add apt-key
     apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg

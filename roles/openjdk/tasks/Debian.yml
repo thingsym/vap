@@ -5,7 +5,8 @@
     state: latest
   when: java_version is version('1.9', '==')
 
-- block:
+- name: Ubuntu version 1.8
+  block:
   - name: ppa:openjdk-r/ppa repository installed
     apt_repository:
       repo: "ppa:openjdk-r/ppa"
@@ -19,7 +20,8 @@
     - java_version is version('1.8', '==')
     - ansible_distribution == 'Ubuntu'
 
-- block:
+- name: Debian version 1.8
+  block:
   - name: OpenJDK 8 installed (Debian 9 or later)
     apt:
       name: openjdk-8-jdk
