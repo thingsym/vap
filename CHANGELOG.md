@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.4] - 2022.05.13
+
+* fix memory to 2GB
+* fix installing libzip for php 8.0
+
 ## [0.5.3] - 2022.04.19
 
 * add .yamllint for ansible-lint
