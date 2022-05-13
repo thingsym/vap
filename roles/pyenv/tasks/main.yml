@@ -48,7 +48,8 @@
     path: "{{ pyenv_dir }}/bin/pyenv"
   register: is_pyenv
 
-- block:
+- name: exists is_pyenv
+  block:
   - name: Python installed via pyenv
     command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
     become: yes

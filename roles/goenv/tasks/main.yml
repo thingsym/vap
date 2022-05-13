@@ -24,7 +24,8 @@
     path: "{{ goenv_dir }}/bin/goenv"
   register: is_goenv
 
-- block:
+- name: exists is_goenv
+  block:
   - name: Go installed via goenv
     command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"
     become: yes

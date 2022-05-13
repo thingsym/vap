@@ -4,7 +4,8 @@
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin"
   register: is_phpmyadmin_path
 
-- block:
+- name: not exists is_phpmyadmin_path
+  block:
   - name: phpMyAdmin download
     get_url:
       url: "{{ phpmyadmin_zip_url }}"

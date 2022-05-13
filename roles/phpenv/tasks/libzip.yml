@@ -1,5 +1,6 @@
 ---
-- block:
+- name: RedHat 7 and php version 7.4 later
+  block:
   - name: cmake3 installed
     package:
       name: cmake3
@@ -33,7 +34,7 @@
 
   when:
     - ansible_distribution_major_version is version('7', '==')
-    - php_version　is version('7.4', '>=')
+    - php_version is version('7.4', '>=')
 
 - name: libzip-devel installed
   package:
