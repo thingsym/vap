@@ -187,7 +187,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	python_version     : 3.9.2       # 3.9.2
 	ruby_version       : 2.7.2       # 2.7.2
-	php_version        : 7.4.14      # 7.4.14
+	php_version        : 7.4.33      # 7.4.33
 	perl_version       : 5.32.0      # 5.32.0
 	node_version       : 14.15.3     # 14.15.3
 	go_version         : 1.15.6      # 1.15.6
@@ -212,7 +212,7 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 * `python_version` version of Python (default: `3.9.2`)
 * `ruby_version` version of Ruby (default: `2.7.2`)
-* `php_version` version of PHP (default: `7.4.14`)
+* `php_version` version of PHP (default: `7.4.33`)
 * `perl_version` version of Perl (default: `5.32.0`)
 * `node_version` version of Node.js (default: `14.15.3`)
 * `go_version` version of Go (default: `1.15.6`)
