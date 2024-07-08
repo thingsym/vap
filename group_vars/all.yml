@@ -4,7 +4,7 @@
 
 server             : none   # none|apache|nginx|h2o|litespeed
 fastcgi            : none   # none|php-fpm
-database           : none   # none|mysql|mariadb|percona
+database           : none   # none|mysql|mariadb
 
 db_root_password   : admin
 
