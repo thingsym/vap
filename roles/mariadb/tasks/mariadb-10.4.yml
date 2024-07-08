@@ -70,7 +70,7 @@
   - name: MariaDB 10.4 repository installed
     apt_repository:
       filename: MariaDB
-      repo: 'deb [arch=amd64,i386,ppc64el] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.4/ubuntu {{ ansible_distribution_release }} main'
+      repo: 'deb [arch=amd64,i386,ppc64el] https://deb.mariadb.org/10.4/ubuntu {{ ansible_distribution_release }} main'
 
   - name: MariaDB 10.4 installed (Ubuntu)
     package:
@@ -100,7 +100,7 @@
   - name: MariaDB 10.4 repository installed
     apt_repository:
       filename: MariaDB
-      repo: 'deb [arch=amd64,i386] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/10.4/debian {{ ansible_distribution_release }} main'
+      repo: 'deb [arch=amd64,i386] https://deb.mariadb.org/10.4/debian {{ ansible_distribution_release }} main'
 
   - name: MariaDB 10.4 installed (Debian)
     package:

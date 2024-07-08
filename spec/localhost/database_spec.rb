@@ -52,7 +52,7 @@ if property["database"] == 'mysql' then
 elsif property["database"] == 'mariadb' then
 
   describe command('mysqld -V') do
-    its(:stdout) { should match /#{Regexp.escape('10.4')}/ }
+    its(:stdout) { should match /#{Regexp.escape('10.5')}/ }
   end
 
   describe yumrepo('mariadb'), :if => os[:family] == 'redhat' do
@@ -61,7 +61,7 @@ elsif property["database"] == 'mariadb' then
 
   describe package('MariaDB-server'), :if => os[:family] == 'redhat' do
     it { should be_installed }
-    it { should be_installed.with_version '10.4' }
+    it { should be_installed.with_version '10.5' }
   end
 
   describe service('mysql'), :if => os[:family] == 'redhat' && os[:release] == '6' do
@@ -74,7 +74,7 @@ elsif property["database"] == 'mariadb' then
     it { should be_running }
   end
 
-  describe package('mariadb-server-10.4'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('mariadb-server-10.5'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 
