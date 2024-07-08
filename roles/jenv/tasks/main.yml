@@ -21,11 +21,11 @@
     mode: 0644
 
 - name: java added via jenv (CentOS/RHEL)
-  command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(1.8) }}.0
+  command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/jre-{{ java_version | default(17) }}.0
   when: ansible_os_family == 'RedHat'
 
 - name: java added via jenv (Debian)
-  command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(1.8) }}.0-openjdk-amd64
+  command: sudo -u vagrant -i -- jenv add /usr/lib/jvm/java-{{ java_version | default(17) }}-openjdk-amd64
   when: ansible_os_family == 'Debian'
 
 - name: stat jenv

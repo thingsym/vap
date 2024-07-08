@@ -16,8 +16,9 @@ php_version        : 7.4.33      # 7.4.33
 perl_version       : 5.32.0      # 5.32.0
 node_version       : 14.15.3     # 14.15.3
 go_version         : 1.15.6      # 1.15.6
-java_version       : 1.8         # 1.8
 scala_version      : 2.11.12     # 2.11.12 (require java)
+java_version       : 17         # 17 # 11 or 17 LTS
+java_version       : 17          # 17 # 11 or 17 LTS
 
 ## Develop & Deploy Settings ##
 

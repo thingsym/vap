@@ -1,45 +1,12 @@
 ---
-- name: OpenJDK 9 installed
+- name: OpenJDK 11 installed
   package:
-    name: openjdk-9-jdk
+    name: openjdk-11-jdk
     state: latest
-  when: java_version is version('1.9', '==')
+  when: java_version is version('11', '==')
 
-- name: Ubuntu version 1.8
-  block:
-  - name: ppa:openjdk-r/ppa repository installed
-    apt_repository:
-      repo: "ppa:openjdk-r/ppa"
-      state: present
-
-  - name: OpenJDK 8 installed (Ubuntu)
-    package:
-      name: openjdk-8-jdk
-      state: latest
-  when:
-    - java_version is version('1.8', '==')
-    - ansible_distribution == 'Ubuntu'
-
-- name: Debian version 1.8
-  block:
-  - name: OpenJDK 8 installed (Debian 9 or later)
-    apt:
-      name: openjdk-8-jdk
-      state: latest
-    when: ansible_distribution_major_version is version('9', '<=')
-
-  - name: OpenJDK 8 installed (Debian jessie)
-    apt:
-      name: openjdk-8-jdk
-      state: latest
-      default_release: jessie-backports
-    when: ansible_distribution_major_version is version('8', '==')
-  when:
-    - java_version is version('1.8', '==')
-    - ansible_distribution == 'Debian'
-
-- name: OpenJDK 7 installed
+- name: OpenJDK 17 installed
   package:
-    name: openjdk-7-jdk
+    name: openjdk-17-jdk
     state: latest
-  when: java_version is version('1.7', '==')
+  when: java_version is version('17', '==')
