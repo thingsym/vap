@@ -1,52 +1,87 @@
 ---
+- name: service facts
+  service_facts:
+
+# - name: print service facts
+#   debug:
+#     var: ansible_facts.services
+
 - name: apache stopped
   service:
     name: httpd
     state: stopped
     enabled: no
-  ignore_errors: yes
-  when: server != 'apache'
+  when:
+    - server != 'apache'
+    - item.key == 'httpd.service'
+    - item.value.state == 'running'
+  with_dict: "{{ ansible_facts.services }}"
 
 - name: apache2 stopped
   service:
     name: apache2
     state: stopped
     enabled: no
-  ignore_errors: yes
-  changed_when: False
-  when: server != 'apache'
+  when:
+    - server != 'apache'
+    - item.key == 'apache2.service'
+    - item.value.state == 'running'
+  with_dict: "{{ ansible_facts.services }}"
 
 - name: nginx stopped
   service:
     name: nginx
     state: stopped
     enabled: no
-  ignore_errors: yes
-  changed_when: False
-  when: server != 'nginx'
+  when:
+    - server != 'nginx'
+    - item.key == 'nginx.service'
+    - item.value.state == 'running'
+  with_dict: "{{ ansible_facts.services }}"
 
 - name: h2o stopped
   service:
     name: h2o
     state: stopped
     enabled: no
-  ignore_errors: yes
-  when: server != 'h2o'
+  when:
+    - server != 'h2o'
+    - item.key == 'h2o.service'
+    - item.value.state == 'running'
+  with_dict: "{{ ansible_facts.services }}"
 
 - name: php-fpm stopped
   service:
     name: php-fpm
     state: stopped
     enabled: no
-  ignore_errors: yes
-  when: fastcgi != 'php-fpm'
+  when:
+    - fastcgi != 'php-fpm'
+    - item.key == 'php-fpm.service'
+    - item.value.state == 'running'
+  with_dict: "{{ ansible_facts.services }}"
 
-- name: removed mysql
-  package:
-    name: mysql*
-    state: absent
-  ignore_errors: yes
-  when: database != 'mysql'
+- name: mysql
+  block:
+  - name: removed mysql
+    package:
+      name: mysql*
+      state: absent
+    when:
+      - item.key == 'mysql.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
+
+  - name: removed mysql
+    package:
+      name: mysql*
+      state: absent
+    when:
+      - item.key == 'mysqld.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
+  when:
+    - database != 'mysql'
 
 - name: MariaDB
   block:
@@ -54,36 +89,37 @@
     package:
       name: MariaDB*
       state: absent
-    ignore_errors: yes
+    when:
+      - ansible_os_family == 'RedHat'
+      - item.key == 'mariadb.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
 
   - name: removed mariadb
     package:
       name: mariadb*
       state: absent
-    ignore_errors: yes
+    when:
+      - item.key == 'mariadb.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
 
   - name: delete symbolic links
     file:
       path: /etc/systemd/system/mysql.service
       state: absent
+    when:
+      - item.key == 'mariadb.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
 
   - name: delete symbolic links
     file:
       path: /etc/systemd/system/mysqld.service
       state: absent
-  when: database != 'mariadb'
-
-- name: Percona
-  block:
-  - name: removed Percona
-    package:
-      name: Percona*
-      state: absent
-    ignore_errors: yes
-
-  - name: removed Percona
-    package:
-      name: percona*
-      state: absent
-    ignore_errors: yes
-  when: database != 'percona'
+    when:
+      - item.key == 'mariadb.service'
+      - item.value.state == 'running'
+    with_dict: "{{ ansible_facts.services }}"
+  when:
+    - database != 'mariadb'
