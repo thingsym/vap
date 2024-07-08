@@ -3,35 +3,26 @@
   block:
   - name: mysql repository installed (CentOS/RHEL 6)
     yum:
-      name: https://dev.mysql.com/get/mysql57-community-release-el6-9.noarch.rpm
+      name: https://dev.mysql.com/get/mysql80-community-release-el6-1.noarch.rpm
       disable_gpg_check: yes
     when: ansible_distribution_major_version is version('6', '==')
 
   - name: mysql repository installed (CentOS/RHEL 7)
     yum:
-      name: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+      name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
       disable_gpg_check: yes
     when: ansible_distribution_major_version is version('7', '==')
 
-  - name: version 8
-    block:
-    - name: mysql repository installed (CentOS/RHEL 8)
-      yum:
-        name: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
-        disable_gpg_check: yes
-
-    - name: it not been implemented yet.
-      fail:
-        msg: Not enough packages are available.
-
-    - name: yum module disable
-      command: yum -y module disable mysql mariadb
+  - name: mysql repository installed (CentOS/RHEL 8)
+    yum:
+      name: https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm
+      disable_gpg_check: yes
     when: ansible_distribution_major_version is version('8', '==')
 
-  - name: yum-config enable mysql57-community
-    command: yum-config-manager --enable mysql57-community
+  - name: yum-config enable mysql80-community
+    command: yum-config-manager --enable mysql80-community
 
-  - name: mysql 5.7 installed (CentOS/RHEL)
+  - name: mysql 8.4 installed (CentOS/RHEL)
     package:
       name:
         - mysql-community-server
@@ -39,26 +30,13 @@
         - mysql-community-common
         - mysql-community-devel
         - mysql-community-libs
-      state: latest
-
-  - name: python-PyMySQL installed (CentOS/RHEL 6 or 7)
-    package:
-      name:
         - MySQL-python
       state: latest
-    when: ansible_distribution_major_version is version('7', '<=')
-
-  - name: python3-PyMySQL installed (CentOS/RHEL 8)
-    package:
-      name:
-        - python3-PyMySQL
-      state: latest
-    when: ansible_distribution_major_version is version('8', '>=')
   when: ansible_os_family == 'RedHat'
 
 - name: Debian
   block:
-  - name: set mysql-apt-config to mysql version 5.7
+  - name: set mysql-apt-config to mysql version 8.4
     debconf:
       name: mysql-apt-config
       question: "{{ item.question }}"
@@ -66,32 +44,32 @@
       vtype: "{{ item.vtype | default ('select') }}"
     with_items:
       - question: mysql-apt-config/select-server
-        value: mysql-5.7
+        value: mysql-8.4
       - question: mysql-apt-config/select-tools
         value: Enabled
 
   - name: get mysql-apt-config deb
     get_url:
-      url: https://dev.mysql.com/get/mysql-apt-config_0.8.18-1_all.deb
-      dest: /tmp/mysql-apt-config_0.8.18-1_all.deb
+      url: https://repo.mysql.com/mysql-apt-config_0.8.32-1_all.deb
+      dest: /tmp/mysql-apt-config_0.8.32-1_all.deb
       timeout: 60
       http_agent: 'Wget'
 
   - name: mysql-apt-config installed (Debian)
     apt:
-      deb: /tmp/mysql-apt-config_0.8.18-1_all.deb
+      deb: /tmp/mysql-apt-config_0.8.32-1_all.deb
 
-  - name: apt-key update
+  - name: add mysql gpg key
     command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B7B3B788A8D3785C
 
-  - name: apt-key update
+  - name: add mysql gpg key
     command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3A79BD29
 
   - name: apt-get update
     apt:
       update_cache: yes
 
-  - name: mysql 5.7 installed (Debian)
+  - name: mysql installed (Debian)
     package:
       name:
         - mysql-community-server
@@ -117,6 +95,6 @@
 
 - name: python-mysqldb installed
   package:
-    name: python-mysqldb
+    name: python3-mysqldb
     state: latest
   when: ansible_distribution == 'Debian'

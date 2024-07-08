@@ -4,16 +4,16 @@ require 'shellwords'
 if property["database"] == 'mysql' then
 
   describe command('mysqld -V'), :if => os[:family] == 'redhat' || os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
-    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
+    its(:stdout) { should match /#{Regexp.escape('8.0')}/ }
   end
 
   describe command('mysqld -V'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-    its(:stdout) { should match /#{Regexp.escape('5.7')}/ }
+    its(:stdout) { should match /#{Regexp.escape('8.0')}/ }
   end
 
   describe package('mysql-community-server'), :if => os[:family] == 'redhat' do
     it { should be_installed }
-    it { should be_installed.with_version '5.7' }
+    it { should be_installed.with_version '8.0' }
   end
 
   describe package('mysql-community-server'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -36,12 +36,12 @@ if property["database"] == 'mysql' then
     it { should be_running }
   end
 
-  describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
-    its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
+  describe command('apt-cache policy | grep mysql-8.0'), :if => os[:family] == 'debian' || (os[:family] == 'ubuntu' && os[:release] == '14.04') do
+    its(:stdout) { should match /#{Regexp.escape('mysql-8.0')}/ }
   end
 
-  describe command('apt-cache policy | grep mysql-5.7'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
-    its(:stdout) { should match /#{Regexp.escape('mysql-5.7')}/ }
+  describe command('apt-cache policy | grep mysql-8.0'), :if => os[:family] == 'ubuntu' && os[:release] == '16.04' do
+    its(:stdout) { should match /#{Regexp.escape('mysql-8.0')}/ }
   end
 
   describe service('mysql'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
@@ -149,7 +149,7 @@ if property["database"] == 'mysql' || property["database"] == 'mariadb' then
     it { should be_installed }
   end
 
-  describe package('python-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
+  describe package('python3-mysqldb'), :if => os[:family] == 'debian' || os[:family] == 'ubuntu' do
     it { should be_installed }
   end
 
