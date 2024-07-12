@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.5] - 2024.07.12
+
+* bump up programming languages version
+* change force Install mysql-apt-config
+* fix reset role
+* improve openjdk role
+* fix develop-tool
+* improve mariadb and mysql role
+* remove percona
+* remove gibo
+* bump up git package to git236
+* add and update vm box
+
 ## [0.5.4] - 2022.05.13
 
 * fix memory to 2GB
