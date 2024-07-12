@@ -58,6 +58,7 @@
   - name: mysql-apt-config installed (Debian)
     apt:
       deb: /tmp/mysql-apt-config_0.8.32-1_all.deb
+      force: true
 
   - name: add mysql gpg key
     command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B7B3B788A8D3785C
