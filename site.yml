@@ -1,5 +1,5 @@
 ---
-- name: "VAP (Vagrant Ansible Programming languages) v0.5.4"
+- name: "VAP (Vagrant Ansible Programming languages) v0.5.5"
   hosts: localhost
   remote_user: vagrant
   become: yes
@@ -10,10 +10,8 @@
     - { role: develop-tools,   tags: [develop-tools] }
     - { role: mkcert,          tags: [mkcert] }
     - { role: git,             tags: [git] }
-    - { role: gibo,            tags: [gibo] }
     - { role: mysql,           tags: [mysql],       when: "database == 'mysql'" }
     - { role: mariadb,         tags: [mariadb],     when: "database == 'mariadb'" }
-    - { role: percona,         tags: [percona],     when: "database == 'percona'" }
     - { role: apache,          tags: [apache],      when: "server == 'apache'" }
     - { role: nginx,           tags: [nginx],       when: "server == 'nginx'" }
     - { role: h2o,             tags: [h2o],         when: "server == 'h2o'" }
@@ -27,6 +25,6 @@
     - { role: openjdk,         tags: [openjdk],     when: "java_version is version('0', '!=')" }
     - { role: jenv,            tags: [jenv],        when: "java_version is version('0', '!=')" }
     - { role: scalaenv,        tags: [scalaenv],    when: "scala_version is version('0', '!=') and java_version is version('0', '!=')" }
-    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin and php_version is version('0', '!=') and (database == 'mysql' or database == 'mariadb' or database == 'percona')" }
+    - { role: phpmyadmin,      tags: [phpmyadmin],  when: "phpmyadmin and php_version is version('0', '!=') and (database == 'mysql' or database == 'mariadb')" }
     - { role: docker,          tags: [docker],      when: "docker" }
     - { role: after-command,   tags: [after-command] }

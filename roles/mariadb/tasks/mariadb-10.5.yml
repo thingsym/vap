@@ -1,11 +1,11 @@
 ---
 - name: CentOS
   block:
-  - name: MariaDB 10.1 repository added
+  - name: MariaDB 10.5 repository added
     yum_repository:
       name: mariadb
-      description: MariaDB 10.1 centos repository
-      baseurl: "http://yum.mariadb.org/10.1/centos{{ ansible_distribution_major_version }}-amd64"
+      description: MariaDB 10.5 centos repository
+      baseurl: "http://yum.mariadb.org/10.5/centos{{ ansible_distribution_major_version }}-amd64"
       gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
       gpgcheck: yes
 
@@ -28,7 +28,11 @@
         name: boost-program-options
         state: latest
 
-    - name: MariaDB 10.1 installed (CentOS/RHEL 8)
+    - name: it not been implemented yet.
+      fail:
+        msg: Not enough packages are available.
+
+    - name: MariaDB 10.5 installed (CentOS/RHEL 8)
       dnf:
         name:
           - MariaDB-server
@@ -51,23 +55,11 @@
 
 - name: Ubuntu
   block:
-  - name: MariaDB apt_key installed (Ubuntu/focal)
+  - name: MariaDB apt_key installed (Ubuntu/xenial or later)
     apt_key:
       keyserver: keyserver.ubuntu.com
       id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_major_version is version('20', '==')
-
-  - name: MariaDB apt_key installed (Ubuntu/bionic)
-    apt_key:
-      keyserver: keyserver.ubuntu.com
-      id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_major_version is version('18', '==')
-
-  - name: MariaDB apt_key installed (Ubuntu/xenial)
-    apt_key:
-      keyserver: keyserver.ubuntu.com
-      id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_major_version is version('16', '==')
+    when: ansible_distribution_major_version is version('16', '>=')
 
   - name: MariaDB apt_key installed (Ubuntu/trusty)
     apt_key:
@@ -75,16 +67,16 @@
       id: "0xcbcb082a1bb943db"
     when: ansible_distribution_major_version is version('14', '==')
 
-  - name: MariaDB 10.1 repository installed
+  - name: MariaDB 10.5 repository installed
     apt_repository:
       filename: MariaDB
-      repo: 'deb [arch=amd64,i386,ppc64el] https://deb.mariadb.org/10.1/ubuntu {{ ansible_distribution_release }} main'
+      repo: 'deb [arch=amd64,i386,ppc64el] https://deb.mariadb.org/10.5/ubuntu {{ ansible_distribution_release }} main'
 
-  - name: MariaDB 10.1 installed (Ubuntu)
+  - name: MariaDB 10.5 installed (Ubuntu)
     package:
       name:
-        - mariadb-server-10.1
-        - mariadb-client-10.1
+        - mariadb-server-10.5
+        - mariadb-client-10.5
         - mariadb-common
         - libmariadbd-dev
         - libmariadbclient18
@@ -93,17 +85,11 @@
 
 - name: Debian
   block:
-  - name: MariaDB apt_key installed (Debian/buster)
+  - name: MariaDB apt_key installed (Debian/stretch or later)
     apt_key:
       keyserver: hkp://keyserver.ubuntu.com:80
       id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_major_version is version('10', '==')
-
-  - name: MariaDB apt_key installed (Debian/stretch)
-    apt_key:
-      keyserver: hkp://keyserver.ubuntu.com:80
-      id: "0xF1656F24C74CD1D8"
-    when: ansible_distribution_major_version is version('9', '==')
+    when: ansible_distribution_major_version is version('9', '>=')
 
   - name: MariaDB apt_key installed (Debian/jessie)
     apt_key:
@@ -111,16 +97,16 @@
       id: "0xcbcb082a1bb943db"
     when: ansible_distribution_major_version is version('8', '==')
 
-  - name: MariaDB 10.1 repository installed
+  - name: MariaDB 10.5 repository installed
     apt_repository:
       filename: MariaDB
-      repo: 'deb [arch=amd64,i386] https://deb.mariadb.org/10.1/debian {{ ansible_distribution_release }} main'
+      repo: 'deb [arch=amd64,i386] https://deb.mariadb.org/10.5/debian {{ ansible_distribution_release }} main'
 
-  - name: MariaDB 10.1 installed (Debian)
+  - name: MariaDB 10.5 installed (Debian)
     package:
       name:
-        - mariadb-server-10.1
-        - mariadb-client-10.1
+        - mariadb-server-10.5
+        - mariadb-client-10.5
         - mariadb-common
         - libmariadbd-dev
         - libmariadbclient18
@@ -143,8 +129,8 @@
     - ansible_distribution == 'Ubuntu'
     - ansible_distribution_major_version is version('20', '>=')
 
-- name: python-mysqldb installed
+- name: python3-mysqldb installed
   package:
-    name: python-mysqldb
+    name: python3-mysqldb
     state: latest
   when: ansible_distribution == 'Debian'

@@ -72,7 +72,7 @@
   - name: MariaDB 5.5 repository installed
     apt_repository:
       filename: MariaDB
-      repo: 'deb [arch=amd64,i386,ppc64el] http://ftp.yz.yamagata-u.ac.jp/pub/dbms/mariadb/repo/5.5/ubuntu {{ ansible_distribution_release }} main'
+      repo: 'deb [arch=amd64,i386,ppc64el] https://deb.mariadb.org/5.5/ubuntu {{ ansible_distribution_release }} main'
 
   - name: MariaDB 5.5 installed (Ubuntu)
     package:
