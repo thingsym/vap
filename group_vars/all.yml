@@ -10,15 +10,14 @@ db_root_password   : admin
 
 ## Programming languages Settings ##
 # If the version is set to 0, the programming language does not install
-python_version     : 3.9.2       # 3.9.2
-ruby_version       : 2.7.2       # 2.7.2
-php_version        : 7.4.33      # 7.4.33
-perl_version       : 5.32.0      # 5.32.0
-node_version       : 14.15.3     # 14.15.3
+python_version     : 3.12.2      # 3.12.2
+ruby_version       : 3.2.2       # 3.2.2
+php_version        : 8.2.19      # 8.2.19
+perl_version       : 5.38.0      # 5.38.0
+node_version       : 14.21.3     # 14.21.3
 go_version         : 1.15.6      # 1.15.6
-scala_version      : 2.11.12     # 2.11.12 (require java)
-java_version       : 17         # 17 # 11 or 17 LTS
 java_version       : 17          # 17 # 11 or 17 LTS
+scala_version      : 2.11.12     # 2.11.12 (require java)
 
 ## Develop & Deploy Settings ##
 
