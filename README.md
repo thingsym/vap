@@ -10,7 +10,7 @@
 
 ### 2. Build Server and Database environment
 
-**VAP** will build server from **Apache** or **nginx** or **H2O**, and build database from **MySQL**, **MariaDB** or **Percona MySQL**.
+**VAP** will build server from **Apache** or **nginx** or **H2O**, and build database from **MySQL**, **MariaDB**.
 
 On all web servers, FastCGI configuration is possible. Build PHP execution environment from **PHP-FPM** (FastCGI Process Manager).
 
@@ -177,21 +177,21 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 	server             : none   # none|apache|nginx|h2o|litespeed
 	fastcgi            : none   # none|php-fpm
-	database           : none   # none|mysql|mariadb|percona
+	database           : none   # none|mysql|mariadb
 
 	db_root_password   : admin
 
 	## Programming languages Settings ##
 	# If the version is set to 0, the programming language does not install
-
-	python_version     : 3.9.2       # 3.9.2
-	ruby_version       : 2.7.2       # 2.7.2
-	php_version        : 7.4.33      # 7.4.33
-	perl_version       : 5.32.0      # 5.32.0
-	node_version       : 14.15.3     # 14.15.3
+	python_version     : 3.12.2      # 3.12.2
+	ruby_version       : 3.2.2       # 3.2.2
+	php_version        : 8.2.19      # 8.2.19
+	perl_version       : 5.38.0      # 5.38.0
+	node_version       : 14.21.3     # 14.21.3
 	go_version         : 1.15.6      # 1.15.6
-	java_version       : 1.8         # 1.8
+	java_version       : 17          # 17 # 11 or 17 LTS
 	scala_version      : 2.11.12     # 2.11.12 (require java)
+
 
 	## Develop & Deploy Settings ##
 
@@ -205,17 +205,17 @@ In YAML format, you can set server, database and Programming environment. And ca
 
 * `server` (required) name of web server (default: `none` / value: `none` | `apache` | `nginx` | `h2o` | `litespeed` )
 * `fastcgi` name of fastCGI (default: `none` / value: `none` | `php-fpm`)
-* `database` (required) name of databese (default: `none` / value: `none` | `mysql` | `mariadb` | `percona`)
+* `database` (required) name of databese (default: `none` / value: `none` | `mysql` | `mariadb`)
 
 #### Programming languages Settings ##
 
-* `python_version` version of Python (default: `3.9.2`)
-* `ruby_version` version of Ruby (default: `2.7.2`)
-* `php_version` version of PHP (default: `7.4.33`)
-* `perl_version` version of Perl (default: `5.32.0`)
-* `node_version` version of Node.js (default: `14.15.3`)
+* `python_version` version of Python (default: `3.12.2`)
+* `ruby_version` version of Ruby (default: `3.2.2`)
+* `php_version` version of PHP (default: `8.2.19`)
+* `perl_version` version of Perl (default: `5.38.0`)
+* `node_version` version of Node.js (default: `14.21.3`)
 * `go_version` version of Go (default: `1.15.6`)
-* `java_version` version of Java (default: `1.8`)
+* `java_version` version of Java (default: `17`)
 * `scala_version` version of Scala (default: `2.11.12`) require Java
 
 If the version is set to 0, the programming language does not installation
@@ -267,16 +267,12 @@ VAP will be built in the directory structure of the following minimum unit.
 
 **VAP** supports VirtualBox for providers of Vagrant. Operating system supported CentOS, Debian and Ubuntu Boxes. OS architecture supported x86_64. Details are as follows:
 
-### CentOS
-
-* CentOS 8 (Deprecated ended 2021-12-31)
-* CentOS 7
-* CentOS 6 (Deprecated ended 2020-11-30)
-
 ### Debian
 
-* Debian 10.0
-* Debian 9.0
+* Debian 12.0
+* Debian 11.0
+* Debian 10.0 (Deprecated ended 2024-06-30)
+* Debian 9.0 (Deprecated ended 2022-06-30)
 * Debian 8.0 (Deprecated ended 2020-06-30)
 
 ### Ubuntu
@@ -285,6 +281,12 @@ VAP will be built in the directory structure of the following minimum unit.
 * Ubuntu 18.04
 * Ubuntu 16.04
 * Ubuntu 14.04
+
+### CentOS
+
+* CentOS 8 (Deprecated ended 2021-12-31)
+* CentOS 7 (Deprecated ended 2024-06-30)
+* CentOS 6 (Deprecated ended 2020-11-30)
 
 To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://app.vagrantup.com/boxes/search?provider=virtualbox).
 
@@ -305,7 +307,6 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 * [MariaDB](https://mariadb.org)
 * [MySQL](http://www.mysql.com)
-* [Percona MySQL](http://www.percona.com/software/percona-server)
 
 ### Programming languages
 
@@ -346,7 +347,6 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 ### Pre-installing
 * [Git](http://git-scm.com)
-* [gibo](https://github.com/simonwhitaker/gibo)
 
 ### Helper command
 
@@ -365,20 +365,20 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 `pyenv.sh` will prepare the specified version of Python execution environment.
 
-	/vagrant/command/pyenv.sh 3.5.1
+	/vagrant/command/pyenv.sh 3.12.2
 
 ### rbenv.sh
 
 `rbenv.sh` will prepare the specified version of Ruby execution environment.
 
-	/vagrant/command/rbenv.sh 2.2.0
+	/vagrant/command/rbenv.sh 3.2.2
 	/vagrant/command/rbenv.sh mruby-1.1.0
 
 ### phpenv.sh
 
 `phpenv.sh` will prepare the specified version of PHP execution environment. You can install the specified version of PHP. Switching the PHP version. And then restart Apache or PHP-FPM by switching the server configuration environment.
 
-	/vagrant/command/phpenv.sh -v 7.2.1 -m php-fpm -s unix
+	/vagrant/command/phpenv.sh -v 8.2.19 -m php-fpm -s unix
 
 	# help
 	/vagrant/command/phpenv.sh -h
@@ -387,7 +387,7 @@ To download Vagrant Box, you can search from [Discover Vagrant Boxes](https://ap
 
 `plenv.sh` will prepare the specified version of Perl execution environment.
 
-	/vagrant/command/plenv.sh 5.19.11
+	/vagrant/command/plenv.sh 5.38.0
 
 ## Custom Config
 
@@ -410,7 +410,6 @@ As follows editable configuration files.
 * mysql.my.cnf.j2
 * nginx.conf.j2
 * nginx.www.conf.j2
-* percona.my.cnf.j2
 * php-build.default_configure_options.j2
 * php-fpm.conf (for phpenv.sh)
 * php-fpm.www.conf (for phpenv.sh)
