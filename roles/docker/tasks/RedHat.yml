@@ -1,6 +1,6 @@
 ---
 - name: removed older docker
-  package:
+  ansible.builtin.package:
     name:
       - docker
       - docker-client
@@ -13,16 +13,16 @@
     state: absent
 
 - name: stat docker-ce.repo
-  stat:
+  ansible.builtin.stat:
     path: '/etc/yum.repos.d/docker-ce.repo'
   register: is_docker_ce_repo
 
 - name: yum-config add docker-ce repo
-  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   when: not is_docker_ce_repo.stat.exists
+  ansible.builtin.command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 - name: docker installed
-  package:
+  ansible.builtin.package:
     name:
       - docker-ce
       - docker-ce-cli
@@ -30,7 +30,7 @@
     state: latest
 
 - name: docker started and enabled
-  service:
+  ansible.builtin.service:
     name: docker
     state: restarted
     enabled: yes

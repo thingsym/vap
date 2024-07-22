@@ -1,16 +1,16 @@
 ---
 - name: litespeed repository installed (CentOS/RHEL)
-  yum:
+  ansible.builtin.yum:
     name: "http://rpms.litespeedtech.com/centos/litespeed-repo-1.2-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
     disable_gpg_check: yes
 
 - name: litespeed installed
-  package:
+  ansible.builtin.package:
     name: openlitespeed
     state: latest
 
 - name: lsws enabled
-  service:
+  ansible.builtin.service:
     name: lsws
     enabled: yes
   notify: lsws restarted

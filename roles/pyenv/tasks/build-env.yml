@@ -1,6 +1,7 @@
 ---
 - name: build environment (CentOS/RHEL)
-  package:
+  when: ansible_os_family == 'RedHat'
+  ansible.builtin.package:
     name:
       - zlib-devel
       - bzip2
@@ -12,10 +13,10 @@
       - xz
       - xz-devel
     state: latest
-  when: ansible_os_family == 'RedHat'
 
 - name: build environment (Debian/Ubuntu)
-  package:
+  when: ansible_os_family == 'Debian'
+  ansible.builtin.package:
     name:
       - make
       - build-essential
@@ -32,4 +33,3 @@
       - xz-utils
       - tk-dev
     state: latest
-  when: ansible_os_family == 'Debian'
