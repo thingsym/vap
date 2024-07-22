@@ -1,6 +1,6 @@
 ---
 - name: include task
-  include_tasks: '{{ ansible_os_family }}.yml'
+  ansible.builtin.include_tasks: '{{ ansible_os_family }}.yml'
 
 - name: include task
-  include_tasks: docker-compose.yml
+  ansible.builtin.include_tasks: docker-compose.yml

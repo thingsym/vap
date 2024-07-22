@@ -1,6 +1,6 @@
 ---
 - name: removed older docker
-  package:
+  ansible.builtin.package:
     name:
       - docker
       - docker-engine
@@ -10,32 +10,32 @@
     state: absent
 
 - name: Debian
+  when: ansible_distribution == 'Debian'
   block:
   - name: add apt-key
-    apt_key:
+    ansible.builtin.apt_key:
       url: https://download.docker.com/linux/debian/gpg
       state: present
 
   - name: docker repository installed
-    apt_repository:
+    ansible.builtin.apt_repository:
       repo: 'deb [arch=amd64,i386] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
       update_cache: yes
-  when: ansible_distribution == 'Debian'
 
 - name: Ubuntu
+  when: ansible_distribution == 'Ubuntu'
   block:
   - name: add apt-key
-    apt_key:
+    ansible.builtin.apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
 
   - name: docker repository installed
-    apt_repository:
+    ansible.builtin.apt_repository:
       repo: 'deb [arch=amd64,i386] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
-  when: ansible_distribution == 'Ubuntu'
 
 - name: docker installed
-  package:
+  ansible.builtin.package:
     name:
       - docker-ce
       - docker-ce-cli
@@ -43,14 +43,14 @@
     state: latest
 
 - name: add the ubuntu to the docker group
-  user:
+  ansible.builtin.user:
     name: vagrant
     shell: /bin/bash
     groups: docker
     append: yes
 
 - name: docker started and enabled
-  service:
+  ansible.builtin.service:
     name: docker
     state: restarted
     enabled: yes

@@ -1,6 +1,6 @@
 ---
 - name: git checkout goenv
-  git:
+  ansible.builtin.git:
     repo: https://github.com/wfarr/goenv.git
     dest: "{{ goenv_dir }}"
     version: "master"
@@ -9,35 +9,35 @@
   become_user: vagrant
 
 - name: edit PATH goenv on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.goenv/bin:$PATH"
 
 - name: edit goenv init on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(goenv init -)\""
-    mode: 0644
+    mode: "0644"
 
 - name: stat goenv
-  stat:
+  ansible.builtin.stat:
     path: "{{ goenv_dir }}/bin/goenv"
   register: is_goenv
 
 - name: exists is_goenv
+  when: is_goenv.stat.exists
   block:
   - name: Go installed via goenv
-    command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"
+    ansible.builtin.command: "{{ goenv_dir }}/bin/goenv install {{ go_version | default(1.15.6) }}"
     become: yes
     become_user: vagrant
 
   - name: goenv global
-    command: "{{ goenv_dir }}/bin/goenv global {{ go_version | default(1.15.6) }}"
+    ansible.builtin.command: "{{ goenv_dir }}/bin/goenv global {{ go_version | default(1.15.6) }}"
     become: yes
     become_user: vagrant
 
   - name: goenv rehash
-    command: "{{ goenv_dir }}/bin/goenv rehash"
+    ansible.builtin.command: "{{ goenv_dir }}/bin/goenv rehash"
     become: yes
     become_user: vagrant
-  when: is_goenv.stat.exists

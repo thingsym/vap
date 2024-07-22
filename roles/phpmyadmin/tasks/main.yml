@@ -1,48 +1,49 @@
 ---
 - name: stat phpmyadmin_path
-  stat:
+  ansible.builtin.stat:
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin"
   register: is_phpmyadmin_path
 
 - name: not exists is_phpmyadmin_path
+  when: not is_phpmyadmin_path.stat.exists
   block:
   - name: phpMyAdmin download
-    get_url:
+    ansible.builtin.get_url:
       url: "{{ phpmyadmin_zip_url }}"
       dest: "/tmp/phpMyAdmin.zip"
+      mode: "0755"
       validate_certs: no
 
   - name: unzip phpMyAdmin.zip
-    unarchive:
+    ansible.builtin.unarchive:
       src: /tmp/phpMyAdmin.zip
       dest: /tmp
 
   - name: mv phpMyAdmin.zip
-    command: mv /tmp/{{ phpmyadmin_dir }} {{ DOCUMENT_ROOT }}/phpMyAdmin
+    ansible.builtin.command: mv /tmp/{{ phpmyadmin_dir }} {{ DOCUMENT_ROOT }}/phpMyAdmin
 
   - name: delete phpMyAdmin.zip
-    file:
+    ansible.builtin.file:
       path: "/tmp/phpMyAdmin.zip"
       state: absent
-  when: not is_phpmyadmin_path.stat.exists
 
 - name: stat phpmyadmin_config
-  stat:
+  ansible.builtin.stat:
     path: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
   register: is_phpmyadmin_config
 
 - name: mv config.inc.php
-  command: mv {{ DOCUMENT_ROOT }}/phpMyAdmin/config.sample.inc.php {{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php
   when: not is_phpmyadmin_config.stat.exists
+  ansible.builtin.command: mv {{ DOCUMENT_ROOT }}/phpMyAdmin/config.sample.inc.php {{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php
 
 - name: edit config.inc.php
-  replace:
+  ansible.builtin.replace:
     dest: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
     regexp: "blowfish_secret'] = '';"
     replace: "blowfish_secret'] = 'E=L(LSpfv9Z5R70)JuCe$Lu#^thWI9xc2-)FziBA1N=';"
 
 - name: edit config.inc.php
-  replace:
+  ansible.builtin.replace:
     dest: "{{ DOCUMENT_ROOT }}/phpMyAdmin/config.inc.php"
     regexp: "host'] = 'localhost';"
     replace: "host'] = '127.0.0.1';"

@@ -1,6 +1,6 @@
 ---
 - name: git checkout pyenv
-  git:
+  ansible.builtin.git:
     repo: https://github.com/yyuu/pyenv.git
     dest: "{{ pyenv_dir }}"
     version: "master"
@@ -9,25 +9,25 @@
   become_user: vagrant
 
 - name: edit PYENV_ROOT on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PYENV_ROOT=\"$HOME/.pyenv\""
-    mode: 0644
+    mode: "0644"
 
 - name: edit PATH pyenv on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.pyenv/bin:$PATH"
-    mode: 0644
+    mode: "0644"
 
 - name: edit pyenv init on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(pyenv init --path)\""
-    mode: 0644
+    mode: "0644"
 
 - name: git checkout pyenv-virtualenv
-  git:
+  ansible.builtin.git:
     repo: https://github.com/pyenv/pyenv-virtualenv.git
     dest: "{{ pyenv_dir }}/plugins/pyenv-virtualenv"
     version: "master"
@@ -36,22 +36,24 @@
   become_user: vagrant
 
 - name: edit virtualenv-init init on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(pyenv virtualenv-init -)\""
-    mode: 0644
+    mode: "0644"
 
-- include_tasks: build-env.yml
+- name: include build-env
+  ansible.builtin.include_tasks: build-env.yml
 
 - name: stat pyenv
-  stat:
+  ansible.builtin.stat:
     path: "{{ pyenv_dir }}/bin/pyenv"
   register: is_pyenv
 
 - name: exists is_pyenv
+  when: is_pyenv.stat.exists
   block:
   - name: Python installed via pyenv
-    command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
+    ansible.builtin.command: "{{ pyenv_dir }}/bin/pyenv install {{ python_version | default(3.9.2) }}"
     become: yes
     become_user: vagrant
     register: pyenv_result
@@ -60,12 +62,11 @@
       - pyenv_result.rc != 1
 
   - name: pyenv global
-    command: "{{ pyenv_dir }}/bin/pyenv global {{ python_version | default(3.9.2) }}"
+    ansible.builtin.command: "{{ pyenv_dir }}/bin/pyenv global {{ python_version | default(3.9.2) }}"
     become: yes
     become_user: vagrant
 
   - name: pyenv rehash
-    command: "{{ pyenv_dir }}/bin/pyenv rehash"
+    ansible.builtin.command: "{{ pyenv_dir }}/bin/pyenv rehash"
     become: yes
     become_user: vagrant
-  when: is_pyenv.stat.exists
