@@ -1,6 +1,6 @@
 ---
 - name: git checkout plenv
-  git:
+  ansible.builtin.git:
     repo: https://github.com/tokuhirom/plenv.git
     dest: "{{ plenv_dir }}"
     version: "master"
@@ -9,19 +9,19 @@
   become_user: vagrant
 
 - name: edit PATH plenv on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "export PATH=$HOME/.plenv/bin:$PATH"
-    mode: 0644
+    mode: "0644"
 
 - name: edit plenv init on .bashrc_alias
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ home_dir }}/.bashrc_alias"
     line: "eval \"$(plenv init -)\""
-    mode: 0644
+    mode: "0644"
 
 - name: git checkout perl-build
-  git:
+  ansible.builtin.git:
     repo: https://github.com/tokuhirom/Perl-Build.git
     dest: "{{ plenv_dir }}/plugins/perl-build"
     version: "master"
@@ -30,14 +30,15 @@
   become_user: vagrant
 
 - name: stat plenv
-  stat:
+  ansible.builtin.stat:
     path: "{{ plenv_dir }}/bin/plenv"
   register: is_plenv
 
 - name: exists is_plenv
+  when: is_plenv.stat.exists
   block:
   - name: perl installed via plenv
-    command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.32.0) }}"
+    ansible.builtin.command: "{{ plenv_dir }}/bin/plenv install {{ perl_version | default(5.32.0) }}"
     become: yes
     become_user: vagrant
     register: plenv_result
@@ -46,56 +47,55 @@
       - plenv_result.rc != 255
 
   - name: plenv global
-    command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.32.0) }}"
+    ansible.builtin.command: "{{ plenv_dir }}/bin/plenv global {{ perl_version | default(5.32.0) }}"
     become: yes
     become_user: vagrant
 
   - name: plenv rehash
-    command: "{{ plenv_dir }}/bin/plenv rehash"
+    ansible.builtin.command: "{{ plenv_dir }}/bin/plenv rehash"
     become: yes
     become_user: vagrant
 
   - name: cpanm module installed
-    command: "{{ plenv_dir }}/bin/plenv install-cpanm"
+    ansible.builtin.command: "{{ plenv_dir }}/bin/plenv install-cpanm"
     become: yes
     become_user: vagrant
-  when: is_plenv.stat.exists
 
 - name: stat cpanm
-  stat:
+  ansible.builtin.stat:
     path: "{{ plenv_dir }}/bin/cpm"
   register: is_cpm
 
 - name: not exists is_cpm
+  when: not is_cpm.stat.exists
   block:
   - name: cpm module installed
-    shell: curl -fsSL --compressed https://git.io/cpm > "{{ plenv_dir }}/bin/cpm"
+    ansible.builtin.shell: curl -fsSL --compressed https://git.io/cpm > "{{ plenv_dir }}/bin/cpm"
 
   - name: chmod 755
-    file:
+    ansible.builtin.file:
       path: "{{ plenv_dir }}/bin/cpm"
-      mode: 0755
-  when: not is_cpm.stat.exists
+      mode: "0755"
 
 - name: stat cpanm
-  stat:
+  ansible.builtin.stat:
     path: "{{ plenv_dir }}/shims/cpanm"
   register: is_cpanm
 
 - name: exists is_cpanm
+  when: is_cpanm.stat.exists
   block:
   - name: Carton module installed
-    command: "{{ plenv_dir }}/shims/cpanm Carton"
+    ansible.builtin.command: "{{ plenv_dir }}/shims/cpanm Carton"
     become: yes
     become_user: vagrant
 
   - name: Server::Starter module installed
-    command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
+    ansible.builtin.command: "{{ plenv_dir }}/shims/cpanm Server::Starter"
     become: yes
     become_user: vagrant
 
   - name: App::UpdateCPANfile module installed
-    command: "{{ plenv_dir }}/shims/cpanm App::UpdateCPANfile"
+    ansible.builtin.command: "{{ plenv_dir }}/shims/cpanm App::UpdateCPANfile"
     become: yes
     become_user: vagrant
-  when: is_cpanm.stat.exists

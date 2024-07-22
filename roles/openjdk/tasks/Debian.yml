@@ -1,12 +1,12 @@
 ---
 - name: OpenJDK 11 installed
-  package:
+  when: java_version is version('11', '==')
+  ansible.builtin.package:
     name: openjdk-11-jdk
     state: latest
-  when: java_version is version('11', '==')
 
 - name: OpenJDK 17 installed
-  package:
+  when: java_version is version('17', '==')
+  ansible.builtin.package:
     name: openjdk-17-jdk
     state: latest
-  when: java_version is version('17', '==')

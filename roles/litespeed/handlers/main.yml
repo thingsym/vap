@@ -1,5 +1,5 @@
 ---
 - name: lsws restarted
-  service:
+  ansible.builtin.service:
     name: lsws
     state: restarted

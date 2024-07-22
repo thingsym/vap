@@ -1,29 +1,30 @@
 ---
 - name: RedHat
+  when: ansible_os_family == 'RedHat'
   block:
   - name: mysql repository installed (CentOS/RHEL 6)
-    yum:
+    when: ansible_distribution_major_version is version('6', '==')
+    ansible.builtin.yum:
       name: https://dev.mysql.com/get/mysql80-community-release-el6-1.noarch.rpm
       disable_gpg_check: yes
-    when: ansible_distribution_major_version is version('6', '==')
 
   - name: mysql repository installed (CentOS/RHEL 7)
-    yum:
+    when: ansible_distribution_major_version is version('7', '==')
+    ansible.builtin.yum:
       name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
       disable_gpg_check: yes
-    when: ansible_distribution_major_version is version('7', '==')
 
   - name: mysql repository installed (CentOS/RHEL 8)
-    yum:
+    when: ansible_distribution_major_version is version('8', '==')
+    ansible.builtin.yum:
       name: https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm
       disable_gpg_check: yes
-    when: ansible_distribution_major_version is version('8', '==')
 
   - name: yum-config enable mysql80-community
-    command: yum-config-manager --enable mysql80-community
+    ansible.builtin.command: yum-config-manager --enable mysql80-community
 
   - name: mysql 8.4 installed (CentOS/RHEL)
-    package:
+    ansible.builtin.package:
       name:
         - mysql-community-server
         - mysql-community-client
@@ -32,16 +33,16 @@
         - mysql-community-libs
         - MySQL-python
       state: latest
-  when: ansible_os_family == 'RedHat'
 
 - name: Debian
+  when: ansible_os_family == 'Debian'
   block:
   - name: set mysql-apt-config to mysql version 8.4
-    debconf:
+    ansible.builtin.debconf:
       name: mysql-apt-config
       question: "{{ item.question }}"
       value: "{{ item.value }}"
-      vtype: "{{ item.vtype | default ('select') }}"
+      vtype: "{{ item.vtype | default('select') }}"
     with_items:
       - question: mysql-apt-config/select-server
         value: mysql-8.4
@@ -49,53 +50,53 @@
         value: Enabled
 
   - name: get mysql-apt-config deb
-    get_url:
+    ansible.builtin.get_url:
       url: https://repo.mysql.com/mysql-apt-config_0.8.32-1_all.deb
       dest: /tmp/mysql-apt-config_0.8.32-1_all.deb
+      mode: "0755"
       timeout: 60
       http_agent: 'Wget'
 
   - name: mysql-apt-config installed (Debian)
-    apt:
+    ansible.builtin.apt:
       deb: /tmp/mysql-apt-config_0.8.32-1_all.deb
       force: true
 
   - name: add mysql gpg key
-    command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B7B3B788A8D3785C
+    ansible.builtin.command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B7B3B788A8D3785C
 
   - name: add mysql gpg key
-    command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3A79BD29
+    ansible.builtin.command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3A79BD29
 
   - name: apt-get update
-    apt:
+    ansible.builtin.apt:
       update_cache: yes
 
   - name: mysql installed (Debian)
-    package:
+    ansible.builtin.package:
       name:
         - mysql-community-server
         - mysql-community-client
       state: latest
-  when: ansible_os_family == 'Debian'
 
 - name: python-mysqldb installed
-  package:
-    name: python-mysqldb
-    state: latest
   when:
     - ansible_distribution == 'Ubuntu'
     - ansible_distribution_major_version is version('18', '<=')
+  ansible.builtin.package:
+    name: python-mysqldb
+    state: latest
 
 - name: python3-mysqldb installed
-  package:
-    name: python3-mysqldb
-    state: latest
   when:
     - ansible_distribution == 'Ubuntu'
     - ansible_distribution_major_version is version('20', '>=')
-
-- name: python-mysqldb installed
-  package:
+  ansible.builtin.package:
     name: python3-mysqldb
     state: latest
+
+- name: python-mysqldb installed
   when: ansible_distribution == 'Debian'
+  ansible.builtin.package:
+    name: python3-mysqldb
+    state: latest
